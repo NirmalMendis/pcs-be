@@ -1,0 +1,31 @@
+**Setting Up Project-PCS**
+
+1. **Clone the Application**
+   - Clone the application repository using the command:
+     --> git clone https://github.com/NirmalMendis/pcs-be.git
+
+2. **Install Required Packages**
+   - Navigate to the project directory:
+     cd psc-be
+   - Install the required npm packages:
+     --> npm install
+
+3. **Install Sequelize CLI Globally**
+   - Install the Sequelize Command Line Interface (CLI) globally on your machine:
+     --> npm install -g sequelize-cli
+
+4. **Create or Ensure Database Existence**
+   - Verify that the database named `pcs-db` exists on your local MySQL server. If it doesn't exist, create it.
+
+5. **Update Database Credentials**
+   - Locate the `config.json` file in your project (usually in the `config` folder).
+   - Update the database credentials in the `development` environment section with your local MySQL server details.
+
+6. **Create Migration Files for Entities**
+   - For each entity (e.g., `customer`), create a migration file:
+     --> sequelize migration:create --name=customer
+
+7. **Update Database with Migrations**
+   - Run the following command to apply the migrations to your database:
+     --> sequelize db:migrate
+
