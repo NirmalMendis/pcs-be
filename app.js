@@ -11,24 +11,23 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Customer API',
+      title: 'PCS API',
       version: '1.0.0',
-      description: 'A simple Express Customer API'
+      description: 'A simple Express pcs API'
     },
     servers: [
       {
-        url: 'http://localhost:3001/api/v1', // Ensure this matches your actual server URL and port
+        url: 'http://localhost:3001/api/v1',
         description: 'Development server'
       }
     ],
   },
-  apis: ['./routes/customer.routes.js'], // Ensure this matches the path to your routes
+  apis: ['./routes/customer.routes.js'], 
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Morgan for logging HTTP requests
-// Remove the if condition if you want Morgan to log in all environments
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }

@@ -1,22 +1,22 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
+    "username": "kasun",
+    "password": "12345",
     "database": "pcs_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
+    "username": "kasun",
+    "password": "12345",
+    "database": "pcs_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
+    "username": "kasun",
+    "password": "12345",
+    "database": "pcs_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
