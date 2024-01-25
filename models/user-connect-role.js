@@ -5,7 +5,6 @@ const UserConnectRole = sequelize.define(
   {},
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

@@ -10,21 +10,21 @@ const PawnTicket = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    pawn_date: {
+    pawnDate: {
       type: DataTypes.DATE,
       allowNull: false,
       unique: true,
     },
-    due_date: {
+    dueDate: {
       type: DataTypes.DATE,
       allowNull: false,
       unique: true,
     },
-    principal_amount: {
+    principalAmount: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    interest_rate: {
+    interestRate: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
@@ -35,7 +35,6 @@ const PawnTicket = sequelize.define(
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

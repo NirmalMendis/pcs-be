@@ -10,23 +10,22 @@ const Redemption = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    redemption_date: {
+    redemptionDate: {
       type: DataTypes.DATE,
       allowNull: false,
       unique: true,
     },
-    amount_paid: {
+    amountPaid: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    remaining_amount: {
+    remainingAmount: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

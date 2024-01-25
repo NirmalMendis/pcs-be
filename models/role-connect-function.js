@@ -11,7 +11,6 @@ const RoleConnectFunction = sequelize.define(
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

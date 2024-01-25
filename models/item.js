@@ -19,11 +19,11 @@ const Item = sequelize.define(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    appraised_value: {
+    appraisedValue: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    pawning_amount: {
+    pawningAmount: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
@@ -34,7 +34,6 @@ const Item = sequelize.define(
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

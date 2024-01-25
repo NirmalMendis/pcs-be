@@ -10,7 +10,7 @@ const Function = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    function_name: {
+    functionName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -37,7 +37,6 @@ const Function = sequelize.define(
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

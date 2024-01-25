@@ -14,7 +14,7 @@ const Payment = sequelize.define(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
-    payment_date: {
+    paymentDate: {
       type: DataTypes.DATE,
       allowNull: false,
       unique: true,
@@ -22,7 +22,6 @@ const Payment = sequelize.define(
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 

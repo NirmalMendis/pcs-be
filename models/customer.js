@@ -10,16 +10,16 @@ const Customer = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    nic_no: {
+    nicNo: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
-    first_name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    last_name: {
+    lastName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -28,7 +28,7 @@ const Customer = sequelize.define(
       allowNull: false,
       unique: true,
     },
-    mobile_no: {
+    mobileNo: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -37,7 +37,6 @@ const Customer = sequelize.define(
   },
   {
     paranoid: true,
-    underscored: true,
   }
 );
 
