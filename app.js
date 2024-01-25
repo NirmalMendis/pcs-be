@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const errorHandler = require("./utils/errors/errorHandler");
 
 const customerRouter = require("./routes/customer-routes");
+const userRouter = require("./routes/user-routes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/api/v1/ping", (req, res) => {
 });
 
 app.use("/api/v1/customer", customerRouter);
+app.use("/api/v1/user", userRouter);
 
 app.use(errorHandler);
 

@@ -4,14 +4,17 @@ const sequelize = require("../../utils/database");
 
 const UserService = {
   createUser: async (userData) => {
-    const { name, email, password, ...otherFields } = userData;
+    const { firstName, lastName, email, password, mobileNo } = userData;
 
     const transaction = await sequelize.transaction();
     try {
       const newUser = await User.create(
         {
-          name: req.body.name,
-          email: req.body.email,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password,
+          mobileNo: mobileNo,
         },
         { transaction }
       );
