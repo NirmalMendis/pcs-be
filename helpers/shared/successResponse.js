@@ -1,24 +1,24 @@
-const { StatusCodes } = require("http-status-codes");
-const { SUCCESS } = require("../../utils/constants/generic-constantss");
+const { StatusCodes } = require('http-status-codes');
+const { SUCCESS } = require('../../utils/constants/generic-constantss');
+const { Response } = require('express');
+const { PagerType } = require('./pagination');
 
-const sendSuccessResponse = (res, data, jwt, extraData) => {
-  if (jwt) {
-    res.status(StatusCodes.OK).json({
-      status: SUCCESS,
-      jwt: jwt,
-      data: {
-        data: data,
-      },
-    });
-  } else {
-    res.status(StatusCodes.OK).json({
-      status: SUCCESS,
-      data: {
-        data: data,
-        extraData: extraData,
-      },
-    });
-  }
+/**
+ *
+ * @param {Response} res
+ * @param {Object} data
+ * @param {string} [jwt] - only used when logging in
+ * @param {PagerType} [extraData]
+ */
+const sendSuccessResponse = (res, data, extraData, jwt) => {
+  res.status(StatusCodes.OK).json({
+    status: SUCCESS,
+    jwt,
+    data: {
+      data,
+      extraData,
+    },
+  });
 };
 
 module.exports = sendSuccessResponse;

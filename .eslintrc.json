@@ -1,0 +1,22 @@
+{
+  "env": {
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2023,
+    "sourceType": "script"
+  },
+  "plugins": ["jsdoc"],
+  "extends": ["eslint:recommended"],
+  "settings": {
+    "import/resolver": {
+      "node": {}
+    }
+  },
+  "rules": {
+    "no-console": "warn",
+    "jsdoc/no-undefined-types": 1,
+    "no-unused-vars": ["warn", { "args": "after-used" }]
+  }
+}

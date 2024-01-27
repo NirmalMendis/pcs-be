@@ -2,26 +2,25 @@ const DataTypes = require('sequelize');
 const sequelize = require('../utils/database');
 
 /**
- * @typedef {Object} CustomerType
+ * @typedef {Object} BranchType
  * @property {number} id
- * @property {string} nicNo
- * @property {string} firstName
- * @property {string} lastName
- * @property {string} email
+ * @property {string} name
  * @property {string} mobileNo
+ * @property {string} email
  * @property {string} addressLine1
  * @property {string} addressLine2
  * @property {string} addressLine3
  * @property {string} city
  * @property {string} postalCode
- * @property {number} branchId
+ * @property {string} logoURL
+ * @property {string} isMainBranch
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
  */
 
-const Customer = sequelize.define(
-  'customer',
+const Branch = sequelize.define(
+  'branch',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -29,20 +28,7 @@ const Customer = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    nicNo: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -52,15 +38,25 @@ const Customer = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     addressLine1: DataTypes.STRING,
     addressLine2: DataTypes.STRING,
     addressLine3: DataTypes.STRING,
     city: DataTypes.STRING,
     postalCode: DataTypes.STRING,
+    logoURL: DataTypes.STRING,
+    isMainBranch: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     paranoid: true,
   },
 );
 
-module.exports = Customer;
+module.exports = Branch;

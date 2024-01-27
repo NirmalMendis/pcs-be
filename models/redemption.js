@@ -1,8 +1,21 @@
-const DataTypes = require("sequelize");
-const sequelize = require("../utils/database");
+const DataTypes = require('sequelize');
+const sequelize = require('../utils/database');
+
+/**
+ * @typedef {Object} RedemptionType
+ * @property {number} id
+ * @property {Date} redemptionDate
+ * @property {number} amountPaid
+ * @property {number} remainingAmount
+ * @property {Date} createdAt
+ * @property {Date} updatedAt
+ * @property {Date} deletedAt
+ * @property {number} branchId
+ * @property {number} pawnTicketId
+ */
 
 const Redemption = sequelize.define(
-  "redemption",
+  'redemption',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -26,7 +39,7 @@ const Redemption = sequelize.define(
   },
   {
     paranoid: true,
-  }
+  },
 );
 
 module.exports = Redemption;
