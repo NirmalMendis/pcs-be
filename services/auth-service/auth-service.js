@@ -7,6 +7,7 @@ const {
   PASSWORD_RESET_ATTEMPT_LIMIT,
 } = require('../../utils/constants/generic-constantss');
 const crypto = require('crypto');
+const { UserType } = require('../../models/user');
 
 /**
  * @namespace
@@ -75,6 +76,36 @@ const AuthService = {
       await transaction.rollback();
       throw error;
     }
+  },
+  /**
+   *
+   * @param {string} email
+   * @param {string} password
+   * @returns {Promise<Pick<UserType, 'id' | 'firstName' | 'lastName' | 'email'> | void>}
+   */
+  login: async (email, password) => {
+    const user = await User.scope('login').findOne({
+      where: {
+        email,
+      },
+    });
+    if (!user) {
+      const user = await User.scope('login').findOne({
+        where: {
+          email,
+        },
+      });
+      if (user) {
+        throw new AppError(errorTypes.USER.ACCOUNT_DEACTIVATED);
+      }
+      // eslint-disable-next-line no-console
+      console.log('NO USER !!!');
+    }
+    if (!user || !(await user.verifyPassword(email, password))) {
+      throw new AppError(errorTypes.USER.INCORRECT_EMAIL_PASSWORD);
+    }
+
+    return user;
   },
 };
 

@@ -1,5 +1,5 @@
 const { Model } = require('sequelize');
-const sendSuccessResponse = require('../../helpers/shared/successResponse');
+const sendSuccessResponse = require('../../helpers/shared/success-response');
 const catchAsync = require('../../utils/catchAsync');
 const { AssociationOptionsType } = require('../../utils/types');
 const paginateData = require('../../helpers/shared/pagination');
@@ -44,7 +44,7 @@ const DbFactoryService = {
         if (+pager.totalPages < +req.query.page) {
           sendSuccessResponse(res, []);
         } else {
-          sendSuccessResponse(res, pageData, null, pager);
+          sendSuccessResponse(res, pageData, pager);
         }
       } else {
         sendSuccessResponse(res, results);

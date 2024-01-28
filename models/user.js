@@ -77,6 +77,9 @@ const User = sequelize.define(
           'passwordResetExpires',
         ],
       },
+      login: {
+        attributes: ['id', 'firstName', 'lastName', 'email', 'passkey'],
+      },
     },
   },
 );
@@ -96,6 +99,19 @@ User.prototype.createPasswordResetToken = async function (transaction) {
     Date.now() + +process.env.PASSWORD_RESET_EXPIRES_MINS * 60 * 1000;
   await this.save({ transaction });
   return resetToken;
+};
+
+/**
+ *
+ * @param {string} candidateEmail
+ * @param {string} candidatePassword
+ * @returns
+ */
+User.prototype.verifyPassword = async function (
+  candidateEmail,
+  candidatePassword,
+) {
+  return bcrypt.compare(candidateEmail + candidatePassword, this.passkey);
 };
 
 module.exports = User;

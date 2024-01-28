@@ -29,7 +29,9 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-module.exports = (err, _, res) => {
+//req and next are needed for express to function properly
+// eslint-disable-next-line no-unused-vars
+module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
   err.status = err.status || ERROR;
   if (process.env.NODE_ENV === DEVELOPMENT_ENV) {
