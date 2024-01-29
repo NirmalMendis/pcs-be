@@ -7,8 +7,11 @@ const userRouter = require('./routes/user-routes');
 const authRouter = require('./routes/auth-routes');
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
+const cookieParser = require('cookie-parser');
 
 const app = express();
+
+app.use(cookieParser());
 
 /* use morgan in dev env */
 if (process.env.NODE_ENV === 'development') {

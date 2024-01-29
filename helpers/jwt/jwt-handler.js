@@ -8,7 +8,7 @@ const { Response } = require('express');
  * @param {Pick<UserType, 'firstName' | 'lastName' | 'email'>} user
  * @returns {string}
  */
-const generateAccessToken = async (user) => {
+const generateAccessToken = (user) => {
   const jwtPayloadData = {
     firstName: user.firstName,
     lastName: user.lastName,
@@ -24,7 +24,7 @@ const generateAccessToken = async (user) => {
  * @param {Pick<UserType, 'email'>} user
  * @returns {string}
  */
-const generateRefreshToken = async (user) => {
+const generateRefreshToken = (user) => {
   const jwtPayloadData = {
     email: user.email,
   };
@@ -40,8 +40,8 @@ const generateRefreshToken = async (user) => {
  * @param {Response} res
  */
 const sendResponseWithJWT = async (user, res) => {
-  const accessToken = await generateAccessToken(user);
-  const refreshToken = await generateRefreshToken(user);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
 
   res.cookie('refreshToken', refreshToken, {
     // expires: new Date(

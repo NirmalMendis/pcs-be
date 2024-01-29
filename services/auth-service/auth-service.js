@@ -8,6 +8,8 @@ const {
 } = require('../../utils/constants/generic-constantss');
 const crypto = require('crypto');
 const { UserType } = require('../../models/user');
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
 
 /**
  * @namespace
@@ -106,6 +108,27 @@ const AuthService = {
     }
 
     return user;
+  },
+  /**
+   *
+   * @param {string} refreshToken
+   * @param {string} accessToken
+   * @returns {UserType}
+   */
+  validateTokens: async (refreshToken, accessToken) => {
+    await promisify(jwt.verify)(refreshToken, process.env.JWT_SECRET);
+
+    const decodedJWT = await promisify(jwt.verify)(
+      accessToken,
+      process.env.JWT_SECRET,
+    );
+
+    const currentUser = await User.findOne({
+      where: {
+        email: decodedJWT.email,
+      },
+    });
+    return currentUser;
   },
 };
 
