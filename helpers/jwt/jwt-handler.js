@@ -57,7 +57,7 @@ const sendResponseWithJWT = async (user, res) => {
     lastName: user.lastName,
     email: user.email,
   };
-  sendSuccessResponse(res, filteredUser, undefined, accessToken);
+  sendSuccessResponse(res, { user: filteredUser, accessToken });
 };
 
 module.exports = {

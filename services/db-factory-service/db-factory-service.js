@@ -15,13 +15,15 @@ const DbFactoryService = {
    * @param {AssociationOptionsType} associationOptions
    * @returns
    */
-  getOne: (Model, associationOptions = {}) =>
+  getOne: (Model, associationOptions = {}, blockScoping = false) =>
     catchAsync(async (req, res) => {
       let results = [];
-      results = await Model.scope(req.query.scope).findByPk(
-        req.params.id,
-        associationOptions,
-      );
+      const ScopedModel = blockScoping
+        ? Model
+        : req.query.scope
+          ? Model.scope(req.query.scope)
+          : Model;
+      results = await ScopedModel.findByPk(req.params.id, associationOptions);
       sendSuccessResponse(res, results);
     }),
 
@@ -31,10 +33,15 @@ const DbFactoryService = {
    * @param {AssociationOptionsType} associationOptions
    * @returns
    */
-  getAll: (Model, associationOptions = {}) =>
+  getAll: (Model, associationOptions = {}, blockScoping = false) =>
     catchAsync(async (req, res) => {
       let results = [];
-      results = await Model.scope(req.query.scope).findAll(associationOptions);
+      const ScopedModel = blockScoping
+        ? Model
+        : req.query.scope
+          ? Model.scope(req.query.scope)
+          : Model;
+      results = await ScopedModel.findAll(associationOptions);
       if (req.query.page && req.query.pageSize) {
         const { pager, pageData } = paginateData(
           req.query.page,
@@ -44,7 +51,7 @@ const DbFactoryService = {
         if (+pager.totalPages < +req.query.page) {
           sendSuccessResponse(res, []);
         } else {
-          sendSuccessResponse(res, pageData, pager);
+          sendSuccessResponse(res, { pageData, pager });
         }
       } else {
         sendSuccessResponse(res, results);

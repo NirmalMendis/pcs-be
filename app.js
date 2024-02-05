@@ -26,7 +26,19 @@ app.options('*', cors()); //for put delete.. requests which sends preflight opti
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
 app.use(express.json({ limit: '10kb' }));
+app.use((req, res, next) => {
+  if (
+    req.body &&
+    req.body.data &&
+    req.body.data !== 'undefined' &&
+    req.body.data != 'null'
+  ) {
+    req.body = req.body.data;
+  }
+  next();
+});
 
 //live test
 app.get('/api/v1/ping', (_, res) => {

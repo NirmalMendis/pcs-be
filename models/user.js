@@ -53,6 +53,11 @@ const User = sequelize.define(
     },
   },
   {
+    defaultScope: {
+      attributes: {
+        exclude: ['passkey'],
+      },
+    },
     paranoid: true,
     hooks: {
       beforeUpdate: async (user) => {
