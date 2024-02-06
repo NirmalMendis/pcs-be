@@ -6,4 +6,8 @@ const router = express.Router();
 router.route('/login').post(AuthController.login);
 router.route('/set-new-password').patch(AuthController.setNewUserPassword);
 
+router.use(AuthController.protect);
+
+router.route('/logout').post(AuthController.logout);
+
 module.exports = router;

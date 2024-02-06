@@ -113,7 +113,7 @@ const AuthService = {
    *
    * @param {string} refreshToken
    * @param {string} accessToken
-   * @returns {UserType}
+   * @returns {Promise<UserType | void>}
    */
   validateTokens: async (refreshToken, accessToken) => {
     await promisify(jwt.verify)(refreshToken, process.env.JWT_SECRET);

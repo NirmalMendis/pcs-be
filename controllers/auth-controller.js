@@ -29,6 +29,16 @@ const AuthController = {
     const user = await AuthService.login(email, password);
     sendResponseWithJWT(user, res);
   }),
+  logout: catchAsync(async (req, res) => {
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      //secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+      //Temp disabled below 2
+      secure: true,
+      sameSite: 'none',
+    });
+    sendSuccessResponse(res, {});
+  }),
   protect: catchAsync(async (req, res, next) => {
     try {
       let accessToken;
