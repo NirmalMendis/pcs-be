@@ -5,3 +5,7 @@ exports.ERROR = 'error';
 exports.SUCCESS = 'success';
 
 exports.PASSWORD_RESET_ATTEMPT_LIMIT = 5;
+
+exports.METADATA_TYPES = {
+  PAWN_TICKETS_STATUS: 'PAWN_TICKETS_STATUS',
+};

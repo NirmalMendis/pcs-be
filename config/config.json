@@ -4,7 +4,8 @@
     "password": "root",
     "database": "pcs_db",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "seederStorage": "sequelize"
   },
   "test": {
     "username": "root",
@@ -18,6 +19,7 @@
     "password": null,
     "database": "database_production",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "seederStorage": "sequelize"
   }
 }

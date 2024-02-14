@@ -1,15 +1,6 @@
 const DataTypes = require('sequelize');
 const sequelize = require('../utils/database');
-
-/**
- * @enum {string}
- * @readonly
- */
-const PawnTicketStatusEnum = {
-  INITIAL: 'Initial',
-  ONGOING: 'Ongoing',
-  COMPLETE: 'Complete',
-};
+const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 
 /**
  * @typedef {Object} PawnTicketType
@@ -68,4 +59,3 @@ const PawnTicket = sequelize.define(
 );
 
 module.exports = PawnTicket;
-exports.PawnTicketStatusEnum = PawnTicketStatusEnum;

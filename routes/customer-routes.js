@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.use(AuthController.protect);
 
+router.route('/search').get(CustomerController.searchCustomers);
 router.route('/:id').get(CustomerController.getCustomer);
+router.route('/').post(CustomerController.createCustomer);
 
 module.exports = router;

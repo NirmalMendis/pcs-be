@@ -5,6 +5,9 @@ const errorHandler = require('./utils/errors/errorHandler');
 const customerRouter = require('./routes/customer-routes');
 const userRouter = require('./routes/user-routes');
 const authRouter = require('./routes/auth-routes');
+const metadataRouter = require('./routes/metadata-routes');
+const branchRouter = require('./routes/branch-routes');
+
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
 const cookieParser = require('cookie-parser');
@@ -34,9 +37,16 @@ app.get('/api/v1/ping', (_, res) => {
   res.status(200).send('Server is live');
 });
 
+//comment to remove delay
+// app.use(async (req, res, next) => {
+//   setTimeout(next, 1000);
+// });
+
 app.use('/api/v1/customer', customerRouter);
 app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/metadata', metadataRouter);
+app.use('/api/v1/branch', branchRouter);
 
 app.all('*', (req, _, next) => {
   next(

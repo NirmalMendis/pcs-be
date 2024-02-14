@@ -15,6 +15,7 @@ const sequelize = require('../utils/database');
  * @property {string} city
  * @property {string} postalCode
  * @property {number} branchId
+ * @property {string} searchString
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
@@ -42,6 +43,12 @@ const Customer = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    name: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.firstName} ${this.lastName}`;
+      },
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -57,9 +64,26 @@ const Customer = sequelize.define(
     addressLine3: DataTypes.STRING,
     city: DataTypes.STRING,
     postalCode: DataTypes.STRING,
+    searchString: {
+      type: DataTypes.STRING,
+    },
   },
   {
     paranoid: true,
+    indexes: [{ type: 'FULLTEXT', name: 'text_idx', fields: ['searchString'] }],
+    defaultScope: {
+      attributes: {
+        exclude: ['searchString'],
+      },
+    },
+    hooks: {
+      beforeCreate: async (customer) => {
+        customer.searchString = `${customer.id} ${customer.firstName} ${customer.lastName} ${customer.email} ${customer.mobileNo} ${customer.addressLine1}`;
+      },
+      beforeUpdate: async (customer) => {
+        customer.searchString = `${customer.id} ${customer.firstName} ${customer.lastName} ${customer.email} ${customer.mobileNo} ${customer.addressLine1}`;
+      },
+    },
   },
 );
 

@@ -1,4 +1,4 @@
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 const sendSuccessResponse = require('../../helpers/shared/success-response');
 const catchAsync = require('../../utils/catchAsync');
 const { AssociationOptionsType } = require('../../utils/types');
@@ -56,6 +56,38 @@ const DbFactoryService = {
       } else {
         sendSuccessResponse(res, results);
       }
+    }),
+
+  /**
+   *
+   * @param {Model} Model
+   * @param {AssociationOptionsType} associationOptions
+   * @returns
+   */
+  getAllBySearch: (Model, blockScoping = false) =>
+    catchAsync(async (req, res) => {
+      const { value, scope } = req.query;
+
+      const ScopedModel = blockScoping
+        ? Model
+        : scope
+          ? Model.scope(scope)
+          : Model;
+
+      const results = await ScopedModel.findAll({
+        where: Sequelize.literal(
+          'MATCH (searchString) AGAINST (:value IN BOOLEAN MODE)',
+        ),
+        replacements: {
+          value: value
+            .trim()
+            .replace(/ +(?= )/g, '')
+            .split(' ')
+            .map((word) => `+${word}*`)
+            .join(' '),
+        },
+      });
+      sendSuccessResponse(res, results);
     }),
 
   /**

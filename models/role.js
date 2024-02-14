@@ -35,7 +35,7 @@ const Role = sequelize.define(
       unique: true,
     },
     status: {
-      type: DataTypes.ENUM('Active', 'Inactive'),
+      type: DataTypes.ENUM(RoleStatusEnum.ACTIVE, RoleStatusEnum.INACTIVE),
       allowNull: false,
     },
   },

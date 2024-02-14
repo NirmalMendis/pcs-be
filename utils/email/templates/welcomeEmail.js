@@ -13,7 +13,7 @@ const { UserType } = require('../../../models/user');
  * @param {WelcomeEmailTemplateDataType} data - The user object.
  */
 const welcomeTemplate = (data) => {
-  return `<b><h1>${data.branch.name}</h1>Hello world? ${data.redirectURL}</b>`;
+  return `<b><h1>${data.branch?.name}</h1>Hello world? ${data.redirectURL}</b>`;
 };
 
 module.exports = welcomeTemplate;
