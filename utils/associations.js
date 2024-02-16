@@ -20,10 +20,7 @@ Role.belongsToMany(Function, {
 Role.belongsToMany(User, { through: { model: UserConnectRole } });
 User.belongsToMany(Role, { through: { model: UserConnectRole } });
 
-Item.belongsTo(Branch);
 PawnTicket.belongsTo(Branch);
-Payment.belongsTo(Branch);
-Redemption.belongsTo(Branch);
 
 User.belongsTo(Branch);
 

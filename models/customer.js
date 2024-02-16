@@ -1,5 +1,6 @@
 const DataTypes = require('sequelize');
 const sequelize = require('../utils/database');
+const capitalize = require('../helpers/shared/capitalize');
 
 /**
  * @typedef {Object} CustomerType
@@ -46,7 +47,7 @@ const Customer = sequelize.define(
     name: {
       type: DataTypes.VIRTUAL,
       get() {
-        return `${this.firstName} ${this.lastName}`;
+        return capitalize(`${this.firstName} ${this.lastName}`);
       },
     },
     email: {
