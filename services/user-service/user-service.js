@@ -21,9 +21,6 @@ const UserService = {
 
     const transaction = await sequelize.transaction();
     try {
-      /**
-       * @type {UserType}
-       */
       const newUser = await User.create(
         {
           firstName: firstName,

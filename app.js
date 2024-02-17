@@ -7,6 +7,7 @@ const userRouter = require('./routes/user-routes');
 const authRouter = require('./routes/auth-routes');
 const metadataRouter = require('./routes/metadata-routes');
 const branchRouter = require('./routes/branch-routes');
+const pawnTicketRouter = require('./routes/pawn-ticket-routes');
 
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
@@ -47,6 +48,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/metadata', metadataRouter);
 app.use('/api/v1/branch', branchRouter);
+app.use('/api/v1/pawn-ticket', pawnTicketRouter);
 
 app.all('*', (req, _, next) => {
   next(

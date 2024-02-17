@@ -29,12 +29,10 @@ const PawnTicket = sequelize.define(
     pawnDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      unique: true,
     },
     dueDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      unique: true,
     },
     principalAmount: {
       type: DataTypes.DOUBLE,
