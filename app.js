@@ -39,9 +39,9 @@ app.get('/api/v1/ping', (_, res) => {
 });
 
 //comment to remove delay
-// app.use(async (req, res, next) => {
-//   setTimeout(next, 1000);
-// });
+app.use(async (req, res, next) => {
+  setTimeout(next, 1000);
+});
 
 app.use('/api/v1/customer', customerRouter);
 app.use('/api/v1/user', userRouter);

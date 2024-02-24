@@ -56,6 +56,15 @@ const PawnTicketService = {
       throw error;
     }
   },
+  /**
+   *
+   * @param {number} principalAmount
+   * @param {number} interestRate
+   * @returns {number}
+   */
+  calculateMonthlyInterest: (principalAmount, interestRate) => {
+    return (principalAmount * interestRate) / 100;
+  },
 };
 
 module.exports = PawnTicketService;

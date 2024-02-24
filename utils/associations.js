@@ -25,8 +25,8 @@ PawnTicket.belongsTo(Branch);
 User.belongsTo(Branch);
 
 Customer.hasMany(PawnTicket);
-Customer.hasMany(Item);
 
+PawnTicket.belongsTo(Customer);
 PawnTicket.hasMany(Item);
 PawnTicket.hasMany(Payment);
 PawnTicket.hasMany(Redemption);
