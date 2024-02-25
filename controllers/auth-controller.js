@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const { sendResponseWithJWT } = require('../helpers/jwt/jwt-handler');
 const sendSuccessResponse = require('../helpers/shared/success-response');
-const AuthService = require('../services/auth-service/auth-service');
+const AuthService = require('../services/auth-service');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/errors/AppError');
 const { USER } = require('../utils/errors/errors');

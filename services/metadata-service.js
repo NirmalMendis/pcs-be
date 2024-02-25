@@ -1,4 +1,4 @@
-const { PawnTicketStatusEnum } = require('../../utils/constants/db-enums');
+const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 
 /**
  * @namespace

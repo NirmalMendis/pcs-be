@@ -1,9 +1,9 @@
 const { Model, Sequelize } = require('sequelize');
-const sendSuccessResponse = require('../../helpers/shared/success-response');
-const catchAsync = require('../../utils/catchAsync');
-const { AssociationOptionsType } = require('../../utils/types');
-const paginateData = require('../../helpers/shared/pagination');
-const sequelize = require('../../utils/database');
+const sendSuccessResponse = require('../helpers/shared/success-response');
+const catchAsync = require('../utils/catchAsync');
+const { AssociationOptionsType } = require('../utils/types');
+const paginateData = require('../helpers/shared/pagination');
+const sequelize = require('../utils/database');
 
 /**
  * @namespace

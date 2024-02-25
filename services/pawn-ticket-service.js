@@ -1,9 +1,9 @@
-const sequelize = require('../../utils/database');
-const { BranchType } = require('../../models/branch');
-const { PawnTicketType } = require('../../models/pawn-ticket');
-const { ItemType } = require('../../models/item');
-const PawnTicket = require('../../models/pawn-ticket');
-const Item = require('../../models/item');
+const sequelize = require('../utils/database');
+const { BranchType } = require('../models/branch');
+const { PawnTicketType } = require('../models/pawn-ticket');
+const { ItemType } = require('../models/item');
+const PawnTicket = require('../models/pawn-ticket');
+const Item = require('../models/item');
 
 /**
  * @namespace

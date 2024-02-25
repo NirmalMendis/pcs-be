@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const BranchService = require('../../services/branch-service/branch-service');
+const BranchService = require('../../services/branch-service');
 const { Transaction } = require('sequelize');
 
 const createTransport = () => {

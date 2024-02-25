@@ -1,7 +1,7 @@
 const sendSuccessResponse = require('../helpers/shared/success-response');
 const User = require('../models/user');
-const DbFactoryService = require('../services/db-factory-service/db-factory-service');
-const UserService = require('../services/user-service/user-service');
+const DbFactoryService = require('../services/db-factory-service');
+const UserService = require('../services/user-service');
 const catchAsync = require('../utils/catchAsync');
 
 /**

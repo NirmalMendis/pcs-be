@@ -1,13 +1,13 @@
-const sequelize = require('../../utils/database');
-const User = require('../../models/user');
+const sequelize = require('../utils/database');
+const User = require('../models/user');
 const { Op } = require('sequelize');
-const AppError = require('../../utils/errors/AppError');
-const errorTypes = require('../../utils/errors/errors');
+const AppError = require('../utils/errors/AppError');
+const errorTypes = require('../utils/errors/errors');
 const {
   PASSWORD_RESET_ATTEMPT_LIMIT,
-} = require('../../utils/constants/generic-constantss');
+} = require('../utils/constants/generic-constantss');
 const crypto = require('crypto');
-const { UserType } = require('../../models/user');
+const { UserType } = require('../models/user');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 

@@ -1,5 +1,5 @@
 const sendSuccessResponse = require('../helpers/shared/success-response');
-const MetadataService = require('../services/meta-data-service/metadata-service');
+const MetadataService = require('../services/metadata-service');
 const catchAsync = require('../utils/catchAsync');
 const { METADATA_TYPES } = require('../utils/constants/generic-constantss');
 

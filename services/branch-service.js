@@ -1,7 +1,7 @@
-const Branch = require('../../models/branch');
-const sequelize = require('../../utils/database');
-const { SequelizeOptionsType } = require('../../utils/types');
-const { BranchType } = require('../../models/branch');
+const Branch = require('../models/branch');
+const sequelize = require('../utils/database');
+const { SequelizeOptionsType } = require('../utils/types');
+const { BranchType } = require('../models/branch');
 
 /**
  * @namespace

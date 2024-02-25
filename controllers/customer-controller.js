@@ -1,5 +1,5 @@
 const Customer = require('../models/customer');
-const DbFactoryService = require('../services/db-factory-service/db-factory-service');
+const DbFactoryService = require('../services/db-factory-service');
 
 /**
  * @namespace
