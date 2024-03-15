@@ -8,5 +8,6 @@ router.use(AuthController.protect);
 
 router.route('/').post(UserController.createUser);
 router.route('/:id').get(UserController.getUser);
+router.route('/active-branch').patch(UserController.updateActiveBranch);
 
 module.exports = router;

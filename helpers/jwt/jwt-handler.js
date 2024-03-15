@@ -53,6 +53,7 @@ const sendResponseWithJWT = async (user, res) => {
     sameSite: 'none',
   });
   const filteredUser = {
+    id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,

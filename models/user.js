@@ -13,7 +13,8 @@ const bcrypt = require('bcrypt');
  * @property {string} passwordResetToken
  * @property {string} passwordResetExpires
  * @property {string} passwordResetAttempts
- * @property {number} branchId
+ * @property {number} activeBranchId
+ * @property {number[]} branches
  */
 
 const User = sequelize.define(

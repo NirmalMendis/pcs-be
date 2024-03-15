@@ -22,7 +22,13 @@ User.belongsToMany(Role, { through: { model: UserConnectRole } });
 
 PawnTicket.belongsTo(Branch);
 
-User.belongsTo(Branch);
+User.belongsTo(Branch, { as: 'activeBranch' });
+User.belongsToMany(Branch, {
+  through: { model: 'userconnectbranches', unique: false },
+});
+Branch.belongsToMany(User, {
+  through: { model: 'userconnectbranches', unique: false },
+});
 
 Customer.hasMany(PawnTicket);
 

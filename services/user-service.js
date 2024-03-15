@@ -1,6 +1,7 @@
 const sendEmail = require('../helpers/shared/email');
 const User = require('../models/user');
 const { UserType } = require('../models/user');
+const { BranchType } = require('../models/branch');
 const sequelize = require('../utils/database');
 const welcomeTemplate = require('../utils/email/templates/welcomeEmail');
 const BranchService = require('./branch-service');
@@ -13,11 +14,12 @@ const {
  */
 const UserService = {
   /**
-   * @param {Pick<UserType, 'firstName' | 'lastName' | 'email' | 'branchId' | 'mobileNo'>} userData
+   * @param {Pick<UserType, 'firstName' | 'lastName' | 'email' | 'activeBranchId' | 'mobileNo' | 'branches'>} userData
    * @returns {Promise<(UserType | void)>}
    */
   createUser: async (userData) => {
-    const { firstName, lastName, email, branchId, mobileNo } = userData;
+    const { firstName, lastName, email, activeBranchId, mobileNo, branches } =
+      userData;
 
     const transaction = await sequelize.transaction();
     try {
@@ -27,11 +29,11 @@ const UserService = {
           lastName: lastName,
           email: email,
           mobileNo: mobileNo,
-          branchId: branchId,
+          activeBranchId: activeBranchId,
         },
         { transaction },
       );
-
+      await newUser.addBranches(branches, { transaction });
       const resetToken = await newUser.createPasswordResetToken(transaction);
 
       const mainBranchProfile = await BranchService.findBranch(
@@ -62,6 +64,32 @@ const UserService = {
       await transaction.commit();
 
       return newUser;
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
+    }
+  },
+  /**
+   * @param {Pick<BranchType, 'id' >} branchId
+   * @param {Pick<UserType, 'id' >} userId
+   * @returns {Promise<(void)>}
+   */
+  updateActiveBranch: async (branchId, userId) => {
+    const transaction = await sequelize.transaction();
+    try {
+      const user = await User.findByPk(userId, {
+        transaction,
+      });
+
+      await user.setActiveBranch(branchId);
+      await user.save({
+        lock: true,
+        transaction,
+      });
+
+      await transaction.commit();
     } catch (error) {
       if (transaction) {
         await transaction.rollback();

@@ -78,8 +78,12 @@ const Customer = sequelize.define(
       },
     },
     hooks: {
-      beforeCreate: async (customer) => {
+      afterCreate: async (customer, options) => {
         customer.searchString = `${customer.id} ${customer.firstName} ${customer.lastName} ${customer.email} ${customer.mobileNo} ${customer.addressLine1}`;
+        await customer.save({
+          fields: ['searchString'],
+          transaction: options.transaction,
+        });
       },
       beforeUpdate: async (customer) => {
         customer.searchString = `${customer.id} ${customer.firstName} ${customer.lastName} ${customer.email} ${customer.mobileNo} ${customer.addressLine1}`;
