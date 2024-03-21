@@ -130,6 +130,23 @@ const AuthService = {
     });
     return currentUser;
   },
+  /**
+   *
+   * @param {string} refreshToken
+   * @returns {Promise<Pick<UserType, 'id' | 'firstName' | 'lastName' | 'email'> | void>}
+   */
+  refresh: async (refreshToken) => {
+    const decodedRefreshToken = await promisify(jwt.verify)(
+      refreshToken,
+      process.env.JWT_SECRET,
+    );
+    const currentUser = await User.findOne({
+      where: {
+        email: decodedRefreshToken.email,
+      },
+    });
+    return currentUser;
+  },
 };
 
 module.exports = AuthService;

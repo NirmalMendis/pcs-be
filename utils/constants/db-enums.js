@@ -3,7 +3,8 @@
  * @readonly
  */
 exports.PawnTicketStatusEnum = {
-  INITIAL: 'Initial',
-  ONGOING: 'Ongoing',
-  COMPLETE: 'Complete',
+  ACTIVE: 'Active',
+  DUE: 'Due',
+  RECOVERED: 'Recovered',
+  FORFEITED: 'Forfeited',
 };

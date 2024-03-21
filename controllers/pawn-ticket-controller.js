@@ -10,6 +10,7 @@ const PdfService = require('../services/pdf-service');
 const {
   MATERIAL_CONTENT_TYPES,
 } = require('../utils/constants/generic-constantss');
+const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 
 /**
  * @namespace
@@ -19,6 +20,7 @@ const PawnTicketController = {
     const pawnTicket = await PawnTicketService.createPawnTicket({
       ...req.body,
       branchId: req.user.activeBranchId || req.body.branchId,
+      status: PawnTicketStatusEnum.ACTIVE,
     });
     sendSuccessResponse(res, pawnTicket);
   }),

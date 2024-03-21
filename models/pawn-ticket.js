@@ -44,9 +44,10 @@ const PawnTicket = sequelize.define(
     },
     status: {
       type: DataTypes.ENUM(
-        PawnTicketStatusEnum.INITIAL,
-        PawnTicketStatusEnum.ONGOING,
-        PawnTicketStatusEnum.COMPLETE,
+        PawnTicketStatusEnum.ACTIVE,
+        PawnTicketStatusEnum.DUE,
+        PawnTicketStatusEnum.FORFEITED,
+        PawnTicketStatusEnum.RECOVERED,
       ),
       allowNull: false,
     },

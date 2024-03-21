@@ -71,6 +71,23 @@ const AuthController = {
       return next(new AppError(USER.INVALID_JWT, StatusCodes.UNAUTHORIZED));
     }
   }),
+  refresh: catchAsync(async (req, res, next) => {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+
+      if (!refreshToken) {
+        return next(new AppError(USER.MISSING_JWT));
+      }
+
+      const currentUser = await AuthService.refresh(refreshToken);
+      if (!currentUser) {
+        return next(new AppError(USER.NO_USER_FOR_JWT));
+      }
+      sendResponseWithJWT(currentUser, res);
+    } catch (error) {
+      return next(new AppError(USER.INVALID_JWT, StatusCodes.UNAUTHORIZED));
+    }
+  }),
 };
 
 module.exports = AuthController;

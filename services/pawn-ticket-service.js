@@ -11,7 +11,7 @@ const Item = require('../models/item');
 const PawnTicketService = {
   /**
    *
-   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "principalAmount" | "interestRate" | "status" | "branchId"> & { items: Array<Pick<ItemType, "description" | "caratage" | "appraisedValue" | "pawningAmount" | "weight">> }} pawnTicketData
+   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId"> & { items: Array<Pick<ItemType, "description" | "caratage" | "appraisedValue" | "pawningAmount" | "weight">> }} pawnTicketData
    * @returns {Promise<(BranchType | void)>}
    */
   createPawnTicket: async (pawnTicketData) => {
@@ -19,7 +19,6 @@ const PawnTicketService = {
     const {
       pawnDate,
       dueDate,
-      principalAmount,
       interestRate,
       status,
       branchId,
@@ -28,11 +27,14 @@ const PawnTicketService = {
     } = pawnTicketData;
 
     try {
+      const calculatedPrincipalAmount = items
+        ?.map((item) => item.pawningAmount)
+        ?.reduce((acc, curr) => acc + curr, 0);
       const pawnTicket = await PawnTicket.create(
         {
           pawnDate,
           dueDate,
-          principalAmount,
+          principalAmount: calculatedPrincipalAmount,
           interestRate,
           status,
           items: items,
