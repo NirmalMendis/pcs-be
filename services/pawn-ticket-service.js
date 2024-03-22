@@ -11,7 +11,7 @@ const Item = require('../models/item');
 const PawnTicketService = {
   /**
    *
-   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId"> & { items: Array<Pick<ItemType, "description" | "caratage" | "appraisedValue" | "pawningAmount" | "weight">> }} pawnTicketData
+   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "caratage" | "appraisedValue" | "pawningAmount" | "weight">> }} pawnTicketData
    * @returns {Promise<(BranchType | void)>}
    */
   createPawnTicket: async (pawnTicketData) => {
@@ -24,6 +24,7 @@ const PawnTicketService = {
       branchId,
       customerId,
       items,
+      serviceCharge,
     } = pawnTicketData;
 
     try {
@@ -40,6 +41,7 @@ const PawnTicketService = {
           items: items,
           branchId,
           customerId,
+          serviceCharge,
         },
         {
           include: [Item],

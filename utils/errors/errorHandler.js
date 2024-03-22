@@ -14,6 +14,7 @@ const sendErrorDev = (err, res) => {
     error: err,
     message: err.message,
     stack: err.stack,
+    errorCode: err.errorCode,
   });
 };
 
@@ -27,6 +28,7 @@ const sendErrorProd = (err, res) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       status: ERROR,
       message: GENERIC_PROD_ERROR,
+      errorCode: err.errorCode,
     });
   }
 };
