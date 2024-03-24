@@ -9,6 +9,7 @@ const metadataRouter = require('./routes/metadata-routes');
 const branchRouter = require('./routes/branch-routes');
 const pawnTicketRouter = require('./routes/pawn-ticket-routes');
 const invoiceRouter = require('./routes/invoice-routes');
+const roleRouter = require('./routes/role-routes');
 
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
@@ -51,6 +52,7 @@ app.use('/api/v1/metadata', metadataRouter);
 app.use('/api/v1/branch', branchRouter);
 app.use('/api/v1/pawn-ticket', pawnTicketRouter);
 app.use('/api/v1/invoice', invoiceRouter);
+app.use('/api/v1/role', roleRouter);
 
 app.all('*', (req, _, next) => {
   next(

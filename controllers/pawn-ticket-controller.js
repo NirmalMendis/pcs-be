@@ -12,11 +12,14 @@ const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
  */
 const PawnTicketController = {
   createPawnTicket: catchAsync(async (req, res) => {
-    const pawnTicket = await PawnTicketService.createPawnTicket({
-      ...req.body,
-      branchId: req.user.activeBranchId || req.body.branchId,
-      status: PawnTicketStatusEnum.ACTIVE,
-    });
+    const pawnTicket = await PawnTicketService.createPawnTicket(
+      {
+        ...req.body,
+        branchId: req.user.activeBranchId || req.body.branchId,
+        status: PawnTicketStatusEnum.ACTIVE,
+      },
+      req.user,
+    );
     sendSuccessResponse(res, pawnTicket);
   }),
   getAllPawnTickets: async (req, res) =>

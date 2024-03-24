@@ -14,6 +14,7 @@ const PermissionActionEnum = {
 
 /**
  * @typedef {Object} RoleConnectFunctionType
+ * @property {number} id
  * @property {PermissionActionEnum} action
  * @property {Date} createdAt
  * @property {Date} updatedAt
@@ -25,6 +26,12 @@ const PermissionActionEnum = {
 const RoleConnectFunction = sequelize.define(
   'role_connect_function',
   {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
     action: {
       type: DataTypes.ENUM(
         PermissionActionEnum.CREATE,

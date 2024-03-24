@@ -11,7 +11,7 @@ const RoleStatusEnum = {
 };
 
 /**
- * @typedef {Object} PawnTicketType
+ * @typedef {Object} RoleType
  * @property {number} id
  * @property {string} roleName
  * @property {RoleStatusEnum} status

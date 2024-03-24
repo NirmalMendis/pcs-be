@@ -1,15 +1,6 @@
 const DataTypes = require('sequelize');
 const sequelize = require('../utils/database');
-
-/**
- * @enum {string}
- * @readonly
- */
-const CategoryEnum = {
-  GENERAL: 'General',
-  SETTINGS: 'Settings',
-  TICKETING: 'Ticketing',
-};
+const { CategoryEnum } = require('../utils/constants/generic-constantss');
 
 /**
  * @typedef {Object} FunctionType
@@ -39,11 +30,7 @@ const Function = sequelize.define(
       allowNull: false,
     },
     category: {
-      type: DataTypes.ENUM(
-        CategoryEnum.GENERAL,
-        CategoryEnum.SETTINGS,
-        CategoryEnum.TICKETING,
-      ),
+      type: DataTypes.ENUM(CategoryEnum.PAWN_TICKET, CategoryEnum.CUSTOMER),
       allowNull: false,
     },
     view: {
@@ -69,4 +56,3 @@ const Function = sequelize.define(
 );
 
 module.exports = Function;
-exports.CategoryEnum = CategoryEnum;

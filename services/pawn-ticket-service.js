@@ -2,6 +2,7 @@ const sequelize = require('../utils/database');
 const { BranchType } = require('../models/branch');
 const { PawnTicketType } = require('../models/pawn-ticket');
 const { ItemType } = require('../models/item');
+const { UserType } = require('../models/user');
 const PawnTicket = require('../models/pawn-ticket');
 const Item = require('../models/item');
 const InvoiceService = require('./invoice-service.');
@@ -16,9 +17,10 @@ const PawnTicketService = {
   /**
    *
    * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "caratage" | "appraisedValue" | "pawningAmount" | "weight">> }} pawnTicketData
+   * @param {UserType} user
    * @returns {Promise<(BranchType | void)>}
    */
-  createPawnTicket: async (pawnTicketData) => {
+  createPawnTicket: async (pawnTicketData, user) => {
     const transaction = await sequelize.transaction();
     const {
       pawnDate,
@@ -69,6 +71,10 @@ const PawnTicketService = {
       });
 
       pawnTicket.setInvoice(invoice);
+
+      await pawnTicket.setLastUpdatedBy(user, { transaction });
+      await invoice.setLastUpdatedBy(user, { transaction });
+
       await transaction.commit();
 
       return pawnTicket;
