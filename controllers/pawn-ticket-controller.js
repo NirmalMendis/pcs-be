@@ -5,11 +5,6 @@ const DbFactoryService = require('../services/db-factory-service');
 const PawnTicket = require('../models/pawn-ticket');
 const Customer = require('../models/customer');
 const Item = require('../models/item');
-const ticketInvoiceTemplate = require('../utils/pdf-templates/ticket-invoice');
-const PdfService = require('../services/pdf-service');
-const {
-  MATERIAL_CONTENT_TYPES,
-} = require('../utils/constants/generic-constantss');
 const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 
 /**
@@ -40,17 +35,6 @@ const PawnTicketController = {
       req.query.interestRate,
     );
     sendSuccessResponse(res, { monthlyInterest });
-  }),
-  getTicketInvoice: catchAsync(async (req, res) => {
-    const invoiceHTML = ticketInvoiceTemplate();
-    const invoicePdf = await PdfService.generatePdf(invoiceHTML);
-    if (req.query.materialContentType == MATERIAL_CONTENT_TYPES.HTML) {
-      sendSuccessResponse(res, { invoiceHTML });
-    }
-    if (req.query.materialContentType == MATERIAL_CONTENT_TYPES.PDF) {
-      res.contentType('application/pdf');
-      res.send(invoicePdf);
-    }
   }),
 };
 

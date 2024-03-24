@@ -1,7 +1,94 @@
-const ticketInvoiceTemplate = () => {
+const { AddressType } = require('../types');
+const { CustomerType } = require('../../models/customer');
+const { ItemType } = require('../../models/item');
+const { PawnTicketType } = require('../../models/pawn-ticket');
+
+/**
+ * @typedef {Object} CompanyType
+ * @property {AddressType} address - The address of the company.
+ * @property {string} mobileNo
+ * @property {string} name
+ */
+
+/**
+ * @typedef {Object} TicketInvoiceTemplateType
+ * @property {CompanyType} company - The address of the company.
+ * @property {Pick<CustomerType, 'firstName' | 'lastName' | 'nicNo' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'postalCode' | 'mobileNo'>} customer
+ * @property {Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount" | "weight">>} items
+ * @property {Pick<PawnTicketType, 'dueDate' | 'interestRate' | 'serviceCharge' | 'principalAmount' | 'pawnDate' | 'id'>} pawnTicket
+ * @property {Date} firstInterestDate
+ * @property {number} monthlyInterest
+ */
+
+/**
+ *
+ * @param {TicketInvoiceTemplateType} data
+ * @returns
+ */
+const ticketInvoiceTemplate = (data) => {
+  const branchAddress = () => {
+    const addressArray = [];
+    if (data.company.name)
+      addressArray.push(`<p class="line">${data.company.name}</p>`);
+    if (data.company.address.addressLine1)
+      addressArray.push(
+        `<p class="line">${data.company.address.addressLine1}</p>`,
+      );
+    if (data.company.address.addressLine2)
+      addressArray.push(
+        `<p class="line">${data.company.address.addressLine2}</p>`,
+      );
+    if (data.company.address.addressLine3)
+      addressArray.push(
+        `<p class="line">${data.company.address.addressLine3}</p>`,
+      );
+    if (data.company.address.city)
+      addressArray.push(`<p class="line">${data.company.address.city}</p>`);
+    if (data.company.address.postalCode)
+      addressArray.push(
+        `<p class="line">${data.company.address.postalCode}</p>`,
+      );
+    return addressArray.join('');
+  };
+
+  const ticketNumber = `<h4>Pawn Ticket No: ${data.pawnTicket.id !== undefined ? data.pawnTicket.id : 'XXXX'}</h4>`;
+  const customerName = `<h4 class="line">${data.customer.firstName} ${data.customer.lastName}</h4>`;
+  const customerNIC = `<h4 class="line">${data.customer.nicNo}</h4>`;
+  const customerAddress = () => {
+    const address = [];
+    if (data.customer.addressLine1) address.push(data.customer.addressLine1);
+    if (data.customer.addressLine2) address.push(data.customer.addressLine2);
+    if (data.customer.addressLine3) address.push(data.customer.addressLine3);
+    if (data.customer.city) address.push(data.customer.city);
+    if (data.customer.postalCode) address.push(data.customer.postalCode);
+    return address.join(', ');
+  };
+  const customerPhoneNo = `<h4 class="line">${data.customer.mobileNo}</h4>`;
+
+  const getItems = () => {
+    const itemRows = [];
+    data.items.map((item) => {
+      itemRows.push(
+        `<tr>
+           <td class="item-name">${item.description}</td>
+           <td class="item-weight">${item.weight} g</td>
+           <td>Rs. ${item.appraisedValue}</td>
+           <td>Rs. ${item.pawningAmount}</td>
+         </tr>`,
+      );
+    });
+    return itemRows.join('');
+  };
+
+  const firstInterestDate = `<h4 class="line">${new Date(data.firstInterestDate).toLocaleDateString()}</h4>`;
+  const redemptionDate = `<h4 class="line">${new Date(data.pawnTicket.dueDate).toLocaleDateString()}</h4>`;
+  const interestRate = `<h4 class="line">${data.pawnTicket.interestRate} %</h4>`;
+  const monthlyInterest = `<h4 class="line">Rs. ${data.monthlyInterest}</h4>`;
+  const serviceCharge = `<h4 class="line">Rs. ${data.pawnTicket.serviceCharge}</h4>`;
+  const totalAmount = `<h4 class="line">Rs. ${data.pawnTicket.principalAmount}</h4>`;
+
   return `<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <style>
         table {
@@ -33,6 +120,12 @@ const ticketInvoiceTemplate = () => {
 
         .invoice-title {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            h4 {
+                margin: 0;
+            }
         }
 
         .invoice-header {
@@ -150,6 +243,11 @@ const ticketInvoiceTemplate = () => {
             }
         }
 
+        .redemption-header {
+            font-weight: 700;
+            padding: 10px;
+            padding-left: 0px;
+        }
         .redemption {
             padding: 10px;
             background-color: #e3faeb;
@@ -220,13 +318,11 @@ const ticketInvoiceTemplate = () => {
                         </td>
                         <td colspan="1" class="invoice-title">
                             <h4>Pawn Ticket Invoice</h4>
+                            ${ticketNumber}
                         </td>
                         <td colspan="1">
                             <div class="address">
-                                <p class="line">S A S FERNANDO</p>
-                                <p class="line">Pawning Center</p>
-                                <p class="line">532/1 කපුවත්ත ජා-ඇළ</p>
-                                <p class="line">070 185 1123 / 075 123 1234</p>
+                               ${branchAddress()}
                             </div>
                         </td>
                     </tr>
@@ -241,7 +337,7 @@ const ticketInvoiceTemplate = () => {
                     Details of the pawner (උකස් කරන්නාගේ විස්තර )
                 </p>
                 <p>
-                    2024.12.23
+                    ${new Date(data.pawnTicket.pawnDate).toLocaleDateString()}
                 </p>
             </div>
             <div class="table-container">
@@ -251,13 +347,13 @@ const ticketInvoiceTemplate = () => {
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Name (නම):</p>
-                                    <h4 class="line">Mr S A Fernando</h4>
+                                    ${customerName}
                                 </div>
                             </td>
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">ID (ජා හැ අංකය):</p>
-                                    <h4 class="line">123546235</h4>
+                                    ${customerNIC}
                                 </div>
                             </td>
                         </tr>
@@ -265,13 +361,13 @@ const ticketInvoiceTemplate = () => {
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Address (ලිපිනය) :</p>
-                                    <h4 class="line">No123, Tewatta, Ragama</h4>
+                                    <h4 class="line">${customerAddress()}</h4>
                                 </div>
                             </td>
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Phone No (දුරකථන අංකය): </p>
-                                    <h4 class="line">123546235</h4>
+                                    ${customerPhoneNo}
                                 </div>
                             </td>
                         </tr>
@@ -294,34 +390,7 @@ const ticketInvoiceTemplate = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="item-name">
-                                Ring
-                            </td>
-                            <td class="item-weight">
-                                4.5 g
-                            </td>
-                            <td>
-                                Rs. 45000
-                            </td>
-                            <td>
-                                Rs. 30000
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="item-name">
-                                Necklace
-                            </td>
-                            <td class="item-weight">
-                                10.5 g
-                            </td>
-                            <td>
-                                Rs. 445000
-                            </td>
-                            <td>
-                                Rs. 200000
-                            </td>
-                        </tr>
+                       ${getItems()}
                     </tbody>
                 </table>
             </div>
@@ -337,13 +406,13 @@ const ticketInvoiceTemplate = () => {
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">First Interest Due Date (පළමු පොලී ගෙවීමේ දිනය):</p>
-                                    <h4 class="line">2024.12.02</h4>
+                                    ${firstInterestDate}
                                 </div>
                             </td>
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Redemption Date (බේරා ගන්න දිනය)</p>
-                                    <h4 class="line">2024.5.6</h4>
+                                    ${redemptionDate}
                                 </div>
                             </td>
                         </tr>
@@ -351,13 +420,13 @@ const ticketInvoiceTemplate = () => {
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Interest Rate (පොලී අනුපාතය)</p>
-                                    <h4 class="line">5 %</h4>
+                                    ${interestRate}
                                 </div>
                             </td>
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Monthly Interest ( මාසික පොලී)</p>
-                                    <h4 class="line">Rs 5100</h4>
+                                    ${monthlyInterest}
                                 </div>
                             </td>
                         </tr>
@@ -365,13 +434,13 @@ const ticketInvoiceTemplate = () => {
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Service Charge (සේවා ගාස්තුව)</p>
-                                    <h4 class="line">Rs.50</h4>
+                                    ${serviceCharge}
                                 </div>
                             </td>
                             <td colspan="1">
                                 <div class="cell">
                                     <p class="line head">Total Amount Payable ( ගෙවිය යුතු මුළු මුදල)</p>
-                                    <h4 class="line">Rs 5100</h4>
+                                    ${totalAmount}
                                 </div>
                             </td>
                         </tr>
@@ -381,7 +450,8 @@ const ticketInvoiceTemplate = () => {
         </section>
         <section>
             <p class="declaration">
-                I hereby pawn and handover to SK GOLD LOANS center the above gold articles owned by me. I declare that the above particulars are true and correct. I agere to redeem on or before the redemption date in the pawning ticket. I declare that the above particulars
+                මා සතු ඉහත සදහන් රන් භාණ්ඩ  මෙයින් ${data.company.name} මධමධ්‍යස්ථානය වත උකස් කර භාර දෙමි. උකස් බිල්පතෙහි සදහන් බේරාගන්නා දිනයේදී හෝ ඊට පෙර බේරාගන්නා බවට පොරොන්දු වෙමි. ඉහත සදහන් තොරතුරු සත්‍ය හා නිවැරදි බව තහවුරු කරමි.
+                I hereby pawn and handover to ${data.company.name} the above gold articles owned by me. I declare that the above particulars are true and correct. I agere to redeem on or before the redemption date in the pawning ticket. I declare that the above particulars
                 are true and correct.
             </p>
             <div class="table-container">
@@ -412,9 +482,15 @@ const ticketInvoiceTemplate = () => {
             </div>
         </section>
         <section>
-            <p class="redemption">
-                These articles pawned on the ticket as per given in the document having been received. I hereby discharge SK GOLD LOANS center from all obligations and liabilities in respect of this pawn.
-            </p>
+            <div class="redemption">
+                <p class="redemption-header">
+                    Redemption of Pawn (උකස් බේරුම)
+                </p>
+                <p>
+                    මෙම පත්‍රිකාවේ සදහන් උකස් කල භාණ්ඩ සියල්ලම බේරාගන්නා ලද බැවින් මෙම උකස් පිළිබඳ සියළු වගකීම් හා බැදීම් වලින් ${data.company.name} මධ්‍යස්ථානය නිදහස් කරමි.
+                    These articles pawned on the ticket as per given in the document having been received. I hereby discharge ${data.company.name} from all obligations and liabilities in respect of this pawn.
+                </p>
+            </div>
             <div class="table-container">
                 <table class="signature-table">
                     <tbody>

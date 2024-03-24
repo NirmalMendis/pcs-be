@@ -1,5 +1,4 @@
 const Branch = require('../models/branch');
-const sequelize = require('../utils/database');
 const { SequelizeOptionsType } = require('../utils/types');
 const { BranchType } = require('../models/branch');
 
@@ -14,9 +13,6 @@ const BranchService = {
    */
   findBranch: async (...options) => {
     try {
-      if (!options.transaction) {
-        options.transaction = await sequelize.transaction();
-      }
       /**
        * @type {BranchType}
        */

@@ -1,6 +1,7 @@
 const Branch = require('../models/branch');
 const Customer = require('../models/customer');
 const Function = require('../models/function');
+const Invoice = require('../models/invoice');
 const Item = require('../models/item');
 const PawnTicket = require('../models/pawn-ticket');
 const Payment = require('../models/payment');
@@ -36,6 +37,7 @@ PawnTicket.belongsTo(Customer);
 PawnTicket.hasMany(Item);
 PawnTicket.hasMany(Payment);
 PawnTicket.hasMany(Redemption);
+PawnTicket.belongsTo(Invoice);
 
 Redemption.hasMany(Item);
 
@@ -46,4 +48,5 @@ PawnTicket.belongsTo(User, { as: 'lastUpdatedBy' });
 Payment.belongsTo(User, { as: 'lastUpdatedBy' });
 Redemption.belongsTo(User, { as: 'lastUpdatedBy' });
 Role.belongsTo(User, { as: 'lastUpdatedBy' });
+Invoice.belongsTo(User, { as: 'lastUpdatedBy' });
 User.belongsTo(User, { as: 'lastUpdatedBy' });

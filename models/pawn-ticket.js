@@ -5,6 +5,7 @@ const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 /**
  * @typedef {Object} PawnTicketType
  * @property {number} id
+ * @property {number} revision
  * @property {Date} pawnDate
  * @property {Date} dueDate
  * @property {number} principalAmount
@@ -14,8 +15,8 @@ const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
- * @property {number} branchId
  * @property {number} customerId
+ * @property {number} invoiceId
  */
 
 const PawnTicket = sequelize.define(
@@ -26,6 +27,9 @@ const PawnTicket = sequelize.define(
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
+    },
+    revision: {
+      type: DataTypes.INTEGER,
     },
     pawnDate: {
       type: DataTypes.DATE,

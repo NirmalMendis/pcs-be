@@ -10,7 +10,6 @@ const sequelize = require('../utils/database');
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
- * @property {number} branchId
  * @property {number} pawnTicketId
  */
 

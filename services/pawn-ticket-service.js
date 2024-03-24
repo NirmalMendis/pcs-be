@@ -4,6 +4,10 @@ const { PawnTicketType } = require('../models/pawn-ticket');
 const { ItemType } = require('../models/item');
 const PawnTicket = require('../models/pawn-ticket');
 const Item = require('../models/item');
+const InvoiceService = require('./invoice-service.');
+const {
+  MATERIAL_CONTENT_TYPES,
+} = require('../utils/constants/generic-constantss');
 
 /**
  * @namespace
@@ -49,6 +53,22 @@ const PawnTicketService = {
         },
       );
 
+      const invoiceHTMLContent = await InvoiceService.generateInvoice(
+        {
+          customerId,
+          items,
+          pawnTicket,
+        },
+        MATERIAL_CONTENT_TYPES.HTML,
+        {
+          transaction,
+        },
+      );
+      const invoice = await InvoiceService.createInvoice(invoiceHTMLContent, {
+        transaction,
+      });
+
+      pawnTicket.setInvoice(invoice);
       await transaction.commit();
 
       return pawnTicket;
