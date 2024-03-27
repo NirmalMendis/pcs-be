@@ -14,12 +14,19 @@ const {
  */
 const UserService = {
   /**
-   * @param {Pick<UserType, 'firstName' | 'lastName' | 'email' | 'activeBranchId' | 'mobileNo' | 'branches'>} userData
+   * @param {Pick<UserType, 'firstName' | 'lastName' | 'email' | 'activeBranchId' | 'mobileNo'> & {branches: Array<number>} &{roles: Array<number>}} userData
    * @returns {Promise<(UserType | void)>}
    */
   createUser: async (userData) => {
-    const { firstName, lastName, email, activeBranchId, mobileNo, branches } =
-      userData;
+    const {
+      firstName,
+      lastName,
+      email,
+      activeBranchId,
+      mobileNo,
+      branches,
+      roles,
+    } = userData;
 
     const transaction = await sequelize.transaction();
     try {
@@ -34,6 +41,7 @@ const UserService = {
         { transaction },
       );
       await newUser.addBranches(branches, { transaction });
+      await newUser.setRoles(roles, { transaction });
       const resetToken = await newUser.createPasswordResetToken(transaction);
 
       const mainBranchProfile = await BranchService.findBranch(

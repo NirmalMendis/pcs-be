@@ -2,6 +2,8 @@ const { DataTypes, Transaction } = require('sequelize');
 const sequelize = require('../utils/database');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const { BranchType } = require('./branch');
+const { RoleType } = require('./role');
 
 /**
  * @typedef {Object} UserType
@@ -14,7 +16,8 @@ const bcrypt = require('bcrypt');
  * @property {string} passwordResetExpires
  * @property {string} passwordResetAttempts
  * @property {number} activeBranchId
- * @property {number[]} branches
+ * @property {BranchType[]} branches
+ * @property {RoleType[]} branches
  */
 
 const User = sequelize.define(

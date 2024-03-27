@@ -147,6 +147,35 @@ const AuthService = {
     });
     return currentUser;
   },
+  /**
+   *
+   * @param {string} email
+   * @returns {Promise<Pick<UserType, 'id' | 'firstName' | 'lastName' | 'email'> | void>}
+   */
+  getUserPermissions: async (email) => {
+    const permissions = await sequelize.query(
+      'SELECT f.functionName, f.category, rcf.action FROM functions f INNER JOIN role_connect_functions rcf ON rcf.functionId = f.id INNER JOIN user_connect_roles ucr ON ucr.roleId = rcf.roleId WHERE ucr.userId = ?',
+      {
+        replacements: [email],
+        type: sequelize.QueryTypes.SELECT,
+      },
+    );
+
+    const permissionsByAction = {
+      view: [],
+      create: [],
+      update: [],
+      delete: [],
+    };
+
+    for (const func of permissions) {
+      permissionsByAction[func.action].push({
+        title: func.title,
+        category: func.category,
+      });
+    }
+    return permissionsByAction;
+  },
 };
 
 module.exports = AuthService;
