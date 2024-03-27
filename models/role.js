@@ -40,7 +40,6 @@ const Role = sequelize.define(
     },
   },
   {
-    paranoid: true,
     scopes: {
       essential: {
         attributes: ['id', 'roleName'],

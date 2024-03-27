@@ -19,6 +19,15 @@ const RoleController = {
     const role = await RoleService.createRole(req.body, req.user);
     sendSuccessResponse(res, role);
   }),
+  updateRole: catchAsync(async (req, res) => {
+    const role = await RoleService.updateRole(
+      req.params.id,
+      req.body,
+      req.user,
+    );
+    sendSuccessResponse(res, role);
+  }),
+  deleteRole: DbFactoryService.deleteOne(Role),
 };
 
 module.exports = RoleController;

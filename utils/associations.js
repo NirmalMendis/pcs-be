@@ -13,13 +13,21 @@ const UserConnectRole = require('../models/user-connect-role');
 
 Function.belongsToMany(Role, {
   through: { model: RoleConnectFunction, unique: false },
+  onUpdate: 'CASCADE',
+  onDelete: 'CASCADE',
 });
 Role.belongsToMany(Function, {
   through: { model: RoleConnectFunction, unique: false },
+  onUpdate: 'CASCADE',
+  onDelete: 'CASCADE',
 });
 
-Role.belongsToMany(User, { through: { model: UserConnectRole } });
-User.belongsToMany(Role, { through: { model: UserConnectRole } });
+Role.belongsToMany(User, {
+  through: { model: UserConnectRole, unique: false },
+});
+User.belongsToMany(Role, {
+  through: { model: UserConnectRole, unique: false },
+});
 
 PawnTicket.belongsTo(Branch);
 

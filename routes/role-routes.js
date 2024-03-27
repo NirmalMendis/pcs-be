@@ -6,7 +6,11 @@ const router = express.Router();
 
 router.use(AuthController.protect);
 
-router.route('/:id').get(RoleController.getRole);
 router.route('/').post(RoleController.createRole).get(RoleController.getRoles);
+router
+  .route('/:id')
+  .get(RoleController.getRole)
+  .delete(RoleController.deleteRole)
+  .patch(RoleController.updateRole);
 
 module.exports = router;

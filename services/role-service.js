@@ -39,16 +39,84 @@ const RoleService = {
         },
         { transaction },
       );
-
-      // Set the functions for the role
-      await role.setFunctions(functions, {
-        through: { action: roleData.functions.map((item) => item.action) },
-        transaction,
-      });
+      const setFunctionsPromise = Promise.all(
+        functions.map((func) => {
+          return role.addFunction(func, {
+            through: {
+              action: roleData.functions.find(
+                (payloadFunc) => payloadFunc.id === func.id,
+              ).action,
+            },
+            transaction,
+          });
+        }),
+      );
+      await setFunctionsPromise;
       await role.setLastUpdatedBy(user, { transaction });
 
       await transaction.commit();
 
+      return role;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  },
+  /**
+   *
+   * @param {number} roleId
+   * @param  {Pick<RoleType,  'roleName' | 'status'> & {functions: Array<Pick<FunctionType, 'id'> & Pick<RoleConnectFunctionType, 'action'>>}} roleData
+   * @param {UserType} user
+   * @returns {Promise<(RoleType | void)>}
+   */
+  updateRole: async (roleId, roleData, user) => {
+    const transaction = await sequelize.transaction();
+    try {
+      const role = await Role.findByPk(roleId, {
+        include: [Function],
+        transaction,
+      });
+
+      await role.update(
+        {
+          roleName: roleData.roleName,
+          status: roleData.status,
+        },
+        { transaction },
+      );
+
+      const functions = await Function.findAll(
+        {
+          where: {
+            id: roleData.functions.map((item) => item.id),
+          },
+        },
+        { transaction },
+      );
+
+      await role.removeFunctions(
+        role.functions.map((func) => func.id),
+        { transaction },
+      );
+
+      const setFunctionsPromise = Promise.all(
+        functions.map((func) => {
+          return role.addFunction(func, {
+            through: {
+              action: roleData.functions.find(
+                (payloadFunc) => payloadFunc.id === func.id,
+              ).action,
+            },
+            transaction,
+          });
+        }),
+      );
+      await setFunctionsPromise;
+
+      await role.setLastUpdatedBy(user, { transaction });
+
+      await transaction.commit();
+      await role.reload();
       return role;
     } catch (error) {
       await transaction.rollback();

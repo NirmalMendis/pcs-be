@@ -23,29 +23,23 @@ const PermissionActionEnum = {
  * @property {number} roleId
  */
 
-const RoleConnectFunction = sequelize.define(
-  'role_connect_function',
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-      allowNull: false,
-    },
-    action: {
-      type: DataTypes.ENUM(
-        PermissionActionEnum.CREATE,
-        PermissionActionEnum.VIEW,
-        PermissionActionEnum.UPDATE,
-        PermissionActionEnum.DELETE,
-      ),
-      allowNull: false,
-    },
+const RoleConnectFunction = sequelize.define('role_connect_function', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
   },
-  {
-    paranoid: true,
+  action: {
+    type: DataTypes.ENUM(
+      PermissionActionEnum.CREATE,
+      PermissionActionEnum.VIEW,
+      PermissionActionEnum.UPDATE,
+      PermissionActionEnum.DELETE,
+    ),
+    allowNull: false,
   },
-);
+});
 
 module.exports = RoleConnectFunction;
 exports.PermissionActionEnum = PermissionActionEnum;
