@@ -24,19 +24,23 @@ Role.belongsToMany(Function, {
 
 Role.belongsToMany(User, {
   through: { model: UserConnectRole, unique: false },
+  onUpdate: 'CASCADE',
+  onDelete: 'CASCADE',
 });
 User.belongsToMany(Role, {
   through: { model: UserConnectRole, unique: false },
+  onUpdate: 'CASCADE',
+  onDelete: 'CASCADE',
 });
 
 PawnTicket.belongsTo(Branch);
 
 User.belongsTo(Branch, { as: 'activeBranch' });
 User.belongsToMany(Branch, {
-  through: { model: 'userconnectbranches', unique: false },
+  through: { model: 'user_connect_branches', unique: false },
 });
 Branch.belongsToMany(User, {
-  through: { model: 'userconnectbranches', unique: false },
+  through: { model: 'user_connect_branches', unique: false },
 });
 
 Customer.hasMany(PawnTicket);

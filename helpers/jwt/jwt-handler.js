@@ -1,19 +1,30 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const sendSuccessResponse = require('../shared/success-response');
 const { UserType } = require('../../models/user');
 const { Response } = require('express');
+const AuthService = require('../../services/auth-service');
 
 /**
  *
  * @param {Pick<UserType, 'firstName' | 'lastName' | 'email'>} user
- * @returns {string}
+ * @returns {Promise<string>}
  */
-const generateAccessToken = (user) => {
+const generateAccessToken = async (user) => {
+  const permissions = await AuthService.getUserPermissions(user.email);
+
+  const permissionsHash = crypto
+    .createHash('sha256')
+    .update(JSON.stringify(permissions))
+    .digest('hex');
+
   const jwtPayloadData = {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    permissionsHash,
   };
+
   return jwt.sign(jwtPayloadData, process.env.JWT_SECRET, {
     expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
   });
@@ -40,7 +51,7 @@ const generateRefreshToken = (user) => {
  * @param {Response} res
  */
 const sendResponseWithJWT = async (user, res) => {
-  const accessToken = generateAccessToken(user);
+  const accessToken = await generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
   res.cookie('refreshToken', refreshToken, {

@@ -23,3 +23,6 @@ exports.FunctionEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   CUSTOMER: 'CUSTOMER',
 };
+
+exports.SUPER_ADMIN_ROLE = 'Super Admin';
+exports.SOFTTANK_ADMIN_USER_EMAIL = 'softtanktech@gmail.com';
