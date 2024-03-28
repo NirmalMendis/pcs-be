@@ -52,7 +52,7 @@ const sendEmail = async (options) => {
   );
 
   const mailOptions = {
-    from: `"${mainBranchProfile.name}" <${mainBranchProfile.email}>`,
+    from: `"${mainBranchProfile.title}" <${mainBranchProfile.email}>`,
     to: options.email,
     subject: options.subject,
     html: options.html,

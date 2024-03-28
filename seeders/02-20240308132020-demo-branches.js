@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface) {
     return queryInterface.bulkInsert('branches', [
       {
-        name: 'Colombo',
+        title: 'Colombo',
         email: 'test@gmailt2est.com',
         addressLine1: 'Test (Pvt) Ltd',
         addressLine2: 'TESTA, Galle Face Terrace,',

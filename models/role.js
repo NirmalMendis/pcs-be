@@ -13,7 +13,7 @@ const RoleStatusEnum = {
 /**
  * @typedef {Object} RoleType
  * @property {number} id
- * @property {string} roleName
+ * @property {string} title
  * @property {RoleStatusEnum} status
  * @property {Date} createdAt
  * @property {Date} updatedAt
@@ -29,7 +29,7 @@ const Role = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    roleName: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -42,7 +42,7 @@ const Role = sequelize.define(
   {
     scopes: {
       essential: {
-        attributes: ['id', 'roleName'],
+        attributes: ['id', 'title'],
       },
     },
   },

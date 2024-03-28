@@ -4,7 +4,7 @@ const sequelize = require('../utils/database');
 /**
  * @typedef {Object} BranchType
  * @property {number} id
- * @property {string} name
+ * @property {string} title
  * @property {string} mobileNo
  * @property {string} email
  * @property {string} addressLine1
@@ -28,7 +28,7 @@ const Branch = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,

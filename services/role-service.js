@@ -12,7 +12,7 @@ const Function = require('../models/function');
 const RoleService = {
   /**
    *
-   * @param  {Pick<RoleType,  'roleName' | 'status'> & {functions: Array<Pick<FunctionType, 'id'> & Pick<RoleConnectFunctionType, 'action'>>}} roleData
+   * @param  {Pick<RoleType,  'title' | 'status'> & {functions: Array<Pick<FunctionType, 'id'> & Pick<RoleConnectFunctionType, 'action'>>}} roleData
    * @param {UserType} user
    * @returns {Promise<(RoleType | void)>}
    */
@@ -24,7 +24,7 @@ const RoleService = {
        */
       const role = await Role.create(
         {
-          roleName: roleData.roleName,
+          title: roleData.title,
           status: roleData.status,
         },
         { transaction },
@@ -65,7 +65,7 @@ const RoleService = {
   /**
    *
    * @param {number} roleId
-   * @param  {Pick<RoleType,  'roleName' | 'status'> & {functions: Array<Pick<FunctionType, 'id'> & Pick<RoleConnectFunctionType, 'action'>>}} roleData
+   * @param  {Pick<RoleType,  'title' | 'status'> & {functions: Array<Pick<FunctionType, 'id'> & Pick<RoleConnectFunctionType, 'action'>>}} roleData
    * @param {UserType} user
    * @returns {Promise<(RoleType | void)>}
    */
@@ -79,7 +79,7 @@ const RoleService = {
 
       await role.update(
         {
-          roleName: roleData.roleName,
+          title: roleData.title,
           status: roleData.status,
         },
         { transaction },

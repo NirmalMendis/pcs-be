@@ -11,7 +11,7 @@ module.exports = {
     return queryInterface.bulkInsert('functions', [
       //Pawn Ticket
       {
-        functionName: FunctionEnum.PAWN_TICKET,
+        title: FunctionEnum.PAWN_TICKET,
         category: CategoryEnum.PAWN_TICKET,
         view: true,
         create: true,
@@ -22,7 +22,7 @@ module.exports = {
       },
       //Customer
       {
-        functionName: FunctionEnum.CUSTOMER,
+        title: FunctionEnum.CUSTOMER,
         category: CategoryEnum.CUSTOMER,
         view: true,
         create: true,

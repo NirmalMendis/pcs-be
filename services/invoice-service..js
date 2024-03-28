@@ -89,10 +89,10 @@ const InvoiceService = {
           'addressLine3',
           'city',
           'postalCode',
-          'name',
+          'title',
         ],
       });
-      const { name: branchName, ...branchAddress } = mainBranchProfile.get({
+      const { title: branchName, ...branchAddress } = mainBranchProfile.get({
         dataValues: true,
       });
       const customer = await CustomerService.findCustomer({

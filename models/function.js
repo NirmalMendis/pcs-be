@@ -5,7 +5,7 @@ const { CategoryEnum } = require('../utils/constants/generic-constantss');
 /**
  * @typedef {Object} FunctionType
  * @property {number} id
- * @property {string} functionName
+ * @property {string} title
  * @property {CategoryEnum} category
  * @property {boolean} view
  * @property {boolean} create
@@ -25,7 +25,7 @@ const Function = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    functionName: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
