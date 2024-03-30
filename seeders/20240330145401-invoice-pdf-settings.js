@@ -24,7 +24,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('users', {
+    await queryInterface.bulkDelete('settings', {
       settingType: {
         [Sequelize.Op.or]: [
           SettingEnum.INVOICE_PDF_MARGIN,

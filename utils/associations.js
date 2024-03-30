@@ -63,4 +63,5 @@ Redemption.belongsTo(User, { as: 'lastUpdatedBy' });
 Role.belongsTo(User, { as: 'lastUpdatedBy' });
 Invoice.belongsTo(User, { as: 'lastUpdatedBy' });
 Settings.belongsTo(User, { as: 'lastUpdatedBy' });
+
 User.belongsTo(User, { as: 'lastUpdatedBy' });
