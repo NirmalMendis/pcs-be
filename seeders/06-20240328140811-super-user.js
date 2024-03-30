@@ -12,10 +12,6 @@ module.exports = {
       'SELECT id from branches',
     );
 
-    const roles = await queryInterface.sequelize.query(
-      `SELECT id from roles where status="Active" and title="${SUPER_ADMIN_ROLE}"`,
-    );
-
     await queryInterface.bulkInsert('users', [
       {
         firstName: 'Soft',
@@ -32,6 +28,11 @@ module.exports = {
     const superAdminUser = await queryInterface.sequelize.query(
       `SELECT id from users where email="${SOFTTANK_ADMIN_USER_EMAIL}"`,
     );
+
+    const roles = await queryInterface.sequelize.query(
+      `SELECT id from roles where status="Active" and title="${SUPER_ADMIN_ROLE}"`,
+    );
+
     await queryInterface.bulkInsert('user_connect_roles', [
       {
         userId: superAdminUser[0][0].id,

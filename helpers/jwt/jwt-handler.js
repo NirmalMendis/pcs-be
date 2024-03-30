@@ -7,11 +7,11 @@ const AuthService = require('../../services/auth-service');
 
 /**
  *
- * @param {Pick<UserType, 'firstName' | 'lastName' | 'email'>} user
+ * @param {Pick<UserType, 'firstName' | 'lastName' | 'email' | 'id'>} user
  * @returns {Promise<string>}
  */
 const generateAccessToken = async (user) => {
-  const permissions = await AuthService.getUserPermissions(user.email);
+  const permissions = await AuthService.getUserPermissions(user.id);
 
   const permissionsHash = crypto
     .createHash('sha256')
@@ -47,7 +47,7 @@ const generateRefreshToken = (user) => {
 
 /**
  *
- * @param {Pick<UserType, 'firstName' | 'lastName' | 'email'>} user
+ * @param {Pick<UserType, 'firstName' | 'lastName' | 'email' | 'id'>} user
  * @param {Response} res
  */
 const sendResponseWithJWT = async (user, res) => {

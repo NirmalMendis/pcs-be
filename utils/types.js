@@ -23,3 +23,17 @@ const { Transaction } = require('sequelize');
  * @property {string} city
  * @property {string} postalCode
  */
+
+/**
+ * @typedef {Object} SinglePermissionType
+ * @property {string} title
+ * @property {string} category
+ */
+
+/**
+ * @typedef {Object} PermissionsType
+ * @property {Array<SinglePermissionType>} view
+ * @property {Array<SinglePermissionType>} create
+ * @property {Array<SinglePermissionType>} update
+ * @property {Array<SinglePermissionType>} delete
+ */

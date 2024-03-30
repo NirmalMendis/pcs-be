@@ -10,6 +10,7 @@ const crypto = require('crypto');
 const { UserType } = require('../models/user');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const { PermissionsType } = require('../utils/types');
 
 /**
  * @namespace
@@ -149,18 +150,21 @@ const AuthService = {
   },
   /**
    *
-   * @param {string} email
-   * @returns {Promise<Pick<UserType, 'id' | 'firstName' | 'lastName' | 'email'> | void>}
+   * @param {number} id
+   * @returns {Promise<PermissionsType>}
    */
-  getUserPermissions: async (email) => {
+  getUserPermissions: async (id) => {
     const permissions = await sequelize.query(
       'SELECT f.title, f.category, rcf.action FROM functions f INNER JOIN role_connect_functions rcf ON rcf.functionId = f.id INNER JOIN user_connect_roles ucr ON ucr.roleId = rcf.roleId WHERE ucr.userId = ?',
       {
-        replacements: [email],
+        replacements: [id],
         type: sequelize.QueryTypes.SELECT,
       },
     );
 
+    /**
+     * @type {PermissionsType}
+     */
     const permissionsByAction = {
       view: [],
       create: [],
@@ -174,6 +178,7 @@ const AuthService = {
         category: func.category,
       });
     }
+
     return permissionsByAction;
   },
 };

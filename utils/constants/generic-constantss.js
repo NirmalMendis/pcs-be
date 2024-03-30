@@ -14,6 +14,7 @@ exports.MATERIAL_CONTENT_TYPES = {
   HTML: 'HTML',
   PDF: 'PDF',
 };
+
 exports.CategoryEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   CUSTOMER: 'CUSTOMER',

@@ -104,7 +104,6 @@ const ticketInvoiceTemplate = (data) => {
         }
 
         body {
-            padding: 15px;
             font-family: Arial, sans-serif;
             font-size: 12px;
             font-family: Arial;
@@ -255,7 +254,6 @@ const ticketInvoiceTemplate = (data) => {
         }
     </style>
     <meta charset="utf-8">
-    <title>Example 1</title>
 </head>
 
 <body>

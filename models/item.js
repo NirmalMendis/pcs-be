@@ -47,6 +47,9 @@ const Item = sequelize.define(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
+    image: {
+      type: DataTypes.BLOB,
+    },
   },
   {
     paranoid: true,

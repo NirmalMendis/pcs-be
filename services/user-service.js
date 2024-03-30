@@ -8,6 +8,12 @@ const BranchService = require('./branch-service');
 const {
   WelcomeEmailTemplateDataType,
 } = require('../utils/email/templates/welcomeEmail');
+const { getUserPermissions } = require('./auth-service');
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const errorTypes = require('../utils/errors/errors');
+const AppError = require('../utils/errors/AppError');
 
 /**
  * @namespace
@@ -103,6 +109,31 @@ const UserService = {
         await transaction.rollback();
       }
       throw error;
+    }
+  },
+  /**
+   * @param {UserType} user
+   * @param {string} accessToken
+   * @returns {Promise<(void)>}
+   */
+  getUserPermissions: async (user, accessToken) => {
+    const permissions = await getUserPermissions(user.id);
+    const decodedJWT = await promisify(jwt.verify)(
+      accessToken,
+      process.env.JWT_SECRET,
+    );
+
+    const isPermissionsIntact =
+      decodedJWT.permissionsHash ===
+      crypto
+        .createHash('sha256')
+        .update(JSON.stringify(permissions))
+        .digest('hex');
+
+    if (isPermissionsIntact) {
+      return permissions;
+    } else {
+      throw new AppError(errorTypes.USER.JWT_ROLES_PERMISSIONS_MISMATCH);
     }
   },
 };
