@@ -8,6 +8,7 @@ const Payment = require('../models/payment');
 const Redemption = require('../models/redemption');
 const Role = require('../models/role');
 const RoleConnectFunction = require('../models/role-connect-function');
+const Settings = require('../models/setting');
 const User = require('../models/user');
 const UserConnectRole = require('../models/user-connect-role');
 
@@ -61,4 +62,5 @@ Payment.belongsTo(User, { as: 'lastUpdatedBy' });
 Redemption.belongsTo(User, { as: 'lastUpdatedBy' });
 Role.belongsTo(User, { as: 'lastUpdatedBy' });
 Invoice.belongsTo(User, { as: 'lastUpdatedBy' });
+Settings.belongsTo(User, { as: 'lastUpdatedBy' });
 User.belongsTo(User, { as: 'lastUpdatedBy' });

@@ -104,6 +104,7 @@ const ticketInvoiceTemplate = (data) => {
         }
 
         body {
+            padding: 0px;
             font-family: Arial, sans-serif;
             font-size: 12px;
             font-family: Arial;

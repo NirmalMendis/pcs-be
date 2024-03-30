@@ -11,10 +11,12 @@ const {
  */
 const InvoiceController = {
   getInvoice: catchAsync(async (req, res) => {
-    const draftInvoice = await InvoiceService.findInvoice({
-      id: req.id,
+    const invoice = await InvoiceService.findInvoice({
+      where: {
+        id: req.params.id,
+      },
     });
-    const invoiceHTML = draftInvoice.htmlContent.toString('utf8');
+    const invoiceHTML = invoice.htmlContent.toString('utf8');
     if (req.query.materialContentType == MATERIAL_CONTENT_TYPES.HTML)
       sendSuccessResponse(res, { invoiceHTML });
     else if (req.query.materialContentType == MATERIAL_CONTENT_TYPES.PDF) {

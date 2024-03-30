@@ -8,3 +8,12 @@ exports.PawnTicketStatusEnum = {
   RECOVERED: 'Recovered',
   FORFEITED: 'Forfeited',
 };
+
+/**
+ * @enum {string}
+ * @readonly
+ */
+exports.SettingEnum = {
+  INVOICE_PDF_MARGIN: 'INVOICE_PDF_MARGIN',
+  INVOICE_PDF_SIZE: 'INVOICE_PDF_SIZE',
+};

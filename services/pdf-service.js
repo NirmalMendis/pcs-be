@@ -1,4 +1,6 @@
 const { default: puppeteer } = require('puppeteer');
+const MetadataService = require('./metadata-service');
+const { SettingEnum } = require('../utils/constants/db-enums');
 
 /**
  * @namespace
@@ -12,14 +14,30 @@ const PdfService = {
   generatePdf: async (html) => {
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
+
+    const margin = await MetadataService.findSetting(
+      SettingEnum.INVOICE_PDF_MARGIN,
+    );
+    const pageSize = await MetadataService.findSetting(
+      SettingEnum.INVOICE_PDF_SIZE,
+    );
+
     await page.setContent(html, { waitUntil: 'networkidle0' });
     await page.emulateMediaType('screen');
+    await page.addStyleTag({
+      content: `
+                @page {
+                  margin: ${margin.value};
+                }
+                body {
+                  margin: 0;
+                }
+              `,
+    });
     const pdf = await page.pdf({
-      //provide same margin to FE browser print
-      margin: { bottom: '15px', top: '15px', left: '15px', right: '15px' },
       printBackground: true,
-      //set same page size in FE browser print
-      format: 'A4',
+      preferCSSPageSize: true,
+      format: pageSize.value,
     });
     await browser.close();
 
