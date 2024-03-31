@@ -41,6 +41,12 @@ const DbFactoryService = {
         : req.query.scope
           ? Model.scope(req.query.scope)
           : Model;
+
+      if (req.query.orderBy && req.query.orderDirection) {
+        associationOptions.order = [
+          [req.query.orderBy, req.query.orderDirection],
+        ];
+      }
       results = await ScopedModel.findAll(associationOptions);
       if (req.query.page && req.query.pageSize) {
         const { pager, pageData } = paginateData(
