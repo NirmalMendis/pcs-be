@@ -3,7 +3,9 @@ const {
   SettingEnum,
 } = require('../utils/constants/db-enums');
 const { SettingType } = require('../models/setting');
+const { FeatureType } = require('../models/feature');
 const Setting = require('../models/setting');
+const Feature = require('../models/feature');
 
 /**
  * @namespace
@@ -25,7 +27,7 @@ const MetadataService = {
    */
   findSetting: async (settingType) => {
     /**
-     * @type {SettingEnum}
+     * @type {SettingType}
      */
     const setting = await Setting.findOne({
       where: {
@@ -33,6 +35,21 @@ const MetadataService = {
       },
     });
     return setting;
+  },
+  /**
+   *
+   * @returns {Promise<(Array<FeatureType> | void)>}
+   */
+  getAppFeatures: async () => {
+    /**
+     * @type {Array<FeatureType>}
+     */
+    const features = await Feature.findAll({
+      where: {
+        value: true,
+      },
+    });
+    return features;
   },
 };
 

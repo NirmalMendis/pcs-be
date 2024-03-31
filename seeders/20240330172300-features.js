@@ -14,8 +14,8 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        description: 'branch related features',
-        featureType: FeatureEnum.BRANCH,
+        description: ' multiple branch related features',
+        featureType: FeatureEnum.MULTIPLE_BRANCHES,
         value: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -26,7 +26,10 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('features', {
       settingType: {
-        [Sequelize.Op.or]: [FeatureEnum.PAWN_TICKET, FeatureEnum.BRANCH],
+        [Sequelize.Op.or]: [
+          FeatureEnum.PAWN_TICKET,
+          FeatureEnum.MULTIPLE_BRANCHES,
+        ],
       },
     });
   },

@@ -24,5 +24,5 @@ exports.SettingEnum = {
  */
 exports.FeatureEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
-  BRANCH: 'BRANCH',
+  MULTIPLE_BRANCHES: 'MULTIPLE_BRANCHES',
 };

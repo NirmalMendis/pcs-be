@@ -28,6 +28,9 @@ const MetadataController = {
           };
         }
         break;
+      case METADATA_TYPES.APP_FEATURES:
+        data = await MetadataService.getAppFeatures();
+        break;
     }
     sendSuccessResponse(res, data);
   }),
