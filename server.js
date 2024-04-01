@@ -4,7 +4,7 @@ dotenv.config({ path: './config.env' });
 const app = require('./app');
 const httpServer = require('http').createServer(app);
 
-const sequelize = require('./utils/database');
+const { sequelize } = require('./utils/database');
 // eslint-disable-next-line no-unused-vars
 const associations = require('./utils/associations');
 

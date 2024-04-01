@@ -1,4 +1,4 @@
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 const { PawnTicketType } = require('../models/pawn-ticket');
 const { ItemType } = require('../models/item');
 const { UserType } = require('../models/user');

@@ -1,5 +1,5 @@
 const { DataTypes, Transaction } = require('sequelize');
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const { BranchType } = require('./branch');

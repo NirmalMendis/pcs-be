@@ -2,7 +2,7 @@ const sendEmail = require('../helpers/shared/email');
 const User = require('../models/user');
 const { UserType } = require('../models/user');
 const { BranchType } = require('../models/branch');
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 const welcomeTemplate = require('../utils/email/templates/welcomeEmail');
 const BranchService = require('./branch-service');
 const {

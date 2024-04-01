@@ -11,7 +11,7 @@ const {
 const PdfService = require('./pdf-service');
 const BranchService = require('./branch-service');
 const CustomerService = require('./customer-service');
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 
 /**
  * @namespace

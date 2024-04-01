@@ -1,5 +1,5 @@
 const DataTypes = require('sequelize');
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 const { CategoryEnum } = require('../utils/constants/generic-constantss');
 
 /**

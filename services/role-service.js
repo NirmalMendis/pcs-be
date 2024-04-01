@@ -2,7 +2,7 @@ const { RoleType } = require('../models/role');
 const { UserType } = require('../models/user');
 const { FunctionType } = require('../models/function');
 const { RoleConnectFunctionType } = require('../models/role-connect-function');
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 const Role = require('../models/role');
 const Function = require('../models/function');
 

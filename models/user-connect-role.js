@@ -1,4 +1,4 @@
-const sequelize = require('../utils/database');
+const { sequelize } = require('../utils/database');
 
 /**
  * @typedef {Object} UserConnectRoleType
