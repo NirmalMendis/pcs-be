@@ -26,3 +26,14 @@ exports.FeatureEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   MULTIPLE_BRANCHES: 'MULTIPLE_BRANCHES',
 };
+
+/**
+ * @enum {string}
+ * @readonly
+ */
+exports.InterestStatusEnum = {
+  UPCOMING: 'Upcoming',
+  DUE: 'Due',
+  PAID: 'Paid',
+  OVERDUE: 'Overdue',
+};

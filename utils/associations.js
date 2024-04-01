@@ -1,6 +1,7 @@
 const Branch = require('../models/branch');
 const Customer = require('../models/customer');
 const Function = require('../models/function');
+const Interest = require('../models/interest');
 const Invoice = require('../models/invoice');
 const Item = require('../models/item');
 const PawnTicket = require('../models/pawn-ticket');
@@ -51,6 +52,7 @@ PawnTicket.hasMany(Item);
 PawnTicket.hasMany(Payment);
 PawnTicket.hasMany(Redemption);
 PawnTicket.belongsTo(Invoice);
+PawnTicket.hasMany(Interest);
 
 Redemption.hasMany(Item);
 

@@ -8,6 +8,9 @@ const InvoiceService = require('./invoice-service.');
 const {
   MATERIAL_CONTENT_TYPES,
 } = require('../utils/constants/generic-constantss');
+const { addMonths } = require('date-fns');
+const { InterestStatusEnum } = require('../utils/constants/db-enums');
+const Interest = require('../models/interest');
 
 /**
  * @namespace
@@ -36,6 +39,24 @@ const PawnTicketService = {
       const calculatedPrincipalAmount = items
         ?.map((item) => item.pawningAmount)
         ?.reduce((acc, curr) => acc + curr, 0);
+
+      const monthlyInterest = PawnTicketService.calculateMonthlyInterest(
+        calculatedPrincipalAmount,
+        interestRate,
+      );
+      let dateInAction = new Date(pawnDate);
+      const interests = [];
+      while (dateInAction <= new Date(dueDate)) {
+        const prevDate = dateInAction;
+        dateInAction = addMonths(dateInAction, 1);
+        interests.push({
+          fromDate: prevDate,
+          toDate: dateInAction,
+          amount: monthlyInterest,
+          status: InterestStatusEnum.UPCOMING,
+        });
+      }
+
       const pawnTicket = await PawnTicket.create(
         {
           pawnDate,
@@ -47,9 +68,10 @@ const PawnTicketService = {
           branchId,
           customerId,
           serviceCharge,
+          interests,
         },
         {
-          include: [Item],
+          include: [Item, Interest],
           transaction,
         },
       );

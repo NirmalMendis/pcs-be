@@ -28,4 +28,4 @@ exports.FunctionEnum = {
 };
 
 exports.SUPER_ADMIN_ROLE = 'Super Admin';
-exports.SOFTTANK_ADMIN_USER_EMAIL = 'softtanktech@gmail.com';
+exports.SOFTTANK_ADMIN_USER_EMAIL = 'softanktech@gmail.com';
