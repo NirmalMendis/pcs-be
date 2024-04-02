@@ -40,10 +40,11 @@ const sendErrorProd = (err, res) => {
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
   err.status = err.status || ERROR;
-  let error = { ...err };
+  let error = { ...err, message: err.message };
   if (error.name === DB_ERRORS.SequelizeUniqueConstraintError) {
     error = handleDuplicateEntryError(error.errors[0]);
   }
+
   if (process.env.NODE_ENV === DEVELOPMENT_ENV) {
     sendErrorDev(error, res);
   } else if (process.env.NODE_ENV === PRODUCTION_ENV) {

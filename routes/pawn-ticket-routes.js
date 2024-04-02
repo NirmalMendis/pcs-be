@@ -16,6 +16,11 @@ router
 router
   .route('/calculate-monthly-interest')
   .get(PawnRickeController.getMonthlyInterestValue);
+
+router
+  .route('/revision/:id')
+  .post(PawnRickeController.createPawnTicketRevision);
+
 router.route('/:id').get(PawnRickeController.getTicketById);
 
 module.exports = router;

@@ -64,6 +64,12 @@ const errorTypes = {
       statusCode: StatusCodes.BAD_REQUEST,
     },
   },
+  PAWN_TICKET: {
+    REVISION_EXISTS: {
+      message: `This ticket has already been revised`,
+      statusCode: StatusCodes.FORBIDDEN,
+    },
+  },
   GENERIC: {
     INVALID_ROUTE: {
       message: (originalUrl) => `Cannot find ${originalUrl} on this server`,

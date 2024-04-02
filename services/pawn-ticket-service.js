@@ -13,6 +13,9 @@ const { InterestStatusEnum } = require('../utils/constants/db-enums');
 const Interest = require('../models/interest');
 const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
 const getFirstInterestDate = require('../helpers/business-logic/get-first-interest-date');
+const Invoice = require('../models/invoice');
+const AppError = require('../utils/errors/AppError');
+const errorTypes = require('../utils/errors/errors');
 
 /**
  * @namespace
@@ -95,7 +98,7 @@ const PawnTicketService = {
         transaction,
       });
 
-      pawnTicket.setInvoice(invoice);
+      await pawnTicket.setInvoice(invoice, { transaction });
 
       await pawnTicket.setLastUpdatedBy(user, { transaction });
       await invoice.setLastUpdatedBy(user, { transaction });
@@ -117,6 +120,111 @@ const PawnTicketService = {
    * @returns {number}
    */
   calculateMonthlyInterest: calculateMonthlyInterestFn,
+  /**
+   *
+   * @param  {Pick<PawnTicketType, 'id'>} id
+   * @param {UserType} user
+   * @returns {Promise<(PawnTicketType | void)>}
+   */
+  createRevision: async (id, user) => {
+    const transaction = await sequelize.transaction();
+    try {
+      const originalPawnTicket = await PawnTicket.findByPk(id, {
+        where: { revision: null },
+        include: [Item, Interest, Invoice],
+        transaction,
+      });
+
+      const isRevised = await PawnTicketService.isTicketRevised(
+        originalPawnTicket.id,
+        transaction,
+      );
+
+      if (isRevised) {
+        throw new AppError(errorTypes.PAWN_TICKET.REVISION_EXISTS);
+      }
+
+      const clonedItems = originalPawnTicket.items.map((item) => ({
+        caratage: item.caratage,
+        description: item.description,
+        appraisedValue: item.appraisedValue,
+        pawningAmount: item.pawningAmount,
+        weight: item.weight,
+      }));
+
+      const clonedInterests = originalPawnTicket.interests.map((interest) => ({
+        fromDate: interest.fromDate,
+        toDate: interest.toDate,
+        amount: interest.amount,
+        status: interest.status,
+      }));
+
+      const clonedPawnTicket = await PawnTicket.create(
+        {
+          revision: originalPawnTicket.id,
+          pawnDate: originalPawnTicket.pawnDate,
+          dueDate: originalPawnTicket.dueDate,
+          principalAmount: originalPawnTicket.principalAmount,
+          interestRate: originalPawnTicket.interestRate,
+          status: originalPawnTicket.status,
+          items: clonedItems,
+          branchId: originalPawnTicket.branchId,
+          customerId: originalPawnTicket.customerId,
+          serviceCharge: originalPawnTicket.serviceCharge,
+          interests: clonedInterests,
+        },
+        {
+          include: [Item, Interest],
+          transaction,
+        },
+      );
+
+      const clonedInvoice = await InvoiceService.createInvoice(
+        originalPawnTicket.invoice.htmlContent,
+        {
+          transaction,
+        },
+      );
+
+      await clonedPawnTicket.setInvoice(clonedInvoice, { transaction });
+      await clonedPawnTicket.setLastUpdatedBy(user, { transaction });
+      await clonedInvoice.setLastUpdatedBy(user, { transaction });
+
+      await transaction.commit();
+
+      return clonedPawnTicket;
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
+    }
+  },
+  /**
+   *
+   * @param  {Pick<PawnTicketType, 'id'>} id
+   * @returns {Promise<(boolean)>}
+   */
+  isTicketRevised: async (id, transaction) => {
+    const pawnTicket = await PawnTicket.findOne({
+      where: { revision: id },
+      transaction,
+    });
+
+    return !!pawnTicket;
+  },
+  /**
+   *
+   * @param  {Pick<PawnTicketType, 'id'>} id
+   * @returns {Promise<(boolean)>}
+   */
+  getRevisionIds: async (id, transaction) => {
+    const pawnTicket = await PawnTicket.findByPk(id, {
+      transaction,
+    });
+
+    return null;
+  },
 };
 
 module.exports = PawnTicketService;

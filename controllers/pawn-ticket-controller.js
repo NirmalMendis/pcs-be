@@ -22,6 +22,14 @@ const PawnTicketController = {
     );
     sendSuccessResponse(res, pawnTicket);
   }),
+  // eslint-disable-next-line no-unused-vars
+  createPawnTicketRevision: catchAsync(async (req, res, next) => {
+    const revisedPawnTicket = await PawnTicketService.createRevision(
+      req.params.id,
+      req.user,
+    );
+    sendSuccessResponse(res, revisedPawnTicket);
+  }),
   getAllPawnTickets: async (req, res, next) =>
     DbFactoryService.getAll(PawnTicket, {
       include: [Customer],
