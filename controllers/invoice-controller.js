@@ -12,7 +12,8 @@ const {
  * @namespace
  */
 const InvoiceController = {
-  getInvoice: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  getInvoice: catchAsync(async (req, res, next) => {
     const invoice = await InvoiceService.findInvoice({
       where: {
         id: req.params.id,
@@ -27,7 +28,8 @@ const InvoiceController = {
       res.send(invoicePdf);
     }
   }),
-  getDraftInvoice: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  getDraftInvoice: catchAsync(async (req, res, next) => {
     const firstInterestDate = getFirstInterestDate(
       req.body.pawnTicket.pawnDate,
     );

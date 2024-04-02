@@ -10,7 +10,8 @@ const catchAsync = require('../utils/catchAsync');
  * @namespace
  */
 const UserController = {
-  createUser: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  createUser: catchAsync(async (req, res, next) => {
     const newUser = await UserService.createUser(req.body);
     sendSuccessResponse(res, newUser);
   }),
@@ -25,11 +26,13 @@ const UserController = {
     },
     true,
   ),
-  updateActiveBranch: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  updateActiveBranch: catchAsync(async (req, res, next) => {
     await UserService.updateActiveBranch(req.body.activeBranchId, req.user.id);
     sendSuccessResponse(res);
   }),
-  getUserPermissions: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  getUserPermissions: catchAsync(async (req, res, next) => {
     const accessToken = req.headers.authorization.split(' ')[1];
     const userPermissions = await UserService.getUserPermissions(
       req.user,

@@ -4,11 +4,13 @@ const {
   PRODUCTION_ENV,
   GENERIC_PROD_ERROR,
   ERROR,
+  DB_ERRORS,
 } = require('../constants/generic-constantss');
+const { handleDuplicateEntryError } = require('./handle-db-error');
 
 const sendErrorDev = (err, res) => {
   // eslint-disable-next-line no-console
-  console.log(err);
+  console.log('err -- ', err);
   res.status(err.statusCode).json({
     status: err.status,
     error: err,
@@ -38,9 +40,13 @@ const sendErrorProd = (err, res) => {
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
   err.status = err.status || ERROR;
+  let error = { ...err };
+  if (error.name === DB_ERRORS.SequelizeUniqueConstraintError) {
+    error = handleDuplicateEntryError(error.errors[0]);
+  }
   if (process.env.NODE_ENV === DEVELOPMENT_ENV) {
-    sendErrorDev(err, res);
+    sendErrorDev(error, res);
   } else if (process.env.NODE_ENV === PRODUCTION_ENV) {
-    sendErrorProd(err, res);
+    sendErrorProd(error, res);
   }
 };

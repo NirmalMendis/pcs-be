@@ -16,7 +16,9 @@ const DbFactoryService = {
    * @returns
    */
   getOne: (Model, associationOptions = {}, blockScoping = false) =>
-    catchAsync(async (req, res) => {
+    //next needed for error handling
+    // eslint-disable-next-line no-unused-vars
+    catchAsync(async (req, res, next) => {
       let results = [];
       const ScopedModel = blockScoping
         ? Model
@@ -34,7 +36,9 @@ const DbFactoryService = {
    * @returns
    */
   getAll: (Model, associationOptions = {}, blockScoping = false) =>
-    catchAsync(async (req, res) => {
+    //next needed for error handling
+    // eslint-disable-next-line no-unused-vars
+    catchAsync(async (req, res, next) => {
       let results = [];
       const ScopedModel = blockScoping
         ? Model
@@ -71,7 +75,10 @@ const DbFactoryService = {
    * @returns
    */
   getAllBySearch: (Model, blockScoping = false) =>
-    catchAsync(async (req, res) => {
+    //next needed for error handling
+    // eslint-disable-next-line no-unused-vars
+    catchAsync(async (req, res, next) => {
+      //next needed for error handling
       const { value, scope } = req.query;
 
       const ScopedModel = blockScoping
@@ -102,7 +109,9 @@ const DbFactoryService = {
    * @returns
    */
   createOne: (Model) =>
-    catchAsync(async (req, res) => {
+    //next needed for error handling
+    // eslint-disable-next-line no-unused-vars
+    catchAsync(async (req, res, next) => {
       const transaction = await sequelize.transaction();
       try {
         const doc = await Model.create(req.body, {
@@ -126,7 +135,9 @@ const DbFactoryService = {
    * @returns
    */
   updateOne: (Model, associationOptions = {}) =>
-    catchAsync(async (req, res) => {
+    //next needed for error handling
+    // eslint-disable-next-line no-unused-vars
+    catchAsync(async (req, res, next) => {
       const transaction = await sequelize.transaction();
       try {
         const doc = await Model.findOne(
@@ -160,7 +171,9 @@ const DbFactoryService = {
    * @returns
    */
   deleteOne: (Model) =>
-    catchAsync(async (req, res) => {
+    //next needed for error handling
+    // eslint-disable-next-line no-unused-vars
+    catchAsync(async (req, res, next) => {
       const transaction = await sequelize.transaction();
       try {
         const doc = await Model.destroy(

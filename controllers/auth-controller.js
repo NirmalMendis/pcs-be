@@ -29,7 +29,9 @@ const AuthController = {
     const user = await AuthService.login(email, password);
     sendResponseWithJWT(user, res);
   }),
-  logout: catchAsync(async (req, res) => {
+  // next needed for error handling
+  // eslint-disable-next-line no-unused-vars
+  logout: catchAsync(async (req, res, next) => {
     res.clearCookie('refreshToken', {
       httpOnly: true,
       //secure: req.secure || req.headers["x-forwarded-proto"] === "https",

@@ -15,11 +15,13 @@ const RoleController = {
   getRoles: DbFactoryService.getAll(Role, {
     include: [Function],
   }),
-  createRole: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  createRole: catchAsync(async (req, res, next) => {
     const role = await RoleService.createRole(req.body, req.user);
     sendSuccessResponse(res, role);
   }),
-  updateRole: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  updateRole: catchAsync(async (req, res, next) => {
     const role = await RoleService.updateRole(
       req.params.id,
       req.body,

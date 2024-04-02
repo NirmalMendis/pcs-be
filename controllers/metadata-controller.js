@@ -8,7 +8,8 @@ const { METADATA_TYPES } = require('../utils/constants/generic-constantss');
  * @namespace
  */
 const MetadataController = {
-  getMetaData: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  getMetaData: catchAsync(async (req, res, next) => {
     let data;
     switch (req.params.type) {
       case METADATA_TYPES.PAWN_TICKETS_STATUS:

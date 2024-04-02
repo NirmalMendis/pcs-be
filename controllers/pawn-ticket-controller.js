@@ -10,7 +10,8 @@ const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
  * @namespace
  */
 const PawnTicketController = {
-  createPawnTicket: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  createPawnTicket: catchAsync(async (req, res, next) => {
     const pawnTicket = await PawnTicketService.createPawnTicket(
       {
         ...req.body,
@@ -21,17 +22,18 @@ const PawnTicketController = {
     );
     sendSuccessResponse(res, pawnTicket);
   }),
-  getAllPawnTickets: async (req, res) =>
+  getAllPawnTickets: async (req, res, next) =>
     DbFactoryService.getAll(PawnTicket, {
       include: [Customer],
       where: {
         branchId: req.user.activeBranchId,
       },
-    })(req, res),
+    })(req, res, next),
   getTicketById: DbFactoryService.getOne(PawnTicket, {
     include: [Customer],
   }),
-  getMonthlyInterestValue: catchAsync(async (req, res) => {
+  // eslint-disable-next-line no-unused-vars
+  getMonthlyInterestValue: catchAsync(async (req, res, next) => {
     const monthlyInterest = PawnTicketService.calculateMonthlyInterest(
       req.query.principalAmount,
       req.query.interestRate,
