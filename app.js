@@ -10,6 +10,7 @@ const branchRouter = require('./routes/branch-routes');
 const pawnTicketRouter = require('./routes/pawn-ticket-routes');
 const invoiceRouter = require('./routes/invoice-routes');
 const roleRouter = require('./routes/role-routes');
+const itemRouter = require('./routes/item-routes');
 
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
@@ -53,6 +54,7 @@ app.use('/api/v1/branch', branchRouter);
 app.use('/api/v1/pawn-ticket', pawnTicketRouter);
 app.use('/api/v1/invoice', invoiceRouter);
 app.use('/api/v1/role', roleRouter);
+app.use('/api/v1/item', itemRouter);
 
 app.all('*', (req, _, next) => {
   next(

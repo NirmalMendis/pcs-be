@@ -4,7 +4,6 @@ const catchAsync = require('../utils/catchAsync');
 const DbFactoryService = require('../services/db-factory-service');
 const PawnTicket = require('../models/pawn-ticket');
 const Customer = require('../models/customer');
-const Item = require('../models/item');
 const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 
 /**
@@ -30,7 +29,7 @@ const PawnTicketController = {
       },
     })(req, res),
   getTicketById: DbFactoryService.getOne(PawnTicket, {
-    include: [Customer, Item],
+    include: [Customer],
   }),
   getMonthlyInterestValue: catchAsync(async (req, res) => {
     const monthlyInterest = PawnTicketService.calculateMonthlyInterest(

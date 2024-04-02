@@ -49,6 +49,7 @@ Customer.hasMany(PawnTicket);
 
 PawnTicket.belongsTo(Customer);
 PawnTicket.hasMany(Item);
+Item.belongsTo(PawnTicket);
 PawnTicket.hasMany(Payment);
 PawnTicket.hasMany(Redemption);
 PawnTicket.belongsTo(Invoice);
