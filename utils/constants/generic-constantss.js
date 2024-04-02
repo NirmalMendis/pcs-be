@@ -29,3 +29,4 @@ exports.FunctionEnum = {
 
 exports.SUPER_ADMIN_ROLE = 'Super Admin';
 exports.SOFTTANK_ADMIN_USER_EMAIL = 'softanktech@gmail.com';
+exports.DD_MM_YYY_FORMAT = 'dd-MM-yyyy';

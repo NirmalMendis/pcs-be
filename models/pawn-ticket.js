@@ -1,6 +1,7 @@
 const DataTypes = require('sequelize');
 const { sequelize } = require('../utils/database');
 const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
+const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
 
 /**
  * @typedef {Object} PawnTicketType
@@ -11,6 +12,7 @@ const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
  * @property {number} principalAmount
  * @property {number} serviceCharge
  * @property {number} interestRate
+ * @property {number} monthlyInterest
  * @property {PawnTicketStatusEnum} status
  * @property {Date} createdAt
  * @property {Date} updatedAt
@@ -51,12 +53,22 @@ const PawnTicket = sequelize.define(
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
+    monthlyInterest: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return calculateMonthlyInterestFn(
+          this.principalAmount,
+          this.interestRate,
+        );
+      },
+    },
     status: {
       type: DataTypes.ENUM(
         PawnTicketStatusEnum.ACTIVE,
         PawnTicketStatusEnum.DUE,
         PawnTicketStatusEnum.FORFEITED,
         PawnTicketStatusEnum.RECOVERED,
+        PawnTicketStatusEnum.REVISED,
       ),
       allowNull: false,
     },

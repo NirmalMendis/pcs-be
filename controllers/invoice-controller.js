@@ -1,3 +1,5 @@
+const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
+const getFirstInterestDate = require('../helpers/business-logic/get-first-interest-date');
 const sendSuccessResponse = require('../helpers/shared/success-response');
 const InvoiceService = require('../services/invoice-service.');
 const PdfService = require('../services/pdf-service');
@@ -26,8 +28,20 @@ const InvoiceController = {
     }
   }),
   getDraftInvoice: catchAsync(async (req, res) => {
+    const firstInterestDate = getFirstInterestDate(
+      req.body.pawnTicket.pawnDate,
+    );
+    const monthlyInterest = calculateMonthlyInterestFn(
+      req.body.pawnTicket.principalAmount,
+      req.body.pawnTicket.interestRate,
+    );
+
     const draftInvoice = await InvoiceService.generateInvoice(
-      req.body,
+      {
+        ...req.body,
+        firstInterestDate,
+        monthlyInterest,
+      },
       MATERIAL_CONTENT_TYPES.PDF,
     );
     res.contentType('application/pdf');

@@ -2,6 +2,8 @@ const { AddressType } = require('../types');
 const { CustomerType } = require('../../models/customer');
 const { ItemType } = require('../../models/item');
 const { PawnTicketType } = require('../../models/pawn-ticket');
+const { format } = require('date-fns');
+const { DD_MM_YYY_FORMAT } = require('../constants/generic-constantss');
 
 /**
  * @typedef {Object} CompanyType
@@ -80,8 +82,8 @@ const ticketInvoiceTemplate = (data) => {
     return itemRows.join('');
   };
 
-  const firstInterestDate = `<h4 class="line">${new Date(data.firstInterestDate).toLocaleDateString()}</h4>`;
-  const redemptionDate = `<h4 class="line">${new Date(data.pawnTicket.dueDate).toLocaleDateString()}</h4>`;
+  const firstInterestDate = `<h4 class="line">${format(new Date(data.firstInterestDate), DD_MM_YYY_FORMAT)}</h4>`;
+  const redemptionDate = `<h4 class="line">${format(new Date(data.pawnTicket.dueDate), DD_MM_YYY_FORMAT)}</h4>`;
   const interestRate = `<h4 class="line">${data.pawnTicket.interestRate} %</h4>`;
   const monthlyInterest = `<h4 class="line">Rs. ${data.monthlyInterest}</h4>`;
   const serviceCharge = `<h4 class="line">Rs. ${data.pawnTicket.serviceCharge}</h4>`;
@@ -336,7 +338,7 @@ const ticketInvoiceTemplate = (data) => {
                     Details of the pawner (උකස් කරන්නාගේ විස්තර )
                 </p>
                 <p>
-                    ${new Date(data.pawnTicket.pawnDate).toLocaleDateString()}
+                    ${format(new Date(data.pawnTicket.pawnDate), DD_MM_YYY_FORMAT)}
                 </p>
             </div>
             <div class="table-container">

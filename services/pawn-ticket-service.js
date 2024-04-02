@@ -11,6 +11,8 @@ const {
 const { addMonths } = require('date-fns');
 const { InterestStatusEnum } = require('../utils/constants/db-enums');
 const Interest = require('../models/interest');
+const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
+const getFirstInterestDate = require('../helpers/business-logic/get-first-interest-date');
 
 /**
  * @namespace
@@ -81,6 +83,8 @@ const PawnTicketService = {
           customerId,
           items,
           pawnTicket,
+          firstInterestDate: getFirstInterestDate(pawnDate),
+          monthlyInterest,
         },
         MATERIAL_CONTENT_TYPES.HTML,
         {
@@ -112,9 +116,7 @@ const PawnTicketService = {
    * @param {number} interestRate
    * @returns {number}
    */
-  calculateMonthlyInterest: (principalAmount, interestRate) => {
-    return (principalAmount * interestRate) / 100;
-  },
+  calculateMonthlyInterest: calculateMonthlyInterestFn,
 };
 
 module.exports = PawnTicketService;
