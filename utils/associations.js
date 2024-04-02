@@ -54,6 +54,7 @@ PawnTicket.hasMany(Payment);
 PawnTicket.hasMany(Redemption);
 PawnTicket.belongsTo(Invoice);
 PawnTicket.hasMany(Interest);
+Interest.belongsTo(PawnTicket);
 
 Redemption.hasMany(Item);
 
