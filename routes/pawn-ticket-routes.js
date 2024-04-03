@@ -19,6 +19,7 @@ router
 
 router
   .route('/revision/:id')
+  .get(PawnRickeController.getRevisionIds)
   .post(PawnRickeController.createPawnTicketRevision);
 
 router.route('/:id').get(PawnRickeController.getTicketById);

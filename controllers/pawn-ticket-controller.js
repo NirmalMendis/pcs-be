@@ -48,6 +48,11 @@ const PawnTicketController = {
     );
     sendSuccessResponse(res, { monthlyInterest });
   }),
+  // eslint-disable-next-line no-unused-vars
+  getRevisionIds: catchAsync(async (req, res, next) => {
+    const revisionIds = await PawnTicketService.getRevisionIds(req.params.id);
+    sendSuccessResponse(res, revisionIds);
+  }),
 };
 
 module.exports = PawnTicketController;

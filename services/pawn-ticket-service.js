@@ -9,7 +9,10 @@ const {
   MATERIAL_CONTENT_TYPES,
 } = require('../utils/constants/generic-constantss');
 const { addMonths } = require('date-fns');
-const { InterestStatusEnum } = require('../utils/constants/db-enums');
+const {
+  InterestStatusEnum,
+  PawnTicketStatusEnum,
+} = require('../utils/constants/db-enums');
 const Interest = require('../models/interest');
 const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
 const getFirstInterestDate = require('../helpers/business-logic/get-first-interest-date');
@@ -130,11 +133,14 @@ const PawnTicketService = {
     const transaction = await sequelize.transaction();
     try {
       const originalPawnTicket = await PawnTicket.findByPk(id, {
-        where: { revision: null },
+        where: { previousRevision: null },
         include: [Item, Interest, Invoice],
         transaction,
       });
 
+      if (!originalPawnTicket) {
+        throw new AppError(errorTypes.PAWN_TICKET.TICKET_DOES_NOT_EXISTS);
+      }
       const isRevised = await PawnTicketService.isTicketRevised(
         originalPawnTicket.id,
         transaction,
@@ -161,7 +167,7 @@ const PawnTicketService = {
 
       const clonedPawnTicket = await PawnTicket.create(
         {
-          revision: originalPawnTicket.id,
+          previousRevision: originalPawnTicket.id,
           pawnDate: originalPawnTicket.pawnDate,
           dueDate: originalPawnTicket.dueDate,
           principalAmount: originalPawnTicket.principalAmount,
@@ -186,13 +192,23 @@ const PawnTicketService = {
         },
       );
 
+      originalPawnTicket.status = PawnTicketStatusEnum.REVISED;
+
       await clonedPawnTicket.setInvoice(clonedInvoice, { transaction });
       await clonedPawnTicket.setLastUpdatedBy(user, { transaction });
       await clonedInvoice.setLastUpdatedBy(user, { transaction });
+      await originalPawnTicket.save({ transaction });
+
+      const clonedPawnTicketDbCopy = await PawnTicket.findByPk(
+        clonedPawnTicket.id,
+        {
+          transaction,
+        },
+      );
 
       await transaction.commit();
 
-      return clonedPawnTicket;
+      return clonedPawnTicketDbCopy;
     } catch (error) {
       if (transaction) {
         await transaction.rollback();
@@ -207,7 +223,7 @@ const PawnTicketService = {
    */
   isTicketRevised: async (id, transaction) => {
     const pawnTicket = await PawnTicket.findOne({
-      where: { revision: id },
+      where: { previousRevision: id },
       transaction,
     });
 
@@ -219,11 +235,55 @@ const PawnTicketService = {
    * @returns {Promise<(boolean)>}
    */
   getRevisionIds: async (id, transaction) => {
-    const pawnTicket = await PawnTicket.findByPk(id, {
+    const pawnTicketInQuery = await PawnTicket.findByPk(id, {
       transaction,
     });
 
-    return null;
+    const previousRevisions = [];
+    let previousRevision = pawnTicketInQuery.previousRevision;
+
+    do {
+      if (previousRevision) {
+        previousRevisions.push(previousRevision);
+        const previousRevisionTicket = await PawnTicket.findByPk(
+          previousRevision,
+          {
+            attributes: ['id', 'previousRevision'],
+            transaction,
+          },
+        );
+        previousRevision = previousRevisionTicket.previousRevision;
+      }
+    } while (previousRevision);
+
+    const forwardRevisions = [];
+    let forwardRevision = await PawnTicket.findOne({
+      where: {
+        previousRevision: pawnTicketInQuery.id,
+      },
+      attributes: ['id', 'previousRevision'],
+      transaction,
+    });
+
+    while (forwardRevision) {
+      forwardRevisions.push(forwardRevision.id);
+      const forwardRevisionBooking = await PawnTicket.findOne({
+        where: {
+          previousRevision: forwardRevision.id,
+        },
+        attributes: ['id', 'previousRevision'],
+        transaction,
+      });
+      forwardRevision = forwardRevisionBooking;
+    }
+
+    const allRevisions = [
+      ...previousRevisions.reverse(),
+      pawnTicketInQuery.id,
+      ...forwardRevisions,
+    ];
+
+    return allRevisions;
   },
 };
 

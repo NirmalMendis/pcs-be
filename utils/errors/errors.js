@@ -69,6 +69,10 @@ const errorTypes = {
       message: `This ticket has already been revised`,
       statusCode: StatusCodes.FORBIDDEN,
     },
+    TICKET_DOES_NOT_EXISTS: {
+      message: `This ticket has not been created`,
+      statusCode: StatusCodes.FORBIDDEN,
+    },
   },
   GENERIC: {
     INVALID_ROUTE: {

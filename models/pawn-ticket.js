@@ -6,7 +6,7 @@ const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-
 /**
  * @typedef {Object} PawnTicketType
  * @property {number} id
- * @property {number} revision
+ * @property {number} previousRevision
  * @property {Date} pawnDate
  * @property {Date} dueDate
  * @property {number} principalAmount
@@ -30,7 +30,7 @@ const PawnTicket = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    revision: {
+    previousRevision: {
       type: DataTypes.INTEGER,
     },
     pawnDate: {
