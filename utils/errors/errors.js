@@ -69,9 +69,15 @@ const errorTypes = {
       message: `This ticket has already been revised`,
       statusCode: StatusCodes.FORBIDDEN,
     },
-    TICKET_DOES_NOT_EXISTS: {
+    NO_TICKET: {
       message: `This ticket has not been created`,
       statusCode: StatusCodes.FORBIDDEN,
+    },
+  },
+  INVOICE: {
+    NO_INVOICE: {
+      message: `The invoice for this ticket has not been created`,
+      statusCode: StatusCodes.BAD_REQUEST,
     },
   },
   GENERIC: {

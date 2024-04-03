@@ -53,6 +53,11 @@ const PawnTicketController = {
     const revisionIds = await PawnTicketService.getRevisionIds(req.params.id);
     sendSuccessResponse(res, revisionIds);
   }),
+  // eslint-disable-next-line no-unused-vars
+  updateTicketInvoice: catchAsync(async (req, res, next) => {
+    await PawnTicketService.updateTicketInvoice(req.params.id, req.user);
+    sendSuccessResponse(res);
+  }),
 };
 
 module.exports = PawnTicketController;

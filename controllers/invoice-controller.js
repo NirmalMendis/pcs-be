@@ -7,6 +7,8 @@ const catchAsync = require('../utils/catchAsync');
 const {
   MATERIAL_CONTENT_TYPES,
 } = require('../utils/constants/generic-constantss');
+const AppError = require('../utils/errors/AppError');
+const errorTypes = require('../utils/errors/errors');
 
 /**
  * @namespace
@@ -19,6 +21,9 @@ const InvoiceController = {
         id: req.params.id,
       },
     });
+    if (!invoice) {
+      throw new AppError(errorTypes.INVOICE.NO_INVOICE);
+    }
     const invoiceHTML = invoice.htmlContent.toString('utf8');
     if (req.query.materialContentType == MATERIAL_CONTENT_TYPES.HTML)
       sendSuccessResponse(res, { invoiceHTML });

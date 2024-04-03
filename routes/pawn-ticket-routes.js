@@ -23,5 +23,6 @@ router
   .post(PawnRickeController.createPawnTicketRevision);
 
 router.route('/:id').get(PawnRickeController.getTicketById);
+router.route('/:id/invoice').patch(PawnRickeController.updateTicketInvoice);
 
 module.exports = router;

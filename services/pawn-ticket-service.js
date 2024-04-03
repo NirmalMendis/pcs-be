@@ -16,9 +16,9 @@ const {
 const Interest = require('../models/interest');
 const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
 const getFirstInterestDate = require('../helpers/business-logic/get-first-interest-date');
-const Invoice = require('../models/invoice');
 const AppError = require('../utils/errors/AppError');
 const errorTypes = require('../utils/errors/errors');
+const { InvoiceType } = require('../models/invoice');
 
 /**
  * @namespace
@@ -132,22 +132,20 @@ const PawnTicketService = {
   createRevision: async (id, user) => {
     const transaction = await sequelize.transaction();
     try {
-      const originalPawnTicket = await PawnTicket.findByPk(id, {
-        where: { previousRevision: null },
-        include: [Item, Interest, Invoice],
+      const originalPawnTicket = await PawnTicket.findOne({
+        where: { id, revision: null },
+        include: [Item, Interest],
         transaction,
       });
 
       if (!originalPawnTicket) {
-        throw new AppError(errorTypes.PAWN_TICKET.TICKET_DOES_NOT_EXISTS);
-      }
-      const isRevised = await PawnTicketService.isTicketRevised(
-        originalPawnTicket.id,
-        transaction,
-      );
-
-      if (isRevised) {
-        throw new AppError(errorTypes.PAWN_TICKET.REVISION_EXISTS);
+        const originalPawnTicketWithRevision = await PawnTicket.findByPk(id, {
+          transaction,
+        });
+        if (originalPawnTicketWithRevision) {
+          throw new AppError(errorTypes.PAWN_TICKET.REVISION_EXISTS);
+        }
+        throw new AppError(errorTypes.PAWN_TICKET.NO_TICKET);
       }
 
       const clonedItems = originalPawnTicket.items.map((item) => ({
@@ -167,7 +165,6 @@ const PawnTicketService = {
 
       const clonedPawnTicket = await PawnTicket.create(
         {
-          previousRevision: originalPawnTicket.id,
           pawnDate: originalPawnTicket.pawnDate,
           dueDate: originalPawnTicket.dueDate,
           principalAmount: originalPawnTicket.principalAmount,
@@ -185,18 +182,10 @@ const PawnTicketService = {
         },
       );
 
-      const clonedInvoice = await InvoiceService.createInvoice(
-        originalPawnTicket.invoice.htmlContent,
-        {
-          transaction,
-        },
-      );
-
       originalPawnTicket.status = PawnTicketStatusEnum.REVISED;
+      originalPawnTicket.revision = clonedPawnTicket.id;
 
-      await clonedPawnTicket.setInvoice(clonedInvoice, { transaction });
       await clonedPawnTicket.setLastUpdatedBy(user, { transaction });
-      await clonedInvoice.setLastUpdatedBy(user, { transaction });
       await originalPawnTicket.save({ transaction });
 
       const clonedPawnTicketDbCopy = await PawnTicket.findByPk(
@@ -221,60 +210,47 @@ const PawnTicketService = {
    * @param  {Pick<PawnTicketType, 'id'>} id
    * @returns {Promise<(boolean)>}
    */
-  isTicketRevised: async (id, transaction) => {
-    const pawnTicket = await PawnTicket.findOne({
-      where: { previousRevision: id },
-      transaction,
-    });
-
-    return !!pawnTicket;
-  },
-  /**
-   *
-   * @param  {Pick<PawnTicketType, 'id'>} id
-   * @returns {Promise<(boolean)>}
-   */
   getRevisionIds: async (id, transaction) => {
     const pawnTicketInQuery = await PawnTicket.findByPk(id, {
       transaction,
     });
 
-    const previousRevisions = [];
-    let previousRevision = pawnTicketInQuery.previousRevision;
+    const forwardRevisions = [];
+    let forwardRevision = pawnTicketInQuery.revision;
 
     do {
-      if (previousRevision) {
-        previousRevisions.push(previousRevision);
-        const previousRevisionTicket = await PawnTicket.findByPk(
-          previousRevision,
+      if (forwardRevision) {
+        forwardRevisions.push(forwardRevision);
+        const forwardRevisionTicket = await PawnTicket.findByPk(
+          forwardRevision,
           {
-            attributes: ['id', 'previousRevision'],
+            attributes: ['id', 'revision'],
             transaction,
           },
         );
-        previousRevision = previousRevisionTicket.previousRevision;
+        forwardRevision = forwardRevisionTicket.revision;
       }
-    } while (previousRevision);
+    } while (forwardRevision);
 
-    const forwardRevisions = [];
-    let forwardRevision = await PawnTicket.findOne({
+    const previousRevisions = [];
+    let previousRevision = await PawnTicket.findOne({
       where: {
-        previousRevision: pawnTicketInQuery.id,
+        revision: pawnTicketInQuery.id,
       },
-      attributes: ['id', 'previousRevision'],
+      attributes: ['id', 'revision'],
       transaction,
     });
 
-    while (forwardRevision) {
-      forwardRevisions.push(forwardRevision.id);
-      const forwardRevisionBooking = await PawnTicket.findOne({
+    while (previousRevision) {
+      previousRevisions.push(previousRevision.id);
+      const previousRevisionTicket = await PawnTicket.findOne({
         where: {
-          previousRevision: forwardRevision.id,
+          revision: previousRevision.id,
         },
-        attributes: ['id', 'previousRevision'],
+        attributes: ['id', 'revision'],
         transaction,
       });
-      forwardRevision = forwardRevisionBooking;
+      previousRevision = previousRevisionTicket;
     }
 
     const allRevisions = [
@@ -284,6 +260,62 @@ const PawnTicketService = {
     ];
 
     return allRevisions;
+  },
+  /**
+   *
+   * @param  {Pick<PawnTicketType, 'id'>} id
+   * @param {UserType} user
+   * @returns {Promise<(InvoiceType | void)>}
+   */
+  updateTicketInvoice: async (id, user) => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      /**
+       * @type {PawnTicket}
+       */
+      const pawnTicket = await PawnTicket.findByPk(id, {
+        include: [Item, Interest],
+        transaction,
+      });
+      const invoiceHTMLContent = await InvoiceService.generateInvoice(
+        {
+          customerId: pawnTicket.customerId,
+          items: pawnTicket.items,
+          pawnTicket: {
+            dueDate: pawnTicket.dueDate,
+            id: pawnTicket.id,
+            interestRate: pawnTicket.interestRate,
+            pawnDate: pawnTicket.pawnDate,
+            principalAmount: pawnTicket.principalAmount,
+            serviceCharge: pawnTicket.serviceCharge,
+          },
+          firstInterestDate: getFirstInterestDate(pawnTicket.pawnDate),
+          monthlyInterest: pawnTicket.monthlyInterest,
+        },
+        MATERIAL_CONTENT_TYPES.HTML,
+        {
+          transaction,
+        },
+      );
+      const invoice = await InvoiceService.createInvoice(invoiceHTMLContent, {
+        transaction,
+      });
+
+      await pawnTicket.setInvoice(invoice, { transaction });
+
+      await pawnTicket.setLastUpdatedBy(user, { transaction });
+      await invoice.setLastUpdatedBy(user, { transaction });
+
+      await transaction.commit();
+
+      return pawnTicket;
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
+    }
   },
 };
 
