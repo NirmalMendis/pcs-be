@@ -37,3 +37,14 @@ const { Transaction } = require('sequelize');
  * @property {Array<SinglePermissionType>} update
  * @property {Array<SinglePermissionType>} delete
  */
+
+/**
+ * @typedef {Object} GoldItemType
+ * @property {number} caratage
+ * @property {number} weight
+ */
+
+/**
+ * @typedef {Object} VehicleItemType
+ * @property {string} vehicleNo
+ */

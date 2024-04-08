@@ -19,6 +19,8 @@ const getFirstInterestDate = require('../helpers/business-logic/get-first-intere
 const AppError = require('../utils/errors/AppError');
 const errorTypes = require('../utils/errors/errors');
 const { InvoiceType } = require('../models/invoice');
+const { GoldItemType, VehicleItemType } = require('../utils/types');
+const ItemDetails = require('../models/item-detail');
 
 /**
  * @namespace
@@ -26,7 +28,7 @@ const { InvoiceType } = require('../models/invoice');
 const PawnTicketService = {
   /**
    *
-   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "caratage" | "appraisedValue" | "pawningAmount" | "weight">> }} pawnTicketData
+   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount"> & {itemDetails?: GoldItemType | VehicleItemType}> }} pawnTicketData
    * @param {UserType} user
    * @returns {Promise<(PawnTicketType | void)>}
    */
@@ -72,14 +74,25 @@ const PawnTicketService = {
           principalAmount: calculatedPrincipalAmount,
           interestRate,
           status,
-          items: items,
+          items,
           branchId,
           customerId,
           serviceCharge,
           interests,
         },
         {
-          include: [Item, Interest],
+          include: [
+            {
+              model: Item,
+              include: [
+                {
+                  model: ItemDetails,
+                  as: 'itemDetails',
+                },
+              ],
+            },
+            Interest,
+          ],
           transaction,
         },
       );
@@ -134,7 +147,18 @@ const PawnTicketService = {
     try {
       const originalPawnTicket = await PawnTicket.findOne({
         where: { id, revision: null },
-        include: [Item, Interest],
+        include: [
+          {
+            model: Item,
+            include: [
+              {
+                model: ItemDetails,
+                as: 'itemDetails',
+              },
+            ],
+          },
+          Interest,
+        ],
         transaction,
       });
 
@@ -149,11 +173,13 @@ const PawnTicketService = {
       }
 
       const clonedItems = originalPawnTicket.items.map((item) => ({
-        caratage: item.caratage,
         description: item.description,
         appraisedValue: item.appraisedValue,
         pawningAmount: item.pawningAmount,
-        weight: item.weight,
+        itemDetails: item.itemDetails?.map((detail) => ({
+          type: detail.type,
+          value: detail.value,
+        })),
       }));
 
       const clonedInterests = originalPawnTicket.interests.map((interest) => ({
@@ -177,7 +203,18 @@ const PawnTicketService = {
           interests: clonedInterests,
         },
         {
-          include: [Item, Interest],
+          include: [
+            {
+              model: Item,
+              include: [
+                {
+                  model: ItemDetails,
+                  as: 'itemDetails',
+                },
+              ],
+            },
+            Interest,
+          ],
           transaction,
         },
       );

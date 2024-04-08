@@ -34,3 +34,18 @@ exports.DD_MM_YYY_FORMAT = 'dd-MM-yyyy';
 exports.DB_ERRORS = {
   SequelizeUniqueConstraintError: 'SequelizeUniqueConstraintError',
 };
+
+exports.ItemDetailMeta = {
+  caratage: {
+    label: 'Caratage',
+    unit: 'K',
+  },
+  weight: {
+    label: 'Weight',
+    unit: 'g',
+  },
+  vehicleNo: {
+    label: 'Vehicle No',
+    unit: '',
+  },
+};

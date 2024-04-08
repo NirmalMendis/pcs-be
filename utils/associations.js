@@ -4,6 +4,7 @@ const Function = require('../models/function');
 const Interest = require('../models/interest');
 const Invoice = require('../models/invoice');
 const Item = require('../models/item');
+const ItemDetails = require('../models/item-detail');
 const PawnTicket = require('../models/pawn-ticket');
 const Payment = require('../models/payment');
 const Redemption = require('../models/redemption');
@@ -67,5 +68,8 @@ Redemption.belongsTo(User, { as: 'lastUpdatedBy' });
 Role.belongsTo(User, { as: 'lastUpdatedBy' });
 Invoice.belongsTo(User, { as: 'lastUpdatedBy' });
 Settings.belongsTo(User, { as: 'lastUpdatedBy' });
+
+Item.hasMany(ItemDetails, { as: 'itemDetails', foreignKey: 'itemId' });
+ItemDetails.belongsTo(Item, { as: 'itemDetails', foreignKey: 'itemId' });
 
 User.belongsTo(User, { as: 'lastUpdatedBy' });

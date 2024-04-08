@@ -1,9 +1,13 @@
 const { AddressType } = require('../types');
 const { CustomerType } = require('../../models/customer');
 const { ItemType } = require('../../models/item');
+const { ItemDetailType } = require('../../models/item-detail');
 const { PawnTicketType } = require('../../models/pawn-ticket');
 const { format } = require('date-fns');
-const { DD_MM_YYY_FORMAT } = require('../constants/generic-constantss');
+const {
+  DD_MM_YYY_FORMAT,
+  ItemDetailMeta,
+} = require('../constants/generic-constantss');
 
 /**
  * @typedef {Object} CompanyType
@@ -16,7 +20,7 @@ const { DD_MM_YYY_FORMAT } = require('../constants/generic-constantss');
  * @typedef {Object} TicketInvoiceTemplateType
  * @property {CompanyType} company - The address of the company.
  * @property {Pick<CustomerType, 'firstName' | 'lastName' | 'nicNo' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'postalCode' | 'mobileNo'>} customer
- * @property {Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount" | "weight">>} items
+ * @property {Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount"> & {itemDetails?: Array<Pick<ItemDetailType, 'type' | 'value'>>}>} items
  * @property {Pick<PawnTicketType, 'dueDate' | 'interestRate' | 'serviceCharge' | 'principalAmount' | 'pawnDate' | 'id'>} pawnTicket
  * @property {Date} firstInterestDate
  * @property {number} monthlyInterest
@@ -71,9 +75,18 @@ const ticketInvoiceTemplate = (data) => {
     const itemRows = [];
     data.items.map((item) => {
       itemRows.push(
-        `<tr>
+        `<tr class="item-row">
            <td class="item-name">${item.description}</td>
-           <td class="item-weight">${item.weight} g</td>
+           <td class="item-details">${
+             item.itemDetails && item.itemDetails.length
+               ? item.itemDetails?.map(
+                   (detail) => `<div class="item-detail">
+                                <span class="line">${ItemDetailMeta[detail.type].label} :</span>
+                                <span class="line head">${detail.value} ${ItemDetailMeta[detail.type].unit}</span>
+                         </div>`,
+                 )
+               : `-`
+           }</td>
            <td>Rs. ${item.appraisedValue}</td>
            <td>Rs. ${item.pawningAmount}</td>
          </tr>`,
@@ -187,8 +200,16 @@ const ticketInvoiceTemplate = (data) => {
             .item-name {
                 text-align: start;
             }
-            .item-weight {
+            .item-details {
                 text-align: center;
+            }
+            .item-detail {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .item-row {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             }
             tbody {
                 text-align: end;
@@ -197,7 +218,8 @@ const ticketInvoiceTemplate = (data) => {
                 font-size: 10px;
             }
             td {
-                padding-bottom: 10px;
+                padding-bottom: 5px;
+                padding-top: 5px;
             }
         }
 
@@ -383,9 +405,9 @@ const ticketInvoiceTemplate = (data) => {
             <div class="table-container">
                 <table class="item-details-table ">
                     <thead>
-                        <tr>
+                        <tr class="item-row">
                             <th>Item (අයිතමය)</th>
-                            <th>Weight (බර)</th>
+                            <th>Details (විස්තර)</th>
                             <th>Appraised Value (තක්සේරු වටිනාකම)</th>
                             <th>Pawning Amount (උකස් මුද)</th>
                         </tr>

@@ -15,10 +15,9 @@ const createPawnTicketSchema = yup.object({
     items: yup.array().of(
       yup.object().shape({
         description: yup.string().required(),
-        caratage: yup.number().required(),
         appraisedValue: yup.number().required(),
         pawningAmount: yup.number().required(),
-        weight: yup.number().required(),
+        itemDetails: yup.array(),
       }),
     ),
   }),

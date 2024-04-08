@@ -73,6 +73,10 @@ const errorTypes = {
       message: `This ticket has not been created`,
       statusCode: StatusCodes.FORBIDDEN,
     },
+    INVALID_ITEM_DETAIL: {
+      message: `Invalid item detail received`,
+      statusCode: StatusCodes.FORBIDDEN,
+    },
   },
   INVOICE: {
     NO_INVOICE: {

@@ -1,4 +1,5 @@
 const Item = require('../models/item');
+const ItemDetails = require('../models/item-detail');
 const DbFactoryService = require('../services/db-factory-service');
 
 /**
@@ -10,6 +11,12 @@ const ItemController = {
       where: {
         pawnTicketId: req.params.id,
       },
+      include: [
+        {
+          model: ItemDetails,
+          as: 'itemDetails',
+        },
+      ],
     })(req, res, next),
 };
 

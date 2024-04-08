@@ -5,10 +5,8 @@ const { sequelize } = require('../utils/database');
  * @typedef {Object} ItemType
  * @property {number} id
  * @property {string} description
- * @property {number} caratage
  * @property {number} appraisedValue
  * @property {number} pawningAmount
- * @property {number} weight
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
@@ -31,19 +29,11 @@ const Item = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    caratage: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
     appraisedValue: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },
     pawningAmount: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-    weight: {
       type: DataTypes.DOUBLE,
       allowNull: false,
     },

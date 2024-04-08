@@ -26,6 +26,7 @@ exports.SettingEnum = {
 exports.FeatureEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   MULTIPLE_BRANCHES: 'MULTIPLE_BRANCHES',
+  MULTIPLE_ITEM_TYPES: 'MULTIPLE_ITEM_TYPES',
 };
 
 /**
@@ -37,4 +38,14 @@ exports.InterestStatusEnum = {
   DUE: 'Due',
   PAID: 'Paid',
   OVERDUE: 'Overdue',
+};
+
+/**
+ * @enum {string}
+ * @readonly
+ */
+exports.ItemTypesEnum = {
+  GENERIC: 'GENERIC',
+  GOLD: 'GOLD',
+  VEHICLE: 'VEHICLE',
 };

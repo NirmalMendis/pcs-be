@@ -20,6 +20,13 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        description: 'Allow multiple item types in ticket',
+        featureType: FeatureEnum.MULTIPLE_ITEM_TYPES,
+        value: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 
@@ -29,6 +36,7 @@ module.exports = {
         [Sequelize.Op.or]: [
           FeatureEnum.PAWN_TICKET,
           FeatureEnum.MULTIPLE_BRANCHES,
+          FeatureEnum.MULTIPLE_ITEM_TYPES,
         ],
       },
     });
