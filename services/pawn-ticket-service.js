@@ -382,7 +382,9 @@ const PawnTicketService = {
 
       const interestsToUpdate = await Interest.findAll({
         where: {
-          status: InterestStatusEnum.DUE,
+          status: {
+            [Op.or]: [InterestStatusEnum.DUE, InterestStatusEnum.UPCOMING],
+          },
           pawnTicketId: ticketsToUpdate.map((ticket) => ticket.id),
         },
         transaction,
