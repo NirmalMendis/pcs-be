@@ -60,7 +60,7 @@ const sendResponseWithJWT = async (user, res) => {
     // ),
     httpOnly: true,
     //secure: req.secure || req.headers["x-forwarded-proto"] === "https",
-    secure: true,
+    //   secure: true,
     sameSite: 'none',
   });
   const filteredUser = {
