@@ -25,6 +25,7 @@
     "jw-paginate": "^1.0.4",
     "morgan": "^1.10.0",
     "mysql2": "^3.7.0",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.8",
     "nodemon": "^3.0.3",
     "puppeteer": "^22.2.0",

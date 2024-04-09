@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const errorHandler = require('./utils/errors/errorHandler');
+const cron = require('node-cron');
 
 const customerRouter = require('./routes/customer-routes');
 const userRouter = require('./routes/user-routes');
@@ -12,11 +13,13 @@ const invoiceRouter = require('./routes/invoice-routes');
 const roleRouter = require('./routes/role-routes');
 const itemRouter = require('./routes/item-routes');
 const interestRouter = require('./routes/interest-routes');
+const statRouter = require('./routes/stat-routes');
 
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const PawnTicketService = require('./services/pawn-ticket-service');
 
 const app = express();
 
@@ -57,6 +60,7 @@ app.use('/api/v1/invoice', invoiceRouter);
 app.use('/api/v1/role', roleRouter);
 app.use('/api/v1/item', itemRouter);
 app.use('/api/v1/interest', interestRouter);
+app.use('/api/v1/stat', statRouter);
 
 app.all('*', (req, _, next) => {
   next(
@@ -66,6 +70,17 @@ app.all('*', (req, _, next) => {
     }),
   );
 });
+
+cron.schedule(
+  '0 17 * * *',
+  () => {
+    PawnTicketService.updateStatusesJob();
+  },
+  {
+    scheduled: true,
+    timezone: 'Asia/Colombo',
+  },
+);
 
 app.use(errorHandler);
 

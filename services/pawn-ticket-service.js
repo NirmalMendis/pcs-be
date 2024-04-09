@@ -8,7 +8,7 @@ const InvoiceService = require('./invoice-service.');
 const {
   MATERIAL_CONTENT_TYPES,
 } = require('../utils/constants/generic-constantss');
-const { addMonths } = require('date-fns');
+const { addMonths, startOfDay } = require('date-fns');
 const {
   InterestStatusEnum,
   PawnTicketStatusEnum,
@@ -21,6 +21,7 @@ const errorTypes = require('../utils/errors/errors');
 const { InvoiceType } = require('../models/invoice');
 const { GoldItemType, VehicleItemType } = require('../utils/types');
 const ItemDetails = require('../models/item-detail');
+const { Op } = require('sequelize');
 
 /**
  * @namespace
@@ -347,6 +348,59 @@ const PawnTicketService = {
       await transaction.commit();
 
       return pawnTicket;
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
+    }
+  },
+  updateStatusesJob: async () => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      const yesterdayMidnight = startOfDay(new Date());
+      const ticketsToUpdate = await PawnTicket.findAll({
+        where: {
+          status: PawnTicketStatusEnum.ACTIVE,
+          dueDate: {
+            [Op.lt]: yesterdayMidnight,
+          },
+        },
+        transaction,
+      });
+
+      await PawnTicket.update(
+        { status: PawnTicketStatusEnum.DUE },
+        {
+          where: {
+            id: ticketsToUpdate.map((ticket) => ticket.id),
+          },
+          transaction,
+        },
+      );
+
+      const interestsToUpdate = await Interest.findAll({
+        where: {
+          status: InterestStatusEnum.DUE,
+          pawnTicketId: ticketsToUpdate.map((ticket) => ticket.id),
+        },
+        transaction,
+      });
+
+      await Interest.update(
+        { status: InterestStatusEnum.OVERDUE },
+        {
+          where: {
+            id: interestsToUpdate.map((interest) => interest.id),
+          },
+          transaction,
+        },
+      );
+
+      // eslint-disable-next-line no-console
+      console.log('Tickets updated on ', yesterdayMidnight.toLocaleString());
+      await transaction.commit();
     } catch (error) {
       if (transaction) {
         await transaction.rollback();
