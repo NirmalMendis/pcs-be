@@ -5,6 +5,8 @@ const DbFactoryService = require('../services/db-factory-service');
 const PawnTicket = require('../models/pawn-ticket');
 const Customer = require('../models/customer');
 const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
+const { startOfDay, endOfDay } = require('date-fns');
+const { Op } = require('sequelize');
 
 /**
  * @namespace
@@ -30,13 +32,37 @@ const PawnTicketController = {
     );
     sendSuccessResponse(res, revisedPawnTicket);
   }),
-  getAllPawnTickets: async (req, res, next) =>
-    DbFactoryService.getAll(PawnTicket, {
+  getAllPawnTickets: async (req, res, next) => {
+    let where = { branchId: req.user.activeBranchId };
+
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+
+    if (startDate && endDate) {
+      const startOfStartDate = startOfDay(req.query.startDate);
+      const endOfStartDate = endOfDay(req.query.endDate);
+
+      const startDateCondition = {
+        [Op.between]: [startOfStartDate, endOfStartDate],
+      };
+      const endDateCondition = {
+        [Op.between]: [startOfStartDate, endOfStartDate],
+      };
+      where[Op.or] = [
+        { pawnDate: startDateCondition },
+        { dueDate: endDateCondition },
+      ];
+    }
+
+    if (req.query.status) {
+      where.status = req.query.status;
+    }
+
+    return DbFactoryService.getAll(PawnTicket, {
       include: [Customer],
-      where: {
-        branchId: req.user.activeBranchId,
-      },
-    })(req, res, next),
+      where: where,
+    })(req, res, next);
+  },
   getTicketById: DbFactoryService.getOne(PawnTicket, {
     include: [Customer],
   }),
