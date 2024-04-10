@@ -1,11 +1,13 @@
 const DataTypes = require('sequelize');
 const { sequelize } = require('../utils/database');
+const { PaymentTypesEnum } = require('../utils/constants/db-enums');
 
 /**
  * @typedef {Object} PaymentType
  * @property {number} id
  * @property {number} amount
  * @property {Date} paymentDate
+ * @property {PaymentTypesEnum} type
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
@@ -30,6 +32,10 @@ const Payment = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
       unique: true,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

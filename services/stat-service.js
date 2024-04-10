@@ -6,6 +6,7 @@ const {
   InterestStatusEnum,
 } = require('../utils/constants/db-enums');
 const { startOfMonth, endOfMonth, startOfDay, endOfDay } = require('date-fns');
+const getTotalInterestForTickets = require('../helpers/business-logic/get-interest-total-for-tickets');
 
 /**
  * @namespace
@@ -32,6 +33,7 @@ const StatService = {
     const activeTicketsInMonth = await PawnTicket.findAll({
       where: {
         status: PawnTicketStatusEnum.ACTIVE,
+        branchId: activeBranchId,
       },
       include: [
         {
@@ -48,7 +50,12 @@ const StatService = {
                 toDate: {
                   [Op.lt]: startOfCurrentMonth,
                 },
-                status: InterestStatusEnum.DUE,
+                status: {
+                  [Op.or]: [
+                    InterestStatusEnum.UPCOMING,
+                    InterestStatusEnum.DUE,
+                  ],
+                },
               },
             ],
           },
@@ -68,11 +75,96 @@ const StatService = {
       });
     });
 
+    const totalDueCount = await PawnTicket.count({
+      where: {
+        status: PawnTicketStatusEnum.DUE,
+        branchId: activeBranchId,
+      },
+    });
+
+    const allDueTickets = await PawnTicket.findAll({
+      where: {
+        status: PawnTicketStatusEnum.DUE,
+        branchId: activeBranchId,
+      },
+      include: [
+        {
+          model: Interest,
+          as: 'interests',
+          where: {
+            status: {
+              [Op.not]: InterestStatusEnum.PAID,
+            },
+          },
+        },
+      ],
+    });
+
+    const totalRecoveredCount = await PawnTicket.count({
+      where: {
+        status: PawnTicketStatusEnum.RECOVERED,
+        branchId: activeBranchId,
+      },
+    });
+
+    const allRecoveredTickets = await PawnTicket.findAll({
+      where: {
+        status: PawnTicketStatusEnum.RECOVERED,
+        branchId: activeBranchId,
+      },
+      include: [
+        {
+          model: Interest,
+          as: 'interests',
+          where: {
+            status: InterestStatusEnum.PAID,
+          },
+        },
+      ],
+    });
+
+    const totalForfeitedCount = await PawnTicket.count({
+      where: {
+        status: PawnTicketStatusEnum.FORFEITED,
+        branchId: activeBranchId,
+      },
+    });
+
+    const allForfeitedTickets = await PawnTicket.findAll({
+      where: {
+        status: PawnTicketStatusEnum.FORFEITED,
+        branchId: activeBranchId,
+      },
+      include: [
+        {
+          model: Interest,
+          as: 'interests',
+          where: {
+            status: {
+              [Op.not]: InterestStatusEnum.PAID,
+            },
+          },
+        },
+      ],
+    });
+
     return {
-      active: {
-        total: totalActiveCount,
+      [PawnTicketStatusEnum.ACTIVE]: {
+        totalCount: totalActiveCount,
         month: parseFloat(totalInterestsInMonth.toFixed(2)),
         today: parseFloat(totalInterestsToday.toFixed(2)),
+      },
+      [PawnTicketStatusEnum.DUE]: {
+        totalCount: totalDueCount,
+        totalValue: getTotalInterestForTickets(allDueTickets),
+      },
+      [PawnTicketStatusEnum.RECOVERED]: {
+        totalCount: totalRecoveredCount,
+        totalValue: getTotalInterestForTickets(allRecoveredTickets),
+      },
+      [PawnTicketStatusEnum.FORFEITED]: {
+        totalCount: totalForfeitedCount,
+        totalValue: getTotalInterestForTickets(allForfeitedTickets),
       },
     };
   },

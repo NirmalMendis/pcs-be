@@ -49,3 +49,12 @@ exports.ItemTypesEnum = {
   GOLD: 'GOLD',
   VEHICLE: 'VEHICLE',
 };
+
+/**
+ * @enum {string}
+ * @readonly
+ */
+exports.PaymentTypesEnum = {
+  INTEREST: 'INTEREST',
+  PRINCIPAL: 'PRINCIPAL',
+};
