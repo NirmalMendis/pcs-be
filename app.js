@@ -20,6 +20,7 @@ const errorTypes = require('./utils/errors/errors');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const PawnTicketService = require('./services/pawn-ticket-service');
+const InterestService = require('./services/interest-service');
 
 const app = express();
 
@@ -75,6 +76,7 @@ cron.schedule(
   '0 1 * * *',
   () => {
     PawnTicketService.updateStatusesJob();
+    InterestService.updateStatusesJob();
   },
   {
     scheduled: true,
