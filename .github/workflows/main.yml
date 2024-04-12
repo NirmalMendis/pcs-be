@@ -12,10 +12,6 @@ jobs:
         with:
           node-version: 18.18.2
       - run: npm install
-      - name: Load environment variables from config.env
-        run: |
-          source config.env
-          echo "Loaded environment variables from config.env"
       - run: CI=false npm start
       - name: ssh deploy on aws lightsail
         uses: easingthemes/ssh-deploy@v2.1.4
@@ -26,3 +22,4 @@ jobs:
           REMOTE_PORT: ${{ secrets.DEPLOY_PORT }}
           SOURCE: './'
           TARGET: ${{ secrets.DEPLOY_TARGET }}
+          COMMAND_BEFORE_DEPLOY: 'source /home/ubuntu/apps/assetank/stg/pcs-be/config.env && export $(cat /home/ubuntu/apps/assetank/stg/pcs-be/config.env | sed 's/=.*//' | xargs)'
