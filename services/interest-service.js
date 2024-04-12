@@ -35,7 +35,7 @@ const InterestService = {
 
       // eslint-disable-next-line no-console
       console.log(
-        `Tickets updated at ${new Date().toLocaleDateString()} for`,
+        `Tickets updated at ${new Date().toLocaleString()} for`,
         yesterdayMidnight.toLocaleString(),
       );
       await transaction.commit();
