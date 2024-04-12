@@ -27,5 +27,6 @@ jobs:
             cd /home/ubuntu/apps/assetank/stg/pcs-be
             git pull
             npm install
-            npm start
+            npm start &
+            echo "Server started"
             EOF
