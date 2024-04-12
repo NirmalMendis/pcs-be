@@ -14,20 +14,6 @@ jobs:
       - name: Create config.env file from config.env
         run: |
           echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
-      - name: ssh deploy on aws lightsail
-        uses: easingthemes/ssh-deploy@v2.1.4
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
-          REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
-          REMOTE_USER: ${{ secrets.DEPLOY_USER }}
-          REMOTE_PORT: ${{ secrets.DEPLOY_PORT }}
-          SOURCE: './'
-          TARGET: ${{ secrets.DEPLOY_TARGET }}
-          SCRIPT_AFTER: |
-            cd /home/ubuntu/apps/assetank/stg/pcs-be
-            mkdir test123
-            git pull
-            npm install
-            npm start &
-            echo "Server started"
-            EOF
+      - name: Deploy to Lightsail
+        run: |
+          ssh -i ${{ secrets.DEPLOY_KEY }} ubuntu@${{ secrets.DEPLOY_HOST }} 'cd /home/ubuntu/apps/assetank/stg/pcs-be && mkdir test123 && git pull && npm install && npm start'
