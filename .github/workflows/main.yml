@@ -26,7 +26,7 @@ jobs:
           LIGHTSAIL_IP: ${{ secrets.DEPLOY_HOST }}
           LIGHTSAIL_SSH_KEY: ${{ secrets.DEPLOY_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i $DEPLOY_KEY ubuntu@$DEPLOY_HOST <<EOF
+          ssh -o StrictHostKeyChecking=no -i $LIGHTSAIL_SSH_KEY ubuntu@$LIGHTSAIL_IP <<EOF
           cd /home/ubuntu/apps/assetank/stg/pcs-be
           git pull
           npm install
