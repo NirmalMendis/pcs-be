@@ -13,6 +13,10 @@ jobs:
           node-version: 18.18.2
       - run: npm install
       - run: CI=false npm start
+      - name: Load environment variables from config.env
+        run: |
+          source config.env
+          echo "Loaded environment variables from config.env"
       - name: ssh deploy on aws lightsail
         uses: easingthemes/ssh-deploy@v2.1.4
         env:
