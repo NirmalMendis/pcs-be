@@ -15,5 +15,16 @@ jobs:
         run: |
           echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
       - name: Deploy to Lightsail
-        run: |
-          ssh -i ${{ secrets.DEPLOY_KEY }} ubuntu@${{ secrets.DEPLOY_HOST }} 'cd /home/ubuntu/apps/assetank/stg/pcs-be && mkdir test123 && git pull && npm install && npm start'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /home/ubuntu/apps/assetank/stg/pcs-be
+            mkdir test123
+            git pull
+            npm install
+            npm start &
+            echo "Server started"
