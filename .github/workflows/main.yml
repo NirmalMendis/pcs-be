@@ -7,9 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Pull the latest changes
-        run: |
-          git pull origin dev
       - name: Use Node.js 18.18.2 to Build
         uses: actions/setup-node@v2
         with:
@@ -29,6 +26,7 @@ jobs:
           script: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
             source ~/.nvm/nvm.sh
+            git pull origin dev
             npm install
             sudo kill -9 $(sudo lsof -t -i:4000)
             nohup npm start > /home/ubuntu/apps/assetank/assetank-logs.txt 2>&1 &
