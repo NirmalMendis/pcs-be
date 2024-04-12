@@ -22,13 +22,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Deploy to Lightsail
-        env:
-          LIGHTSAIL_IP: ${{ secrets.DEPLOY_HOST }}
-          LIGHTSAIL_SSH_KEY: ${{ secrets.DEPLOY_KEY }}
-        run: |
-          ssh -o StrictHostKeyChecking=no -i $LIGHTSAIL_SSH_KEY ubuntu@$LIGHTSAIL_IP <<EOF
-          cd /home/ubuntu/apps/assetank/stg/pcs-be
-          git pull
-          npm install
-          npm start
-          EOF
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: |
+            cd /home/ubuntu/apps/assetank/stg/pcs-be
+            git pull
+            npm install
+            npm start
+            EOF
