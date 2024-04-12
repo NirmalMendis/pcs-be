@@ -25,8 +25,8 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
-            mkdir testtest
             source ~/.nvm/nvm.sh
             npm install
+            sudo kill -9 $(sudo lsof -t -i:4000)
             nohup npm start > /home/ubuntu/apps/assetank/assetank-logs.txt 2>&1 &
             echo "Server started"
