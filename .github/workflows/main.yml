@@ -11,6 +11,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.18.2
+      - run: npm install
       - name: Create config.env file from config.env
         run: |
           echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
@@ -23,8 +24,6 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
-            mkdir test123
             git pull
-            npm install
             npm start &
             echo "Server started"
