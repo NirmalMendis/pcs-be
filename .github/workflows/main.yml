@@ -25,6 +25,7 @@ jobs:
           TARGET: ${{ secrets.DEPLOY_TARGET }}
           SCRIPT_AFTER: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
+            mkdir test123
             git pull
             npm install
             npm start &
