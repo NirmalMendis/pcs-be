@@ -72,7 +72,7 @@ app.all('*', (req, _, next) => {
   );
 });
 
-//schedule cron jobssss
+//schedule cron jobs at 1am
 cron.schedule(
   '0 1 * * *',
   () => {
