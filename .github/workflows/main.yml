@@ -1,27 +1,34 @@
+name: Deploy to Lightsail
+
 on:
   push:
-    branches: [dev]
+    branches:
+      - dev
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 18.18.2 to Build
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 18.18.2
       - name: Create config.env file from config.env
         run: |
           echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
-      - run: npm install
-      - run: CI=false npm start
-      - name: ssh deploy on aws lightsail
-        uses: easingthemes/ssh-deploy@v2.1.4
+      - name: Install dependencies
+        run: npm ci
+      - name: Deploy to Lightsail
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY }}
-          REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
-          REMOTE_USER: ${{ secrets.DEPLOY_USER }}
-          REMOTE_PORT: ${{ secrets.DEPLOY_PORT }}
-          SOURCE: './'
-          TARGET: ${{ secrets.DEPLOY_TARGET }}
+          LIGHTSAIL_IP: ${{ secrets.DEPLOY_HOST }}
+          LIGHTSAIL_SSH_KEY: ${{ secrets.DEPLOY_KEY }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i $DEPLOY_KEY ubuntu@$DEPLOY_HOST <<EOF
+          cd /home/ubuntu/apps/assetank/stg/pcs-be
+          git pull
+          npm install
+          npm start
+          EOF
