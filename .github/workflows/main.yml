@@ -27,5 +27,6 @@ jobs:
             cd /home/ubuntu/apps/assetank/stg/pcs-be
             mkdir testtest
             source ~/.nvm/nvm.sh
-            npm start > /home/ubuntu/apps/assetank/assetank-logs.txt &
+            npm install
+            nohup npm start > /home/ubuntu/apps/assetank/assetank-logs.txt 2>&1 &
             echo "Server started"
