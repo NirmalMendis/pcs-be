@@ -26,6 +26,7 @@ jobs:
           script: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
             mkdir testtest
+            source ~/.nvm/nvm.sh
             npm start &
             echo "Server started"
             echo "${{ secrets.CONFIG_ENV_CONTENT }}"
