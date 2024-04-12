@@ -13,7 +13,7 @@ jobs:
           node-version: 18.18.2
       - name: Create config.env file from config.env
         run: |
-        echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
+          echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
       - run: npm install
       - run: CI=false npm start
       - name: ssh deploy on aws lightsail
