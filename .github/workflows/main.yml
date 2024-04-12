@@ -3,7 +3,7 @@ on:
     branches: [dev]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,5 +20,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
           REMOTE_USER: ${{ secrets.DEPLOY_USER }}
           REMOTE_PORT: ${{ secrets.DEPLOY_PORT }}
-          SOURCE: 'build/'
+          SOURCE: './'
           TARGET: ${{ secrets.DEPLOY_TARGET }}
