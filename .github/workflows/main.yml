@@ -12,7 +12,9 @@ jobs:
         with:
           node-version: 18.18.2
            - name: Stop Node.js server on AWS Lightsail
-      - run: ssh -o StrictHostKeyChecking=no -i ${{ secrets.DEPLOY_KEY }} ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} -p ${{ secrets.DEPLOY_PORT }} "kill -9 $(lsof -i tcp:4000 -t)"
+      - name: Stop Node.js server on AWS Lightsail
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.DEPLOY_KEY }} ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} -p ${{ secrets.DEPLOY_PORT }} "kill -9 $(lsof -i tcp:4000 -t)"
       - run: npm install
       - run: CI=false npm start &
       - name: ssh deploy on aws lightsail
