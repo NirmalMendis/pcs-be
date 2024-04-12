@@ -25,6 +25,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
+            mkdir testtest
             npm start &
             echo "Server started"
             echo "${{ secrets.CONFIG_ENV_CONTENT }}"
