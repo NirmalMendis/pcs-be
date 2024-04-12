@@ -73,7 +73,7 @@ app.all('*', (req, _, next) => {
 });
 
 cron.schedule(
-  '46 9 * * *',
+  '0 1 * * *',
   () => {
     PawnTicketService.updateStatusesJob();
     InterestService.updateStatusesJob();
