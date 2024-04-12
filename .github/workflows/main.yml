@@ -12,10 +12,10 @@ jobs:
         with:
           node-version: 18.18.2
       - run: npm install
-      - run: CI=false npm start
       - name: Create config.env file from config.env
         run: |
           echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
+      - run: CI=false npm start
       - name: Deploy to Lightsail
         uses: appleboy/ssh-action@master
         with:
