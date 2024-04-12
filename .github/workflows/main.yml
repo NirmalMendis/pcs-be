@@ -12,6 +12,7 @@ jobs:
         with:
           node-version: 18.18.2
       - run: npm install
+      - run: CI=false npm start &
       - name: Create config.env file from config.env
         run: |
           echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
@@ -25,5 +26,4 @@ jobs:
           script: |
             cd /home/ubuntu/apps/assetank/stg/pcs-be
             git pull
-            npm start &
             echo "Server started"
