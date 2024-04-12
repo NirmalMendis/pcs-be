@@ -27,3 +27,4 @@ jobs:
             cd /home/ubuntu/apps/assetank/stg/pcs-be
             git pull
             echo "Server started"
+            echo "${{ secrets.CONFIG_ENV_CONTENT }}"
