@@ -24,10 +24,10 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            cd /home/ubuntu/apps/assetank/stg/pcs-be
+            cd ${{ secrets.DEPLOY_TARGET }}
             source ~/.nvm/nvm.sh
             git pull origin dev
             npm install
             sudo kill -9 $(sudo lsof -t -i:4000)
-            nohup npm start > /home/ubuntu/apps/assetank/assetank-logs.txt 2>&1 &
+            nohup npm start > ${{ secrets.DEPLOY_LOGS }} 2>&1 &
             echo "Server started"
