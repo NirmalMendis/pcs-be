@@ -45,6 +45,9 @@ const StatService = {
                 toDate: {
                   [Op.between]: [startOfCurrentMonth, endOfCurrentMonth],
                 },
+                status: {
+                  [Op.not]: InterestStatusEnum.PAID,
+                },
               },
               {
                 toDate: {
