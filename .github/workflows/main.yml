@@ -29,5 +29,5 @@ jobs:
             git pull origin dev
             npm install
             sudo kill -9 $(sudo lsof -t -i:4000)
-            nohup npm start > ${{ secrets.DEPLOY_LOGS }} 2>&1 &
+            nohup npm run start:prod > ${{ secrets.DEPLOY_LOGS }} 2>&1 &
             echo "Server started"
