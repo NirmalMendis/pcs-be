@@ -36,7 +36,7 @@ jobs:
           script: |
             cd ${{ env.DEPLOY_TARGET }}
             source ~/.nvm/nvm.sh
-            git pull origin dev
+            git pull
             npm install
             sudo kill -9 $(sudo lsof -t -i:4000)
             nohup npm run start:prod > ${{ env.DEPLOY_LOGS }} 2>&1 &
