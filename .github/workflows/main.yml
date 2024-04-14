@@ -11,7 +11,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.18.2
-      - name: Setup environment
+      - name: Setup branch specific environment
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
             echo "CONFIG_ENV_CONTENT=${{ secrets.STG_CONFIG_ENV_CONTENT }}" >> $GITHUB_ENV
