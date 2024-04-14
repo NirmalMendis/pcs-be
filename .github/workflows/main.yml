@@ -11,23 +11,33 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.18.2
+      - name: Setup environment
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "CONFIG_ENV_CONTENT=${{ secrets.STG_CONFIG_ENV_CONTENT }}" >> $GITHUB_ENV
+            echo "DEPLOY_USER=${{ secrets.STG_DEPLOY_USER }}" >> $GITHUB_ENV
+            echo "DEPLOY_TARGET=${{ secrets.STG_DEPLOY_TARGET }}" >> $GITHUB_ENV
+            echo "DEPLOY_LOGS=${{ secrets.STG_DEPLOY_LOGS }}" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/prod" ]]; then
+            echo "DEPLOY_USER=${{ secrets.PROD_DEPLOY_USER }}" >> $GITHUB_ENV
+          fi
       - run: npm install
       - name: Create config.env file from config.env
         run: |
-          echo "${{ secrets.CONFIG_ENV_CONTENT }}" > config.env
+          echo "${{ env.CONFIG_ENV_CONTENT }}" > config.env
       - run: CI=false npm start &
       - name: Deploy to Lightsail
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
+          username: ${{ env.DEPLOY_USER }}
           port: ${{ secrets.DEPLOY_PORT }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            cd ${{ secrets.DEPLOY_TARGET }}
+            cd ${{ env.DEPLOY_TARGET }}
             source ~/.nvm/nvm.sh
             git pull origin dev
             npm install
             sudo kill -9 $(sudo lsof -t -i:4000)
-            nohup npm run start:prod > ${{ secrets.DEPLOY_LOGS }} 2>&1 &
+            nohup npm run start:prod > ${{ env.DEPLOY_LOGS }} 2>&1 &
             echo "Server started"
