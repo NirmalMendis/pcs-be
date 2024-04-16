@@ -17,12 +17,6 @@ exports.MATERIAL_CONTENT_TYPES = {
   PDF: 'PDF',
 };
 
-exports.CategoryEnum = {
-  PAWN_TICKET: 'PAWN_TICKET',
-  CUSTOMER: 'CUSTOMER',
-  IAM: 'IAM',
-};
-
 exports.FunctionEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   CUSTOMER: 'CUSTOMER',
@@ -30,7 +24,7 @@ exports.FunctionEnum = {
 };
 
 exports.SUPER_ADMIN_ROLE = 'Super Admin';
-exports.SOFTTANK_ADMIN_USER_EMAIL = 'softanktech@gmail.com';
+exports.SOFTTANK_ADMIN_USER_EMAIL = 'dev.softanktech@gmail.com';
 exports.DD_MM_YYY_FORMAT = 'dd-MM-yyyy';
 
 exports.DB_ERRORS = {

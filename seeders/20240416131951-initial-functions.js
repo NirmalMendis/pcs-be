@@ -1,9 +1,6 @@
 'use strict';
 
-const {
-  FunctionEnum,
-  CategoryEnum,
-} = require('../utils/constants/generic-constantss');
+const { FunctionEnum } = require('../utils/constants/generic-constantss');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -12,7 +9,6 @@ module.exports = {
       //Pawn Ticket
       {
         title: FunctionEnum.PAWN_TICKET,
-        category: CategoryEnum.PAWN_TICKET,
         view: true,
         create: true,
         update: true,
@@ -23,7 +19,6 @@ module.exports = {
       //Customer
       {
         title: FunctionEnum.CUSTOMER,
-        category: CategoryEnum.CUSTOMER,
         view: true,
         create: true,
         update: true,
@@ -34,7 +29,6 @@ module.exports = {
       //IAM
       {
         title: FunctionEnum.IAM,
-        category: CategoryEnum.IAM,
         view: true,
         create: true,
         update: true,

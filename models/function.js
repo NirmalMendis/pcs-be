@@ -1,12 +1,10 @@
 const DataTypes = require('sequelize');
 const { sequelize } = require('../utils/database');
-const { CategoryEnum } = require('../utils/constants/generic-constantss');
 
 /**
  * @typedef {Object} FunctionType
  * @property {number} id
  * @property {string} title
- * @property {CategoryEnum} category
  * @property {boolean} view
  * @property {boolean} create
  * @property {boolean} update
@@ -26,10 +24,6 @@ const Function = sequelize.define(
       autoIncrement: true,
     },
     title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    category: {
       type: DataTypes.STRING,
       allowNull: false,
     },

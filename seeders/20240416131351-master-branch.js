@@ -5,17 +5,16 @@ module.exports = {
   async up(queryInterface) {
     return queryInterface.bulkInsert('branches', [
       {
-        title: 'Ragama',
-        email: 'nirmal.gmw@gmail.com',
-        addressLine1: 'Test (Pvt) Ltd',
-        addressLine2: 'TESTA, Galle Face Terrace,',
-        addressLine3: 'Colombo 03, Sri Lanka.',
+        title: 'Ja-Ela',
+        email: null,
+        addressLine1: '532/1',
+        addressLine2: 'Kapuwatta',
+        addressLine3: 'Ja-Ela, Sri Lanka.',
         city: 'Ragama',
         postalCode: '12211',
-        mobileNo: '+94 123456678',
+        mobileNo: '0701854328',
         isMainBranch: true,
-        logoURL:
-          'http://www.ceylonwildsafaris.com/wp-content/uploads/2019/04/cws-logo_small.jpg',
+        logoURL: null,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

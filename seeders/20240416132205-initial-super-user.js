@@ -1,9 +1,10 @@
 'use strict';
-const bcrypt = require('bcrypt');
+
 const {
-  SUPER_ADMIN_ROLE,
   SOFTTANK_ADMIN_USER_EMAIL,
+  SUPER_ADMIN_ROLE,
 } = require('../utils/constants/generic-constantss');
+const bcrypt = require('bcrypt');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -17,9 +18,12 @@ module.exports = {
         firstName: 'Soft',
         lastName: 'Tank',
         email: SOFTTANK_ADMIN_USER_EMAIL,
-        passkey: await bcrypt.hash(SOFTTANK_ADMIN_USER_EMAIL + 'User@123', 12),
+        passkey: await bcrypt.hash(
+          SOFTTANK_ADMIN_USER_EMAIL + 'Softank#c1##',
+          12,
+        ),
         activeBranchId: branches[0][0].id,
-        mobileNo: '123456',
+        mobileNo: '0772311464',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
