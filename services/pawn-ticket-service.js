@@ -30,7 +30,7 @@ const logger = require('../utils/logger');
 const PawnTicketService = {
   /**
    *
-   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "dueDate" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount"> & {itemDetails?: GoldItemType | VehicleItemType}> }} pawnTicketData
+   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "periodInMonths" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount"> & {itemDetails?: GoldItemType | VehicleItemType}> }} pawnTicketData
    * @param {UserType} user
    * @returns {Promise<(PawnTicketType | void)>}
    */
@@ -38,7 +38,7 @@ const PawnTicketService = {
     const transaction = await sequelize.transaction();
     const {
       pawnDate,
-      dueDate,
+      periodInMonths,
       interestRate,
       status,
       branchId,
@@ -58,7 +58,7 @@ const PawnTicketService = {
       );
       let dateInAction = new Date(pawnDate);
       const interests = [];
-      while (dateInAction <= new Date(dueDate)) {
+      for (let i = 0; i < periodInMonths; i++) {
         const prevDate = dateInAction;
         dateInAction = addMonths(dateInAction, 1);
         interests.push({
@@ -72,7 +72,7 @@ const PawnTicketService = {
       const pawnTicket = await PawnTicket.create(
         {
           pawnDate,
-          dueDate,
+          periodInMonths,
           principalAmount: calculatedPrincipalAmount,
           interestRate,
           status,
@@ -194,7 +194,7 @@ const PawnTicketService = {
       const clonedPawnTicket = await PawnTicket.create(
         {
           pawnDate: originalPawnTicket.pawnDate,
-          dueDate: originalPawnTicket.dueDate,
+          periodInMonths: originalPawnTicket.periodInMonths,
           principalAmount: originalPawnTicket.principalAmount,
           interestRate: originalPawnTicket.interestRate,
           status: originalPawnTicket.status,

@@ -3,7 +3,7 @@ const yup = require('yup');
 const createPawnTicketSchema = yup.object({
   body: yup.object({
     pawnDate: yup.date().required(),
-    dueDate: yup.date().required(),
+    periodInMonths: yup.number().required(),
     serviceCharge: yup
       .number()
       .positive()

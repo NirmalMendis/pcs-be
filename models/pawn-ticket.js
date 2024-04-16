@@ -2,6 +2,7 @@ const DataTypes = require('sequelize');
 const { sequelize } = require('../utils/database');
 const { PawnTicketStatusEnum } = require('../utils/constants/db-enums');
 const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
+const { addMonths } = require('date-fns');
 
 /**
  * @typedef {Object} PawnTicketType
@@ -9,6 +10,7 @@ const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-
  * @property {number} revision
  * @property {Date} pawnDate
  * @property {Date} dueDate
+ * @property {number} periodInMonths
  * @property {number} principalAmount
  * @property {number} serviceCharge
  * @property {number} interestRate
@@ -38,7 +40,13 @@ const PawnTicket = sequelize.define(
       allowNull: false,
     },
     dueDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.VIRTUAL,
+      get() {
+        return addMonths(this.pawnDate, +this.periodInMonths);
+      },
+    },
+    periodInMonths: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     principalAmount: {

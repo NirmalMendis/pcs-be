@@ -1,3 +1,4 @@
+const { addMonths } = require('date-fns');
 const calculateMonthlyInterestFn = require('../helpers/business-logic/calculate-monthly-interest');
 const getFirstInterestDate = require('../helpers/business-logic/get-first-interest-date');
 const sendSuccessResponse = require('../helpers/shared/success-response');
@@ -48,6 +49,13 @@ const InvoiceController = {
         ...req.body,
         firstInterestDate,
         monthlyInterest,
+        pawnTicket: {
+          ...req.body.pawnTicket,
+          dueDate: addMonths(
+            req.body.pawnTicket.pawnDate,
+            +req.body.pawnTicket.periodInMonths,
+          ),
+        },
       },
       MATERIAL_CONTENT_TYPES.PDF,
     );
