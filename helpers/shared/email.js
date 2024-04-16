@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer');
-const BranchService = require('../../services/branch-service');
 const { Transaction } = require('sequelize');
 const logger = require('../../utils/logger');
+const {
+  SOFTTANK_ADMIN_USER_EMAIL,
+} = require('../../utils/constants/generic-constantss');
 
 const createTransport = () => {
   if (process.env.NODE_ENV === 'production') {
     logger.info('---------- Email Prod Transport Created -------------');
-    // Sendgrid
     return nodemailer.createTransport({
       host: process.env.PROD_EMAIL_HOST,
       port: process.env.PROD_EMAIL_PORT,
@@ -43,16 +44,8 @@ const sendEmail = async (options) => {
   // 1) Create a transporter
   const transporter = createTransport();
 
-  // 2) Define the email options
-  const mainBranchProfile = await BranchService.findBranch(
-    { where: { isMainBranch: true } },
-    {
-      transaction: options.transaction,
-    },
-  );
-
   const mailOptions = {
-    from: `"${mainBranchProfile.title}" <${mainBranchProfile.email}>`,
+    from: `Assetank <${SOFTTANK_ADMIN_USER_EMAIL}>`,
     to: options.email,
     subject: options.subject,
     html: options.html,

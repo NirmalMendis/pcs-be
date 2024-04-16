@@ -148,7 +148,7 @@ const AuthService = {
    */
   getUserPermissions: async (id) => {
     const permissions = await sequelize.query(
-      'SELECT f.title, f.category, rcf.action FROM functions f INNER JOIN role_connect_functions rcf ON rcf.functionId = f.id INNER JOIN user_connect_roles ucr ON ucr.roleId = rcf.roleId WHERE ucr.userId = ?',
+      'SELECT f.title, rcf.action FROM functions f INNER JOIN role_connect_functions rcf ON rcf.functionId = f.id INNER JOIN user_connect_roles ucr ON ucr.roleId = rcf.roleId WHERE ucr.userId = ?',
       {
         replacements: [id],
         type: sequelize.QueryTypes.SELECT,

@@ -6,7 +6,7 @@ const logger = createLogger({
     format.timestamp({ format: 'MM-DD-YYYY HH:mm:ss' }),
     format.json(),
   ),
-  transports: [],
+  transports: [new transports.File({ filename: 'combined.log' })],
 });
 
 if (process.env.NODE_ENV !== 'production') {

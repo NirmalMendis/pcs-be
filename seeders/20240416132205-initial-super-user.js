@@ -1,4 +1,6 @@
 'use strict';
+const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
 
 const {
   SOFTTANK_ADMIN_USER_EMAIL,
@@ -19,7 +21,7 @@ module.exports = {
         lastName: 'Tank',
         email: SOFTTANK_ADMIN_USER_EMAIL,
         passkey: await bcrypt.hash(
-          SOFTTANK_ADMIN_USER_EMAIL + 'Softank#c1##',
+          SOFTTANK_ADMIN_USER_EMAIL + process.env.SOFTTANK_ADMIN_USER_PASSWORD,
           12,
         ),
         activeBranchId: branches[0][0].id,
