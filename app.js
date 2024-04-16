@@ -21,6 +21,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const PawnTicketService = require('./services/pawn-ticket-service');
 const InterestService = require('./services/interest-service');
+const UserService = require('./services/user-service');
 
 const app = express();
 
@@ -78,6 +79,7 @@ cron.schedule(
   () => {
     PawnTicketService.updateStatusesJob();
     InterestService.updateStatusesJob();
+    UserService.resetPasswordChangeLimit();
   },
   {
     scheduled: true,

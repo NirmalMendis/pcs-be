@@ -30,7 +30,7 @@ const Function = sequelize.define(
       allowNull: false,
     },
     category: {
-      type: DataTypes.ENUM(CategoryEnum.PAWN_TICKET, CategoryEnum.CUSTOMER),
+      type: DataTypes.STRING,
       allowNull: false,
     },
     view: {

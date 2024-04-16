@@ -11,6 +11,7 @@ const { UserType } = require('../models/user');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const { PermissionsType } = require('../utils/types');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -34,14 +35,6 @@ const AuthService = {
 
       const user = await User.scope('setNewPassword').findOne(
         {
-          // include: [
-          //   {
-          //     model: Role.scope('essential'),
-          //     where: {
-          //       status: 'Active',
-          //     },
-          //   },
-          // ],
           where: {
             email: email,
             passwordResetToken: hashedToken,
@@ -52,7 +45,7 @@ const AuthService = {
       );
 
       if (!user) {
-        throw new AppError(errorTypes.USER.PASSWORD_RESET_TOKEN_INVALID)();
+        throw new AppError(errorTypes.USER.PASSWORD_RESET_TOKEN_INVALID);
       }
 
       if (user.passwordResetAttempts >= PASSWORD_RESET_ATTEMPT_LIMIT) {
@@ -101,8 +94,8 @@ const AuthService = {
       if (user) {
         throw new AppError(errorTypes.USER.ACCOUNT_DEACTIVATED);
       }
-      // eslint-disable-next-line no-console
-      console.log('NO USER !!!');
+
+      logger.info('NO USER !!!');
     }
     if (!user || !(await user.verifyPassword(email, password))) {
       throw new AppError(errorTypes.USER.INCORRECT_EMAIL_PASSWORD);

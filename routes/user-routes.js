@@ -6,7 +6,10 @@ const router = express.Router();
 
 router.use(AuthController.protect);
 
-router.route('/').post(UserController.createUser);
+router
+  .route('/')
+  .post(UserController.createUser)
+  .get(UserController.getAllUser);
 router.route('/permissions').get(UserController.getUserPermissions);
 router.route('/:id').get(UserController.getUser);
 router.route('/active-branch').patch(UserController.updateActiveBranch);

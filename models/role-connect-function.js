@@ -31,12 +31,7 @@ const RoleConnectFunction = sequelize.define('role_connect_function', {
     allowNull: false,
   },
   action: {
-    type: DataTypes.ENUM(
-      PermissionActionEnum.CREATE,
-      PermissionActionEnum.VIEW,
-      PermissionActionEnum.UPDATE,
-      PermissionActionEnum.DELETE,
-    ),
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });

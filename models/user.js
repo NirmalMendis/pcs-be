@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const { BranchType } = require('./branch');
 const { RoleType } = require('./role');
+const capitalize = require('../helpers/shared/capitalize');
 
 /**
  * @typedef {Object} UserType
@@ -37,6 +38,12 @@ const User = sequelize.define(
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    name: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return capitalize(`${this.firstName} ${this.lastName}`);
+      },
     },
     email: {
       type: DataTypes.STRING,

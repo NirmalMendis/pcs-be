@@ -22,6 +22,7 @@ const { InvoiceType } = require('../models/invoice');
 const { GoldItemType, VehicleItemType } = require('../utils/types');
 const ItemDetails = require('../models/item-detail');
 const { Op } = require('sequelize');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -400,12 +401,8 @@ const PawnTicketService = {
         },
       );
 
-      // eslint-disable-next-line no-console
-      console.log(
-        `Tickets updated at ${new Date().toLocaleString()} for`,
-        yesterdayMidnight.toLocaleString(),
-      );
       await transaction.commit();
+      logger.info('Ticket statuses updated');
     } catch (error) {
       if (transaction) {
         await transaction.rollback();

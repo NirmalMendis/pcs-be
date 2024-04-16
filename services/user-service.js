@@ -4,7 +4,6 @@ const { UserType } = require('../models/user');
 const { BranchType } = require('../models/branch');
 const { sequelize } = require('../utils/database');
 const welcomeTemplate = require('../utils/email/templates/welcomeEmail');
-const BranchService = require('./branch-service');
 const {
   WelcomeEmailTemplateDataType,
 } = require('../utils/email/templates/welcomeEmail');
@@ -14,6 +13,9 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const errorTypes = require('../utils/errors/errors');
 const AppError = require('../utils/errors/AppError');
+const MetadataService = require('./metadata-service');
+const { SettingEnum } = require('../utils/constants/db-enums');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -50,27 +52,24 @@ const UserService = {
       await newUser.setRoles(roles, { transaction });
       const resetToken = await newUser.createPasswordResetToken(transaction);
 
-      const mainBranchProfile = await BranchService.findBranch(
-        { where: { isMainBranch: true } },
-        {
-          transaction,
-        },
+      const companyName = await MetadataService.findSetting(
+        SettingEnum.COMPANY_NAME,
       );
 
       /**
        * @type {WelcomeEmailTemplateDataType}
        */
       const emailData = {
-        branch: mainBranchProfile,
-        user: { ...newUser.get({ plain: true }) },
+        companyName: companyName.value,
+        firstName: newUser.firstName,
         redirectURL:
           process.env.FRONTEND_URL +
-          `/password-reset?token=${resetToken}&email=${newUser.email}`,
+          `/set-new-password?token=${resetToken}&email=${newUser.email}`,
       };
 
       await sendEmail({
         email: email,
-        subject: 'Welcome to Pawn center system',
+        subject: 'Welcome to Assetank',
         html: welcomeTemplate(emailData),
         transaction,
       });
@@ -134,6 +133,23 @@ const UserService = {
       return permissions;
     } else {
       throw new AppError(errorTypes.USER.JWT_ROLES_PERMISSIONS_MISMATCH);
+    }
+  },
+  resetPasswordChangeLimit: async () => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      await User.update(
+        { passwordResetAttempts: 0 },
+        { where: {}, transaction },
+      );
+      await transaction.commit();
+      logger.info('Password change limit resetted');
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
     }
   },
 };

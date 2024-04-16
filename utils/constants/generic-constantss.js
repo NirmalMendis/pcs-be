@@ -20,11 +20,13 @@ exports.MATERIAL_CONTENT_TYPES = {
 exports.CategoryEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   CUSTOMER: 'CUSTOMER',
+  IAM: 'IAM',
 };
 
 exports.FunctionEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   CUSTOMER: 'CUSTOMER',
+  IAM: 'IAM',
 };
 
 exports.SUPER_ADMIN_ROLE = 'Super Admin';

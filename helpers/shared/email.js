@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 const BranchService = require('../../services/branch-service');
 const { Transaction } = require('sequelize');
+const logger = require('../../utils/logger');
 
 const createTransport = () => {
   if (process.env.NODE_ENV === 'production') {
-    // eslint-disable-next-line no-console
-    console.log('---------- Email Prod Transport Created -------------');
+    logger.info('---------- Email Prod Transport Created -------------');
     // Sendgrid
     return nodemailer.createTransport({
       host: process.env.PROD_EMAIL_HOST,

@@ -31,6 +31,17 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      //IAM
+      {
+        title: FunctionEnum.IAM,
+        category: CategoryEnum.IAM,
+        view: true,
+        create: true,
+        update: true,
+        delete: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

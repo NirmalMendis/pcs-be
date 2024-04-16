@@ -1,5 +1,6 @@
 const sendSuccessResponse = require('../helpers/shared/success-response');
 const Branch = require('../models/branch');
+const Function = require('../models/function');
 const Role = require('../models/role');
 const User = require('../models/user');
 const DbFactoryService = require('../services/db-factory-service');
@@ -22,6 +23,17 @@ const UserController = {
         { model: Branch, as: 'branches' },
         { model: Branch, as: 'activeBranch' },
         { model: Role },
+      ],
+    },
+    true,
+  ),
+  getAllUser: DbFactoryService.getAll(
+    User,
+    {
+      include: [
+        { model: Branch, as: 'branches' },
+        { model: Branch, as: 'activeBranch' },
+        { model: Role, include: [{ model: Function }] },
       ],
     },
     true,

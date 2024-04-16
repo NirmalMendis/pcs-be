@@ -27,6 +27,13 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        description: 'IAM',
+        featureType: FeatureEnum.IAM,
+        value: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

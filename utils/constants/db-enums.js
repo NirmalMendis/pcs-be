@@ -17,6 +17,7 @@ exports.PawnTicketStatusEnum = {
 exports.SettingEnum = {
   INVOICE_PDF_MARGIN: 'INVOICE_PDF_MARGIN',
   INVOICE_PDF_SIZE: 'INVOICE_PDF_SIZE',
+  COMPANY_NAME: 'COMPANY_NAME',
 };
 
 /**
@@ -27,6 +28,7 @@ exports.FeatureEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   MULTIPLE_BRANCHES: 'MULTIPLE_BRANCHES',
   MULTIPLE_ITEM_TYPES: 'MULTIPLE_ITEM_TYPES',
+  IAM: 'IAM',
 };
 
 /**

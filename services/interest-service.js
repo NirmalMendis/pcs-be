@@ -3,6 +3,7 @@ const { sequelize } = require('../utils/database');
 const Interest = require('../models/interest');
 const { InterestStatusEnum } = require('../utils/constants/db-enums');
 const { Op } = require('sequelize');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -33,12 +34,8 @@ const InterestService = {
         },
       );
 
-      // eslint-disable-next-line no-console
-      console.log(
-        `Tickets updated at ${new Date().toLocaleString()} for`,
-        yesterdayMidnight.toLocaleString(),
-      );
       await transaction.commit();
+      logger.info('Interest statuses updated');
     } catch (error) {
       if (transaction) {
         await transaction.rollback();

@@ -37,12 +37,7 @@ const Interest = sequelize.define(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM(
-        InterestStatusEnum.UPCOMING,
-        InterestStatusEnum.DUE,
-        InterestStatusEnum.PAID,
-        InterestStatusEnum.OVERDUE,
-      ),
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
