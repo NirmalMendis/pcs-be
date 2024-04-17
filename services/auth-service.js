@@ -11,7 +11,6 @@ const { UserType } = require('../models/user');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const { PermissionsType } = require('../utils/types');
-const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -85,6 +84,7 @@ const AuthService = {
         email,
       },
     });
+    console.log('user---', user);
     if (!user) {
       const user = await User.scope('login').findOne({
         where: {
@@ -94,8 +94,8 @@ const AuthService = {
       if (user) {
         throw new AppError(errorTypes.USER.ACCOUNT_DEACTIVATED);
       }
-
-      logger.info('NO USER !!!');
+      console.log('NO Userv!');
+      //  logger.info('NO USER !!!');
     }
     if (!user || !(await user.verifyPassword(email, password))) {
       throw new AppError(errorTypes.USER.INCORRECT_EMAIL_PASSWORD);
