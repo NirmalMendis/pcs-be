@@ -14,6 +14,7 @@ const roleRouter = require('./routes/role-routes');
 const itemRouter = require('./routes/item-routes');
 const interestRouter = require('./routes/interest-routes');
 const statRouter = require('./routes/stat-routes');
+const functionRouter = require('./routes/function-routes');
 
 const AppError = require('./utils/errors/AppError');
 const errorTypes = require('./utils/errors/errors');
@@ -63,6 +64,7 @@ app.use('/api/v1/role', roleRouter);
 app.use('/api/v1/item', itemRouter);
 app.use('/api/v1/interest', interestRouter);
 app.use('/api/v1/stat', statRouter);
+app.use('/api/v1/function', functionRouter);
 
 app.all('*', (req, _, next) => {
   next(
