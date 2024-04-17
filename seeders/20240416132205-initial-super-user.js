@@ -1,12 +1,9 @@
 'use strict';
-const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' });
 
 const {
   SOFTTANK_ADMIN_USER_EMAIL,
   SUPER_ADMIN_ROLE,
 } = require('../utils/constants/generic-constantss');
-const bcrypt = require('bcrypt');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -20,10 +17,6 @@ module.exports = {
         firstName: 'Soft',
         lastName: 'Tank',
         email: SOFTTANK_ADMIN_USER_EMAIL,
-        passkey: await bcrypt.hash(
-          SOFTTANK_ADMIN_USER_EMAIL + process.env.SOFTTANK_ADMIN_USER_PASSWORD,
-          12,
-        ),
         activeBranchId: branches[0][0].id,
         mobileNo: '0772311464',
         createdAt: new Date(),
