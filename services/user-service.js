@@ -64,10 +64,9 @@ const UserService = {
         firstName: newUser.firstName,
         redirectURL:
           process.env.FRONTEND_URL +
-          `/set-new-password?token=${resetToken}&email=${newUser.email}`,
+          `/set-new-password?token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(newUser.email)}`,
       };
 
-      logger.info('emailData', emailData);
       await sendEmail({
         email: email,
         subject: 'Welcome to Assetank',
