@@ -12,10 +12,10 @@ const logger = require('./utils/logger');
 const port = process.env.PORT || 3001;
 
 sequelize
-  .authenticate()
-  // .sync({
-  //   force: true,
-  // })
+  //  .authenticate()
+  .sync({
+    force: true,
+  })
   .then(() => {
     // eslint-disable-next-line no-unused-vars
     const server = httpServer.listen(port, () => {
