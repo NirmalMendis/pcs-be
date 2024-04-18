@@ -14,9 +14,7 @@ jobs:
       - name: Setup branch specific environment
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
-            echo "CONFIG_ENV_CONTENT<<EOF" >> $GITHUB_ENV
-            echo "${CONFIG_ENV_CONTENT}" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
+            echo "CONFIG_ENV_CONTENT=${{ secrets.STG_CONFIG_ENV_CONTENT }}" >> $GITHUB_ENV
             echo "DEPLOY_USER=${{ secrets.STG_DEPLOY_USER }}" >> $GITHUB_ENV
             echo "DEPLOY_TARGET=${{ secrets.STG_DEPLOY_TARGET }}" >> $GITHUB_ENV
             echo "DEPLOY_LOGS=${{ secrets.STG_DEPLOY_LOGS }}" >> $GITHUB_ENV
@@ -28,7 +26,7 @@ jobs:
         run: |
           echo "${{ env.CONFIG_ENV_CONTENT }}" > config.env
       - run: CI=false npm start &
-      - name: Deploy to Lightsail server
+      - name: Deploy to Lightsail
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
@@ -37,7 +35,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd ${{ env.DEPLOY_TARGET }}
-            printf "%s\n" "${{ env.CONFIG_ENV_CONTENT }}" > config.env
+            echo -e "${{ env.CONFIG_ENV_CONTENT }}" > config.env
             source ~/.nvm/nvm.sh
             git pull
             npm install
