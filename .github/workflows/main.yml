@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "${{ env.CONFIG_ENV_CONTENT }}" > config.env
       - run: CI=false npm start &
-      - name: Deploy to Lightsail
+      - name: Deploy to Lightsail server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
