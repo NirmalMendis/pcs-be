@@ -85,6 +85,7 @@ const AuthService = {
         email,
       },
     });
+    logger.info(`---------user-------${user.email}`);
     if (!user) {
       const user = await User.scope('login').findOne({
         where: {
@@ -97,10 +98,11 @@ const AuthService = {
 
       logger.info('NO USER !!!');
     }
+    logger.info(`---------start verification-------`);
     if (!user || !(await user.verifyPassword(email, password))) {
       throw new AppError(errorTypes.USER.INCORRECT_EMAIL_PASSWORD);
     }
-
+    logger.info(`--------- verified -------`);
     return user;
   },
   /**
