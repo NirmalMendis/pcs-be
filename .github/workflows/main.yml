@@ -14,10 +14,9 @@ jobs:
       - name: Setup branch specific environment
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
-            EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-            echo "CONFIG_ENV_CONTENT<<$EOF" >> "$GITHUB_ENV"
-            echo "${{ secrets.STG_CONFIG_ENV_CONTENT }}" >> "$GITHUB_ENV"
-            echo "$EOF" >> "$GITHUB_ENV"
+            echo "CONFIG_ENV_CONTENT<<EOF" >> $GITHUB_ENV
+            echo "${{ secrets.STG_CONFIG_ENV_CONTENT }}" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
             echo "DEPLOY_USER=${{ secrets.STG_DEPLOY_USER }}" >> $GITHUB_ENV
             echo "DEPLOY_TARGET=${{ secrets.STG_DEPLOY_TARGET }}" >> $GITHUB_ENV
             echo "DEPLOY_LOGS=${{ secrets.STG_DEPLOY_LOGS }}" >> $GITHUB_ENV
@@ -38,7 +37,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd ${{ env.DEPLOY_TARGET }}
-            echo "${{ env.STG_CONFIG_ENV_CONTENT }}" > config.env
+            echo "${{ env.CONFIG_ENV_CONTENT }}" > config.env
             source ~/.nvm/nvm.sh
             git pull
             npm install
