@@ -67,6 +67,7 @@ const UserService = {
           `/set-new-password?token=${resetToken}&email=${newUser.email}`,
       };
 
+      logger.info('emailData', emailData);
       await sendEmail({
         email: email,
         subject: 'Welcome to Assetank',
