@@ -6,6 +6,7 @@ const {
 } = require('../../utils/constants/generic-constantss');
 
 const createTransport = () => {
+  logger.info('--------transport initiated-------------', process.env.NODE_ENV);
   if (process.env.NODE_ENV === 'production') {
     logger.info('---------- Email Prod Transport Created -------------');
     return nodemailer.createTransport({
@@ -43,7 +44,7 @@ const createTransport = () => {
 const sendEmail = async (options) => {
   // 1) Create a transporter
   const transporter = createTransport();
-
+  logger.info('--------transport create-------------');
   const mailOptions = {
     from: `Assetank <${SOFTTANK_ADMIN_USER_EMAIL}>`,
     to: options.email,
@@ -51,6 +52,7 @@ const sendEmail = async (options) => {
     html: options.html,
   };
 
+  logger.info('--------mailOptions-------------', mailOptions);
   // 3) Actually send the email
   await transporter.sendMail(mailOptions);
 };
