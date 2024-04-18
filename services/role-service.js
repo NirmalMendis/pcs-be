@@ -39,18 +39,21 @@ const RoleService = {
         },
         { transaction },
       );
+
       const setFunctionsPromise = Promise.all(
-        functions.map((func) => {
-          return role.addFunction(func, {
-            through: {
-              action: roleData.functions.find(
-                (payloadFunc) => payloadFunc.id === func.id,
-              ).action,
+        roleData.functions.map((func) => {
+          return role.addFunction(
+            functions.find((dbFunc) => dbFunc.id === func.id),
+            {
+              through: {
+                action: func.action,
+              },
+              transaction,
             },
-            transaction,
-          });
+          );
         }),
       );
+
       await setFunctionsPromise;
       await role.setLastUpdatedBy(user, { transaction });
 
