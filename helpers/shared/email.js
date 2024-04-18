@@ -6,7 +6,9 @@ const {
 } = require('../../utils/constants/generic-constantss');
 
 const createTransport = () => {
-  logger.info('--------transport initiated-------------', process.env.NODE_ENV);
+  logger.info(
+    `--------transport initiated------${process.env.NODE_ENV}-------`,
+  );
   if (process.env.NODE_ENV === 'production') {
     logger.info('---------- Email Prod Transport Created -------------');
     return nodemailer.createTransport({
