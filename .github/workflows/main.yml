@@ -35,6 +35,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd ${{ env.DEPLOY_TARGET }}
+            echo "${{ env.CONFIG_ENV_CONTENT }}" > config.env
             source ~/.nvm/nvm.sh
             git pull
             npm install
