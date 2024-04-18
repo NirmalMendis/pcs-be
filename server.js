@@ -7,6 +7,7 @@ const httpServer = require('http').createServer(app);
 const { sequelize } = require('./utils/database');
 // eslint-disable-next-line no-unused-vars
 const associations = require('./utils/associations');
+const logger = require('./utils/logger');
 
 const port = process.env.PORT || 3001;
 
@@ -18,7 +19,6 @@ sequelize
   .then(() => {
     // eslint-disable-next-line no-unused-vars
     const server = httpServer.listen(port, () => {
-      // eslint-disable-next-line no-console
-      console.log(`PCS API started and listening on port ${process.env.PORT}`);
+      logger.info(`PCS API started and listening on port ${process.env.PORT}`);
     });
   });
