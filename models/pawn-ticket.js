@@ -39,15 +39,12 @@ const PawnTicket = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    dueDate: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        return addMonths(this.pawnDate, +this.periodInMonths);
-      },
-    },
     periodInMonths: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    dueDate: {
+      type: DataTypes.DATE,
     },
     principalAmount: {
       type: DataTypes.DOUBLE,
@@ -77,6 +74,20 @@ const PawnTicket = sequelize.define(
   },
   {
     paranoid: true,
+    hooks: {
+      beforeUpdate: (pawnTicket) => {
+        pawnTicket.dueDate = addMonths(
+          pawnTicket.pawnDate,
+          +pawnTicket.periodInMonths,
+        );
+      },
+      beforeCreate: (pawnTicket) => {
+        pawnTicket.dueDate = addMonths(
+          pawnTicket.pawnDate,
+          +pawnTicket.periodInMonths,
+        );
+      },
+    },
   },
 );
 

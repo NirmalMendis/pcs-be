@@ -40,9 +40,16 @@ const Role = sequelize.define(
     },
   },
   {
+    paranoid: true,
     scopes: {
       essential: {
         attributes: ['id', 'title'],
+      },
+    },
+    hooks: {
+      afterDestroy: async (role) => {
+        role.title = `${role.title}-deleted-${role.id}`;
+        await role.save({ paranoid: false, hooks: false });
       },
     },
   },

@@ -181,6 +181,7 @@ const DbFactoryService = {
             where: {
               id: req.params.id,
             },
+            individualHooks: true,
           },
           {
             lock: true,
