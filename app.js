@@ -77,7 +77,7 @@ app.all('*', (req, _, next) => {
 
 //schedule cron jobs at 1 am daily
 cron.schedule(
-  '0 1 * * *',
+  '8 21 * * *',
   () => {
     PawnTicketService.updateStatusesJob();
     InterestService.updateStatusesJob();
