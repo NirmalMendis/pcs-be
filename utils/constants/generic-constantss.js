@@ -26,6 +26,7 @@ exports.FunctionEnum = {
 exports.SUPER_ADMIN_ROLE = 'Super Admin';
 exports.SOFTTANK_ADMIN_USER_EMAIL = 'dev.softanktech@gmail.com';
 exports.DD_MM_YYY_FORMAT = 'dd-MM-yyyy';
+exports.TIME_ZONE = 'Asia/Colombo';
 
 exports.DB_ERRORS = {
   SequelizeUniqueConstraintError: 'SequelizeUniqueConstraintError',

@@ -7,6 +7,7 @@ const Item = require('../models/item');
 const InvoiceService = require('./invoice-service.');
 const {
   MATERIAL_CONTENT_TYPES,
+  TIME_ZONE,
 } = require('../utils/constants/generic-constantss');
 const { addMonths, startOfDay } = require('date-fns');
 const {
@@ -360,7 +361,11 @@ const PawnTicketService = {
     const transaction = await sequelize.transaction();
 
     try {
-      const yesterdayMidnight = startOfDay(new Date());
+      const yesterdayMidnight = startOfDay(
+        new Date().toLocaleString('en-US', {
+          timeZone: TIME_ZONE,
+        }),
+      );
       const ticketsToUpdate = await PawnTicket.findAll({
         where: {
           status: PawnTicketStatusEnum.ACTIVE,

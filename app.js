@@ -23,6 +23,7 @@ const cors = require('cors');
 const PawnTicketService = require('./services/pawn-ticket-service');
 const InterestService = require('./services/interest-service');
 const UserService = require('./services/user-service');
+const { TIME_ZONE } = require('./utils/constants/generic-constantss');
 
 const app = express();
 
@@ -85,7 +86,7 @@ cron.schedule(
   },
   {
     scheduled: true,
-    timezone: 'Asia/Colombo',
+    timezone: TIME_ZONE,
   },
 );
 
