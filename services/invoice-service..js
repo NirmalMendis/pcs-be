@@ -12,6 +12,8 @@ const PdfService = require('./pdf-service');
 const BranchService = require('./branch-service');
 const CustomerService = require('./customer-service');
 const { sequelize } = require('../utils/database');
+const MetadataService = require('./metadata-service');
+const { SettingEnum } = require('../utils/constants/db-enums');
 
 /**
  * @namespace
@@ -89,10 +91,9 @@ const InvoiceService = {
           'addressLine3',
           'city',
           'postalCode',
-          'title',
         ],
       });
-      const { title: branchName, ...branchAddress } = mainBranchProfile.get({
+      const branchAddress = mainBranchProfile.get({
         dataValues: true,
       });
       const customer = await CustomerService.findCustomer({
@@ -109,13 +110,17 @@ const InvoiceService = {
           'nicNo',
         ],
       });
+      const companyName = await MetadataService.findSetting(
+        SettingEnum.COMPANY_NAME,
+      );
+
       /**
        * @type {TicketInvoiceTemplateType}
        */
       const completeInvoiceTemplateData = {
         company: {
           address: branchAddress,
-          name: branchName,
+          name: companyName.value,
         },
         customer: customer,
         ...invoiceTemplateData,
