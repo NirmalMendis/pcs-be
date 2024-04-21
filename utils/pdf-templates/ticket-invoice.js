@@ -409,7 +409,7 @@ const ticketInvoiceTemplate = (data) => {
                             <th>Item (අයිතමය)</th>
                             <th>Details (විස්තර)</th>
                             <th>Appraised Value (තක්සේරු වටිනාකම)</th>
-                            <th>Pawning Amount (උකස් මුද)</th>
+                            <th>Pawning Amount (උකස් මුදල)</th>
                         </tr>
                     </thead>
                     <tbody>
