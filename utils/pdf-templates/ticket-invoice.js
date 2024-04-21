@@ -473,7 +473,7 @@ const ticketInvoiceTemplate = (data) => {
         </section>
         <section>
             <p class="declaration">
-                මා සතු ඉහත සදහන් රන් භාණ්ඩ  මෙයින් ${data.company.name} මධමධ්‍යස්ථානය වත උකස් කර භාර දෙමි. උකස් බිල්පතෙහි සදහන් බේරාගන්නා දිනයේදී හෝ ඊට පෙර බේරාගන්නා බවට පොරොන්දු වෙමි. ඉහත සදහන් තොරතුරු සත්‍ය හා නිවැරදි බව තහවුරු කරමි.
+                මා සතු ඉහත සදහන් රන් භාණ්ඩ  මෙයින් ${data.company.name} මධ්‍යස්ථානය වත උකස් කර භාර දෙමි. උකස් බිල්පතෙහි සදහන් බේරාගන්නා දිනයේදී හෝ ඊට පෙර බේරාගන්නා බවට පොරොන්දු වෙමි. ඉහත සදහන් තොරතුරු සත්‍ය හා නිවැරදි බව තහවුරු කරමි.
                 I hereby pawn and handover to ${data.company.name} the above gold articles owned by me. I declare that the above particulars are true and correct. I agere to redeem on or before the redemption date in the pawning ticket. I declare that the above particulars
                 are true and correct.
             </p>
