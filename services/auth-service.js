@@ -56,6 +56,23 @@ const AuthService = {
         throw new AppError(errorTypes.USER.PASSWORD_RESET_TOKEN_INVALID);
       }
 
+      await user.set(
+        {
+          password: password,
+          passwordResetToken: null,
+          passwordResetExpires: null,
+          passwordResetAttempts: user.passwordResetAttempts + 1,
+        },
+        {
+          transaction,
+        },
+      );
+
+      await user.save({
+        lock: true,
+        transaction,
+      });
+
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();
