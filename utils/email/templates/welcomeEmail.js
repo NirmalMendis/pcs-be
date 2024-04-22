@@ -10,7 +10,6 @@
  * @param {WelcomeEmailTemplateDataType} data - The user object.
  */
 const welcomeTemplate = (data) => {
-  // return `<b><h1>${data.branch?.title}</h1>Hello world? ${data.redirectURL}</b>`;
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" lang="en">
 

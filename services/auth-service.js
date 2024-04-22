@@ -12,6 +12,14 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const { PermissionsType } = require('../utils/types');
 const logger = require('../utils/logger');
+const Role = require('../models/role');
+const MetadataService = require('./metadata-service');
+const { SettingEnum } = require('../utils/constants/db-enums');
+const sendEmail = require('../helpers/shared/email');
+const forgotPasswordTemplate = require('../utils/email/templates/forgotPasswordEmail');
+const {
+  ForgotPwdEmailTemplateDataType,
+} = require('../utils/email/templates/forgotPasswordEmail');
 
 /**
  * @namespace
@@ -48,25 +56,6 @@ const AuthService = {
         throw new AppError(errorTypes.USER.PASSWORD_RESET_TOKEN_INVALID);
       }
 
-      if (user.passwordResetAttempts >= PASSWORD_RESET_ATTEMPT_LIMIT) {
-        throw new AppError(errorTypes.USER.PASSWORD_RESET_ATTEMPT_LIMIT);
-      }
-      await user.set(
-        {
-          password: password,
-          passwordResetToken: null,
-          passwordResetExpires: null,
-          passwordResetAttempts: user.passwordResetAttempts + 1,
-        },
-        {
-          transaction,
-        },
-      );
-
-      await user.save({
-        lock: true,
-        transaction,
-      });
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();
@@ -175,6 +164,101 @@ const AuthService = {
     }
 
     return permissionsByAction;
+  },
+  /**
+   *
+   * @param {string} email
+   * @returns {Promise<void>}
+   */
+  forgotPassword: async (email) => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      const user = await User.scope('setNewPassword').findOne(
+        {
+          where: {
+            email: email,
+          },
+          include: [
+            {
+              model: Role.scope('essential'),
+              where: {
+                status: 'Active',
+              },
+              required: true, // This ensures that only users with at least one active role are returned
+            },
+          ],
+        },
+        { transaction },
+      );
+
+      if (!user) {
+        const userWithouRole = await User.scope('setNewPassword').findOne(
+          {
+            where: {
+              email: email,
+            },
+          },
+          { transaction },
+        );
+
+        if (userWithouRole) {
+          throw new AppError(errorTypes.USER.ACCOUNT_DEACTIVATED);
+        }
+        logger.info('NO USER !!!');
+        throw new AppError(errorTypes.USER.NO_USER_FORGOT_PASSWORD);
+      }
+
+      if (user.passwordResetAttempts >= PASSWORD_RESET_ATTEMPT_LIMIT) {
+        throw new AppError(errorTypes.USER.PASSWORD_RESET_ATTEMPT_LIMIT);
+      }
+
+      if (user.passwordResetAttempts >= PASSWORD_RESET_ATTEMPT_LIMIT) {
+        throw new AppError(errorTypes.USER.PASSWORD_RESET_ATTEMPT_LIMIT);
+      }
+      await user.set(
+        {
+          passwordResetAttempts: user.passwordResetAttempts + 1,
+        },
+        {
+          transaction,
+        },
+      );
+
+      const resetToken = await user.createPasswordResetToken(transaction);
+
+      await user.save({
+        lock: true,
+        transaction,
+      });
+
+      const companyName = await MetadataService.findSetting(
+        SettingEnum.COMPANY_NAME,
+      );
+
+      /**
+       * @type {ForgotPwdEmailTemplateDataType}
+       */
+      const emailData = {
+        companyName: companyName.value,
+        firstName: user.firstName,
+        redirectURL:
+          process.env.FRONTEND_URL +
+          `/set-new-password?token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(user.email)}`,
+      };
+
+      await sendEmail({
+        email: email,
+        subject: 'Reset your password',
+        html: forgotPasswordTemplate(emailData),
+        transaction,
+      });
+
+      await transaction.commit();
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
   },
 };
 

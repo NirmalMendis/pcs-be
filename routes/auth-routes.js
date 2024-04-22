@@ -6,6 +6,7 @@ const router = express.Router();
 router.route('/login').post(AuthController.login);
 router.route('/set-new-password').patch(AuthController.setNewUserPassword);
 router.route('/refresh').get(AuthController.refresh);
+router.route('/forgot-password').post(AuthController.forgotPassword);
 
 router.use(AuthController.protect);
 

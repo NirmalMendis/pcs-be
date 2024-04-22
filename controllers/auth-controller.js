@@ -19,7 +19,15 @@ const AuthController = {
     await AuthService.setNewUserPassword(email, password, resetToken);
     sendSuccessResponse(res, {});
   }),
+  forgotPassword: catchAsync(async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) {
+      return next(new AppError(USER.MISSING_EMAIL));
+    }
 
+    await AuthService.forgotPassword(email);
+    sendSuccessResponse(res, {});
+  }),
   login: catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
     if (!email || !password) {
