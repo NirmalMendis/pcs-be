@@ -1,16 +1,6 @@
 const DataTypes = require('sequelize');
 const { sequelize } = require('../utils/database');
-
-/**
- * @enum {string}
- * @readonly
- */
-const PermissionActionEnum = {
-  VIEW: 'view',
-  CREATE: 'create',
-  UPDATE: 'update',
-  DELETE: 'delete',
-};
+const { PermissionActionEnum } = require('../utils/constants/db-enums');
 
 /**
  * @typedef {Object} RoleConnectFunctionType
@@ -43,4 +33,3 @@ const RoleConnectFunction = sequelize.define(
 );
 
 module.exports = RoleConnectFunction;
-exports.PermissionActionEnum = PermissionActionEnum;

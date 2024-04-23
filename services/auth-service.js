@@ -5,6 +5,7 @@ const AppError = require('../utils/errors/AppError');
 const errorTypes = require('../utils/errors/errors');
 const {
   PASSWORD_RESET_ATTEMPT_LIMIT,
+  FunctionEnum,
 } = require('../utils/constants/generic-constantss');
 const crypto = require('crypto');
 const { UserType } = require('../models/user');
@@ -20,6 +21,7 @@ const forgotPasswordTemplate = require('../utils/email/templates/forgotPasswordE
 const {
   ForgotPwdEmailTemplateDataType,
 } = require('../utils/email/templates/forgotPasswordEmail');
+const { PermissionActionEnum } = require('../models/role-connect-function');
 
 /**
  * @namespace
@@ -152,9 +154,26 @@ const AuthService = {
   /**
    *
    * @param {number} id
+   * @param {FunctionEnum} permission
+   * @param {PermissionActionEnum} action
+   * @returns {Promise<boolean | void>}
+   */
+  authorize: async (id, permission, action) => {
+    const permissions = await AuthService.getUserPermissions(id, true);
+
+    const hasPermission = permissions.find(
+      (dbPermission) =>
+        dbPermission.title === permission && dbPermission.action === action,
+    );
+
+    return !!hasPermission;
+  },
+  /**
+   *
+   * @param {number} id
    * @returns {Promise<PermissionsType>}
    */
-  getUserPermissions: async (id) => {
+  getUserPermissions: async (id, raw = false) => {
     const permissions = await sequelize.query(
       'SELECT f.title, rcf.action FROM functions f INNER JOIN role_connect_functions rcf ON rcf.functionId = f.id INNER JOIN user_connect_roles ucr ON ucr.roleId = rcf.roleId WHERE ucr.userId = ?',
       {
@@ -180,7 +199,7 @@ const AuthService = {
       });
     }
 
-    return permissionsByAction;
+    return raw ? permissions : permissionsByAction;
   },
   /**
    *

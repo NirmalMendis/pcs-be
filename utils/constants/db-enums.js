@@ -60,3 +60,14 @@ exports.PaymentTypesEnum = {
   INTEREST: 'INTEREST',
   PRINCIPAL: 'PRINCIPAL',
 };
+
+/**
+ * @enum {string}
+ * @readonly
+ */
+exports.PermissionActionEnum = {
+  VIEW: 'view',
+  CREATE: 'create',
+  UPDATE: 'update',
+  DELETE: 'delete',
+};

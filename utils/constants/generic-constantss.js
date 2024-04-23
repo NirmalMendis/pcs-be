@@ -17,6 +17,10 @@ exports.MATERIAL_CONTENT_TYPES = {
   PDF: 'PDF',
 };
 
+/**
+ * @enum {string}
+ * @readonly
+ */
 exports.FunctionEnum = {
   PAWN_TICKET: 'PAWN_TICKET',
   CUSTOMER: 'CUSTOMER',

@@ -54,6 +54,11 @@ const errorTypes = {
       statusCode: StatusCodes.BAD_REQUEST,
       errorCode: 'USER_10',
     },
+    UNAUTHORIZED_REQUEST: {
+      message: 'Sorry! you are not authorized to perform this action.',
+      statusCode: StatusCodes.UNAUTHORIZED,
+      errorCode: 'USER_11',
+    },
     JWT_ROLES_PERMISSIONS_MISMATCH: {
       message:
         'Your roles and/or permissions have been updated. Please login to continue.',

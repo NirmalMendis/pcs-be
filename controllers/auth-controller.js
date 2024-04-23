@@ -81,6 +81,29 @@ const AuthController = {
       return next(new AppError(USER.INVALID_JWT, StatusCodes.UNAUTHORIZED));
     }
   }),
+  authorize: (permission, action) => {
+    return catchAsync(async (req, res, next) => {
+      try {
+        const isAuthorized = await AuthService.authorize(
+          req.user.id,
+          permission,
+          action,
+        );
+
+        if (isAuthorized) {
+          next();
+        } else {
+          return next(
+            new AppError(USER.UNAUTHORIZED_REQUEST, StatusCodes.UNAUTHORIZED),
+          );
+        }
+      } catch (error) {
+        return next(
+          new AppError(USER.UNAUTHORIZED_REQUEST, StatusCodes.UNAUTHORIZED),
+        );
+      }
+    });
+  },
   refresh: catchAsync(async (req, res, next) => {
     try {
       const refreshToken = req.cookies.refreshToken;
