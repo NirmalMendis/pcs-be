@@ -303,6 +303,45 @@ const PawnTicketService = {
   },
   /**
    *
+   * @param  {Pick<PawnTicketType, "id" |"customerId" | "pawnDate" | "periodInMonths" | "interestRate" | "status" | "serviceCharge">} pawnTicketData
+   * @param {UserType} user
+   * @returns {Promise<(PawnTicketType | void)>}
+   */
+  updateGeneralDetails: async ({ id, ...pawnTicketData }, user) => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      const pawnTicket = await PawnTicket.findByPk(id, {
+        transaction,
+      });
+
+      await pawnTicket.set(
+        {
+          ...pawnTicketData,
+        },
+        {
+          transaction,
+        },
+      );
+
+      await pawnTicket.setLastUpdatedBy(user, { transaction });
+
+      await pawnTicket.save({
+        lock: true,
+        transaction,
+      });
+
+      await transaction.commit();
+      return pawnTicket;
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      throw error;
+    }
+  },
+  /**
+   *
    * @param  {Pick<PawnTicketType, 'id'>} id
    * @param {UserType} user
    * @returns {Promise<(InvoiceType | void)>}

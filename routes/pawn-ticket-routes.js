@@ -51,5 +51,6 @@ router
 
 router.route('/:id').get(PawnRickeController.getTicketById);
 router.route('/:id/invoice').patch(PawnRickeController.updateTicketInvoice);
+router.route('/:id/general').patch(PawnRickeController.updateGeneralDetails);
 
 module.exports = router;
