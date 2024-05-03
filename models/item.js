@@ -7,6 +7,7 @@ const { sequelize } = require('../utils/database');
  * @property {string} description
  * @property {number} appraisedValue
  * @property {number} pawningAmount
+ * @property {string} itemType
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
@@ -39,6 +40,10 @@ const Item = sequelize.define(
     },
     image: {
       type: DataTypes.BLOB,
+    },
+    itemType: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

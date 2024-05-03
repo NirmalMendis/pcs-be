@@ -6,6 +6,14 @@ const router = express.Router();
 
 router.use(AuthController.protect);
 
-router.route('/pawn-ticket/:id').get(ItemController.getItemsForPawnTicket);
+router
+  .route('/pawn-ticket/:id')
+  .get(ItemController.getItemsForPawnTicket)
+  .post(ItemController.addItem);
+
+router
+  .route('/:id')
+  .patch(ItemController.updateItem)
+  .delete(ItemController.deleteItem);
 
 module.exports = router;

@@ -71,3 +71,9 @@ exports.PermissionActionEnum = {
   UPDATE: 'update',
   DELETE: 'delete',
 };
+
+exports.ItemTypes = {
+  GENERIC: 'Generic',
+  GOLD: 'Gold',
+  VEHICLE: 'Vehicle',
+};

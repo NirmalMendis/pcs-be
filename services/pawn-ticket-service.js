@@ -31,7 +31,7 @@ const logger = require('../utils/logger');
 const PawnTicketService = {
   /**
    *
-   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "periodInMonths" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount"> & {itemDetails?: GoldItemType | VehicleItemType}> }} pawnTicketData
+   * @param  {Pick<PawnTicketType, 'customerId' | "pawnDate" | "periodInMonths" | "interestRate" | "status" | "branchId" | "serviceCharge"> & { items: Array<Pick<ItemType, "description" | "appraisedValue" | "pawningAmount" | 'itemType'> & {itemDetails?: GoldItemType | VehicleItemType}> }} pawnTicketData
    * @param {UserType} user
    * @returns {Promise<(PawnTicketType | void)>}
    */
@@ -179,6 +179,7 @@ const PawnTicketService = {
         description: item.description,
         appraisedValue: item.appraisedValue,
         pawningAmount: item.pawningAmount,
+        itemType: item.itemType,
         itemDetails: item.itemDetails?.map((detail) => ({
           type: detail.type,
           value: detail.value,

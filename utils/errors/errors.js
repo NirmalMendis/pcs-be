@@ -83,6 +83,12 @@ const errorTypes = {
       statusCode: StatusCodes.FORBIDDEN,
     },
   },
+  ITEM: {
+    NO_ITEM: {
+      message: `Invalid Item`,
+      statusCode: StatusCodes.BAD_REQUEST,
+    },
+  },
   INVOICE: {
     NO_INVOICE: {
       message: `The invoice for this ticket has not been created`,
