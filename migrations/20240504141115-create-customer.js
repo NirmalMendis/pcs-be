@@ -62,7 +62,7 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-
+    //add full text index
     await queryInterface.addIndex('customers', ['searchString'], {
       indexName: 'text_idx',
       type: 'FULLTEXT',
