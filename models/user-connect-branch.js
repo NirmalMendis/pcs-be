@@ -2,16 +2,16 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('../utils/database');
 
 /**
- * @typedef {Object} UserConnectRoleType
- * @property {number} roleId
+ * @typedef {Object} UserConnectBranchType
+ * @property {number} branchId
  * @property {number} userId
  * @property {Date} createdAt
  * @property {Date} updatedAt
  * @property {Date} deletedAt
  */
 
-const UserConnectRole = sequelize.define(
-  'user_connect_role',
+const UserConnectBranch = sequelize.define(
+  'user_connect_branch',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -25,4 +25,4 @@ const UserConnectRole = sequelize.define(
   },
 );
 
-module.exports = UserConnectRole;
+module.exports = UserConnectBranch;

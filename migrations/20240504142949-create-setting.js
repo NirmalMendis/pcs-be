@@ -1,51 +1,41 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('features', {
+    await queryInterface.createTable('settings', {
       id: {
-        type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         autoIncrement: true,
-        unique: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
       },
       description: {
         type: Sequelize.STRING,
       },
-      featureType: {
+      settingType: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       value: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
       },
       deletedAt: {
         type: Sequelize.DATE,
-        allowNull: true,
-      },
-      lastUpdatedById: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'NO ACTION',
-        onDelete: 'NO ACTION',
       },
     });
   },
+
   async down(queryInterface) {
-    await queryInterface.dropTable('features');
+    await queryInterface.dropTable('settings');
   },
 };

@@ -1,16 +1,14 @@
 'use strict';
 
-const { InterestStatusEnum } = require('../utils/constants/db-enums');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('interests', {
       id: {
-        type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
       },
       fromDate: {
         type: Sequelize.DATE,
@@ -25,38 +23,23 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM(
-          InterestStatusEnum.UPCOMING,
-          InterestStatusEnum.DUE,
-          InterestStatusEnum.PAID,
-          InterestStatusEnum.OVERDUE,
-        ),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
       },
       updatedAt: {
-        type: Sequelize.DATE,
         allowNull: false,
+        type: Sequelize.DATE,
       },
       deletedAt: {
         type: Sequelize.DATE,
-        allowNull: true,
-      },
-      pawnTicketId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'pawn_tickets',
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
       },
     });
   },
+
   async down(queryInterface) {
     await queryInterface.dropTable('interests');
   },

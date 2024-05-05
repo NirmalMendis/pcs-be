@@ -12,6 +12,7 @@ const Role = require('../models/role');
 const RoleConnectFunction = require('../models/role-connect-function');
 const Settings = require('../models/setting');
 const User = require('../models/user');
+const UserConnectBranch = require('../models/user-connect-branch');
 const UserConnectRole = require('../models/user-connect-role');
 
 Function.belongsToMany(Role, {
@@ -40,10 +41,10 @@ PawnTicket.belongsTo(Branch);
 
 User.belongsTo(Branch, { as: 'activeBranch' });
 User.belongsToMany(Branch, {
-  through: { model: 'user_connect_branches', unique: false },
+  through: { model: UserConnectBranch, unique: false },
 });
 Branch.belongsToMany(User, {
-  through: { model: 'user_connect_branches', unique: false },
+  through: { model: UserConnectBranch, unique: false },
 });
 
 Customer.hasMany(PawnTicket);
