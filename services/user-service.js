@@ -67,7 +67,7 @@ const UserService = {
           `/set-new-password?token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(newUser.email)}`,
       };
 
-      //send welcome email
+      //send welcome email -
       await sendEmail({
         email: email,
         subject: 'Welcome to Assetank',
