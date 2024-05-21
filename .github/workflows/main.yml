@@ -21,7 +21,12 @@ jobs:
             echo "DEPLOY_TARGET=${{ secrets.STG_DEPLOY_TARGET }}" >> $GITHUB_ENV
             echo "DEPLOY_LOGS=${{ secrets.STG_DEPLOY_LOGS }}" >> $GITHUB_ENV
           elif [[ "${{ github.ref }}" == "refs/heads/prod" ]]; then
+            echo "CONFIG_ENV_CONTENT<<EOF" >> $GITHUB_ENV
+            echo "${{ secrets.PROD_CONFIG_ENV_CONTENT }}" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
             echo "DEPLOY_USER=${{ secrets.PROD_DEPLOY_USER }}" >> $GITHUB_ENV
+            echo "DEPLOY_TARGET=${{ secrets.PROD_DEPLOY_TARGET }}" >> $GITHUB_ENV
+            echo "DEPLOY_LOGS=${{ secrets.PROD_DEPLOY_LOGS }}" >> $GITHUB_ENV
           fi
       - run: npm install
       - name: Create config.env file from config.env
