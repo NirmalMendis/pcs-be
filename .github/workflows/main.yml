@@ -32,7 +32,7 @@ jobs:
       - name: Create config.env file from config.env
         run: |
           echo "${{ env.CONFIG_ENV_CONTENT }}" > config.env
-      - run: CI=false npm start || exit 1
+      - run: CI=false npm start &
       - name: Deploy to Lightsail
         uses: appleboy/ssh-action@master
         with:
