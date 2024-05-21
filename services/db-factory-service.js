@@ -74,7 +74,7 @@ const DbFactoryService = {
    * @param {AssociationOptionsType} associationOptions
    * @returns
    */
-  getAllBySearch: (Model, blockScoping = false) =>
+  getAllBySearch: (Model, associationOptions = {}, blockScoping = false) =>
     //next needed for error handling
     // eslint-disable-next-line no-unused-vars
     catchAsync(async (req, res, next) => {
@@ -87,20 +87,34 @@ const DbFactoryService = {
           ? Model.scope(scope)
           : Model;
 
-      const results = await ScopedModel.findAll({
-        where: Sequelize.literal(
-          'MATCH (searchString) AGAINST (:value IN BOOLEAN MODE)',
-        ),
-        replacements: {
+      if (req.query.orderBy && req.query.orderDirection) {
+        associationOptions.order = [
+          [req.query.orderBy, req.query.orderDirection],
+        ];
+      }
+      associationOptions.where = Sequelize.literal(
+        'MATCH (searchString) AGAINST (:value IN BOOLEAN MODE)',
+      );
+      if (value)
+        associationOptions.replacements = {
           value: value
             .trim()
             .replace(/ +(?= )/g, '')
             .split(' ')
             .map((word) => `+${word}*`)
             .join(' '),
-        },
-      });
-      sendSuccessResponse(res, results);
+        };
+      const results = await ScopedModel.findAll(associationOptions);
+      if (req.query.page && req.query.pageSize) {
+        const { pager, pageData } = paginateData(
+          req.query.page,
+          req.query.pageSize,
+          results,
+        );
+        sendSuccessResponse(res, { pageData, pager });
+      } else {
+        sendSuccessResponse(res, results);
+      }
     }),
 
   /**

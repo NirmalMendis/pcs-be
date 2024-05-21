@@ -22,6 +22,10 @@ router
   );
 router
   .route('/')
+  .get(
+    AuthController.authorize(FunctionEnum.CUSTOMER, PermissionActionEnum.VIEW),
+    CustomerController.getAllCustomers,
+  )
   .post(
     AuthController.authorize(
       FunctionEnum.CUSTOMER,
