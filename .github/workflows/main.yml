@@ -20,6 +20,7 @@ jobs:
             echo "DEPLOY_USER=${{ secrets.STG_DEPLOY_USER }}" >> $GITHUB_ENV
             echo "DEPLOY_TARGET=${{ secrets.STG_DEPLOY_TARGET }}" >> $GITHUB_ENV
             echo "DEPLOY_LOGS=${{ secrets.STG_DEPLOY_LOGS }}" >> $GITHUB_ENV
+            echo "DEPLOY_NODE_PORT=${{ secrets.STG_DEPLOY_NODE_PORT }}" >> $GITHUB_ENV
           elif [[ "${{ github.ref }}" == "refs/heads/prod" ]]; then
             echo "CONFIG_ENV_CONTENT<<EOF" >> $GITHUB_ENV
             echo "${{ secrets.PROD_CONFIG_ENV_CONTENT }}" >> $GITHUB_ENV
@@ -27,6 +28,7 @@ jobs:
             echo "DEPLOY_USER=${{ secrets.PROD_DEPLOY_USER }}" >> $GITHUB_ENV
             echo "DEPLOY_TARGET=${{ secrets.PROD_DEPLOY_TARGET }}" >> $GITHUB_ENV
             echo "DEPLOY_LOGS=${{ secrets.PROD_DEPLOY_LOGS }}" >> $GITHUB_ENV
+            echo "DEPLOY_NODE_PORT=${{ secrets.PROD_DEPLOY_NODE_PORT }}" >> $GITHUB_ENV
           fi
       - run: npm install
       - name: Create config.env file from config.env
@@ -46,6 +48,6 @@ jobs:
             source ~/.nvm/nvm.sh
             git pull
             npm install
-            sudo kill -9 $(sudo lsof -t -i:4000)
+            sudo kill -9 $(sudo lsof -t -i:${{ env.DEPLOY_NODE_PORT }})
             nohup npm run start:prod > ${{ env.DEPLOY_LOGS }} 2>&1 &
             echo "Server started"
