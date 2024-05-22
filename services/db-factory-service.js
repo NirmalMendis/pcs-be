@@ -58,7 +58,11 @@ const DbFactoryService = {
           req.query.pageSize,
           results,
         );
-        sendSuccessResponse(res, { pageData, pager });
+        if (+pager.totalPages < +req.query.page) {
+          sendSuccessResponse(res, []);
+        } else {
+          sendSuccessResponse(res, { pageData, pager });
+        }
       } else {
         sendSuccessResponse(res, results);
       }
