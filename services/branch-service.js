@@ -1,6 +1,7 @@
 const Branch = require('../models/branch');
 const { SequelizeOptionsType } = require('../utils/types');
 const { BranchType } = require('../models/branch');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -22,6 +23,7 @@ const BranchService = {
       if (options.transaction) {
         await options.transaction.rollback();
       }
+      logger.error('findBranch', error);
       throw error;
     }
   },

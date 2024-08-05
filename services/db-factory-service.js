@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const { AssociationOptionsType } = require('../utils/types');
 const paginateData = require('../helpers/shared/pagination');
 const { sequelize } = require('../utils/database');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -134,6 +135,7 @@ const DbFactoryService = {
         sendSuccessResponse(res, doc);
       } catch (error) {
         await transaction.rollback();
+        logger.error('createOne', error);
         throw error;
       }
     }),
@@ -171,6 +173,7 @@ const DbFactoryService = {
         sendSuccessResponse(res, updatedDoc);
       } catch (error) {
         await transaction.rollback();
+        logger.error('updateOne', error);
         throw error;
       }
     }),
@@ -203,6 +206,7 @@ const DbFactoryService = {
         sendSuccessResponse(res, doc);
       } catch (error) {
         await transaction.rollback();
+        logger.error('deleteOne', error);
         throw error;
       }
     }),

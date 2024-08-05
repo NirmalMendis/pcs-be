@@ -78,6 +78,7 @@ const AuthService = {
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();
+      logger.error('setNewUserPassword', error);
       throw error;
     }
   },
@@ -293,6 +294,7 @@ const AuthService = {
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();
+      logger.error('forgotPassword', error);
       throw error;
     }
   },

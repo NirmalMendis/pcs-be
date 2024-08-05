@@ -5,6 +5,7 @@ const { RoleConnectFunctionType } = require('../models/role-connect-function');
 const { sequelize } = require('../utils/database');
 const Role = require('../models/role');
 const Function = require('../models/function');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -62,6 +63,7 @@ const RoleService = {
       return role;
     } catch (error) {
       await transaction.rollback();
+      logger.error('createRole', error);
       throw error;
     }
   },
@@ -123,6 +125,7 @@ const RoleService = {
       return role;
     } catch (error) {
       await transaction.rollback();
+      logger.error('updateRole', error);
       throw error;
     }
   },

@@ -129,6 +129,7 @@ const PawnTicketService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('createPawnTicket', error);
       throw error;
     }
   },
@@ -243,6 +244,7 @@ const PawnTicketService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('createRevision', error);
       throw error;
     }
   },
@@ -338,6 +340,7 @@ const PawnTicketService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('updateGeneralDetails', error);
       throw error;
     }
   },
@@ -394,6 +397,7 @@ const PawnTicketService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('updateTicketInvoice', error);
       throw error;
     }
   },
@@ -452,6 +456,7 @@ const PawnTicketService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('updateStatusesJob', error);
       throw error;
     }
   },

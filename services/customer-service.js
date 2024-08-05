@@ -1,6 +1,7 @@
 const { SequelizeOptionsType } = require('../utils/types');
 const { CustomerType } = require('../models/customer');
 const Customer = require('../models/customer');
+const logger = require('../utils/logger');
 
 const CustomerService = {
   /**
@@ -19,6 +20,7 @@ const CustomerService = {
       if (options.transaction) {
         await options.transaction.rollback();
       }
+      logger.error('findCustomer', error);
       throw error;
     }
   },

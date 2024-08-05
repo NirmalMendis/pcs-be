@@ -7,6 +7,8 @@ const errorTypes = require('../utils/errors/errors');
 const AppError = require('../utils/errors/AppError');
 const ItemDetails = require('../models/item-detail');
 const PawnTicket = require('../models/pawn-ticket');
+const logger = require('../utils/logger');
+
 /**
  * @namespace
  */
@@ -51,6 +53,7 @@ const ItemService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('addItem', error);
       throw error;
     }
   },
@@ -109,6 +112,7 @@ const ItemService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('updateItem', error);
       throw error;
     }
   },
@@ -150,6 +154,7 @@ const ItemService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('deleteItem', error);
       throw error;
     }
   },

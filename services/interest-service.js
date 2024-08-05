@@ -40,6 +40,7 @@ const InterestService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('updateStatusesJob', error);
       throw error;
     }
   },

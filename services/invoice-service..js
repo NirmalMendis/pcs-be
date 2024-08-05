@@ -14,6 +14,7 @@ const CustomerService = require('./customer-service');
 const { sequelize } = require('../utils/database');
 const MetadataService = require('./metadata-service');
 const { SettingEnum } = require('../utils/constants/db-enums');
+const logger = require('../utils/logger');
 
 /**
  * @namespace
@@ -35,6 +36,7 @@ const InvoiceService = {
       if (options.transaction) {
         await options.transaction.rollback();
       }
+      logger.error('findInvoice', error);
       throw error;
     }
   },
@@ -67,6 +69,7 @@ const InvoiceService = {
       if (options.transaction) {
         await options.transaction.rollback();
       }
+      logger.error('createInvoice', error);
       throw error;
     }
   },
@@ -141,6 +144,7 @@ const InvoiceService = {
       if (options.transaction) {
         await options.transaction.rollback();
       }
+      logger.error('generateInvoice', error);
       throw error;
     }
   },

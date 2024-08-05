@@ -82,6 +82,7 @@ const UserService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('createUser', error);
       throw error;
     }
   },
@@ -108,6 +109,7 @@ const UserService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('updateActiveBranch', error);
       throw error;
     }
   },
@@ -150,6 +152,7 @@ const UserService = {
       if (transaction) {
         await transaction.rollback();
       }
+      logger.error('resetPasswordChangeLimit', error);
       throw error;
     }
   },
