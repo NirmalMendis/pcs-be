@@ -7,6 +7,7 @@ const {
   DB_ERRORS,
 } = require('../constants/generic-constantss');
 const { handleDuplicateEntryError } = require('./handle-db-error');
+const logger = require('../logger');
 
 const sendErrorDev = (err, res) => {
   // eslint-disable-next-line no-console
@@ -21,6 +22,7 @@ const sendErrorDev = (err, res) => {
 };
 
 const sendErrorProd = (err, res) => {
+  logger.error('errorHandler', err);
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
