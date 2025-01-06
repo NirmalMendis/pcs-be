@@ -37,7 +37,7 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-//req and next are needed for express to function properly
+// req and next are needed for express to function properly
 // eslint-disable-next-line no-unused-vars
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR;
