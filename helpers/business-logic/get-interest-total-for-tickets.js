@@ -12,6 +12,7 @@ const getTotalInterestForTickets = (tickets) => {
     });
   });
 
+  // round to 2 decimal places.
   return parseFloat(totalInterest.toFixed(2));
 };
 
