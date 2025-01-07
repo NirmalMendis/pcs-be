@@ -9,6 +9,7 @@ const CustomerController = {
   getAllCustomers: DbFactoryService.getAll(Customer),
   createCustomer: DbFactoryService.createOne(Customer),
   searchCustomers: DbFactoryService.getAllBySearch(Customer),
+  updateCustomer: DbFactoryService.updateOne(Customer),
 };
 
 module.exports = CustomerController;

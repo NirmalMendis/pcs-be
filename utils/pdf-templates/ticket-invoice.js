@@ -69,7 +69,7 @@ const ticketInvoiceTemplate = (data) => {
     if (data.customer.postalCode) address.push(data.customer.postalCode);
     return address.join(', ');
   };
-  const customerPhoneNo = `<h4 class="line">${data.customer.mobileNo}</h4>`;
+  const customerPhoneNo = `<h4 class="line">+94 ${data.customer.mobileNo}</h4>`;
 
   const getItems = () => {
     const itemRows = [];

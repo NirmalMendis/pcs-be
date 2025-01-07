@@ -37,6 +37,11 @@ const PawnTicketController = {
 
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
+    const statuses = req.query.statuses
+      ? Array.isArray(req.query.statuses)
+        ? req.query.statuses
+        : [req.query.statuses]
+      : null;
 
     if (startDate && endDate) {
       const startOfStartDate = startOfDay(req.query.startDate);
@@ -54,8 +59,8 @@ const PawnTicketController = {
       ];
     }
 
-    if (req.query.status) {
-      where.status = req.query.status;
+    if (statuses && Array.isArray(statuses) && statuses.length > 0) {
+      where.status = { [Op.in]: statuses };
     }
 
     return DbFactoryService.getAll(PawnTicket, {
