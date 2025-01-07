@@ -19,6 +19,13 @@ router
   .get(
     AuthController.authorize(FunctionEnum.CUSTOMER, PermissionActionEnum.VIEW),
     CustomerController.getCustomer,
+  )
+  .patch(
+    AuthController.authorize(
+      FunctionEnum.CUSTOMER,
+      PermissionActionEnum.UPDATE,
+    ),
+    CustomerController.updateCustomer,
   );
 router
   .route('/')
