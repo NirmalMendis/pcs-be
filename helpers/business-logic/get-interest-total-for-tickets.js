@@ -12,7 +12,7 @@ const getTotalInterestForTickets = (tickets) => {
     });
   });
 
-  return totalInterest;
+  return parseFloat(totalInterest.toFixed(2));
 };
 
 module.exports = getTotalInterestForTickets;
