@@ -49,7 +49,10 @@ router
     PawnRickeController.createPawnTicketRevision,
   );
 
-router.route('/:id').get(PawnRickeController.getTicketById);
+router
+  .route('/:id')
+  .get(PawnRickeController.getTicketById)
+  .delete(PawnRickeController.deletePawnTicket);
 router.route('/:id/invoice').patch(PawnRickeController.updateTicketInvoice);
 router.route('/:id/general').patch(PawnRickeController.updateGeneralDetails);
 

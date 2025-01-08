@@ -97,6 +97,14 @@ const PawnTicketController = {
     );
     sendSuccessResponse(res, pawnTicket);
   }),
+  // eslint-disable-next-line no-unused-vars
+  deletePawnTicket: catchAsync(async (req, res, next) => {
+    await PawnTicketService.deletePawnTicketWithRevisions(
+      req.params.id,
+      req.user,
+    );
+    sendSuccessResponse(res);
+  }),
 };
 
 module.exports = PawnTicketController;

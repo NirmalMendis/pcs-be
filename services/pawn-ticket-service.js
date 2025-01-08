@@ -24,6 +24,10 @@ const { GoldItemType, VehicleItemType } = require('../utils/types');
 const ItemDetails = require('../models/item-detail');
 const { Op } = require('sequelize');
 const logger = require('../utils/logger');
+const Invoice = require('../models/invoice');
+const InterestService = require('./interest-service');
+const ItemService = require('./item-service');
+const { StatusCodes } = require('http-status-codes');
 
 /**
  * @namespace
@@ -258,6 +262,13 @@ const PawnTicketService = {
       transaction,
     });
 
+    if (!pawnTicketInQuery) {
+      throw new AppError(
+        errorTypes.PAWN_TICKET.NO_TICKET,
+        StatusCodes.NOT_FOUND,
+      );
+    }
+
     const forwardRevisions = [];
     let forwardRevision = pawnTicketInQuery.revision;
 
@@ -457,6 +468,108 @@ const PawnTicketService = {
         await transaction.rollback();
       }
       logger.error('updateStatusesJob', error);
+      throw error;
+    }
+  },
+  /**
+   *
+   * @param  {Pick<PawnTicketType, 'id'>} id
+   * @param {UserType} user
+   * @returns {Promise<(void)>}
+   */
+  deletePawnTicket: async (pawnTicketId, user, transactionToUse) => {
+    const transaction = transactionToUse || (await sequelize.transaction());
+
+    try {
+      // Fetch the pawn ticket to ensure it exists and includes its associations
+      const pawnTicket = await PawnTicket.findOne({
+        where: { id: pawnTicketId },
+        include: [
+          {
+            model: Item,
+            include: [
+              {
+                model: ItemDetails,
+                as: 'itemDetails',
+              },
+            ],
+          },
+          Interest,
+          Invoice,
+        ],
+        transaction,
+      });
+
+      if (!pawnTicket) {
+        throw new Error('Pawn ticket not found');
+      }
+
+      // Delete associated interests
+      if (pawnTicket.interests && pawnTicket.interests.length > 0) {
+        await InterestService.deleteInterestsByPawnTicket(
+          pawnTicket.id,
+          transaction,
+        );
+      }
+
+      // Delete associated invoice
+      if (pawnTicket.invoice) {
+        await InvoiceService.deleteInvoiceByPawnTicket(
+          pawnTicket.invoice,
+          user,
+          transaction,
+        );
+      }
+
+      // Delete associated items and their details
+      if (pawnTicket.items && pawnTicket.items.length > 0) {
+        for (const item of pawnTicket.items) {
+          await ItemService.deleteItem(item.id, transaction);
+        }
+      }
+
+      await pawnTicket.setLastUpdatedBy(user, { transaction });
+
+      // Delete the pawn ticket itself
+      await PawnTicket.destroy({
+        where: { id: pawnTicket.id },
+        transaction,
+      });
+
+      if (!transactionToUse) await transaction.commit();
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      logger.error('deletePawnTicket', error);
+      throw error;
+    }
+  },
+  /**
+   *
+   * @param  {Pick<PawnTicketType, 'id'>} id
+   * @param {UserType} user
+   * @returns {Promise<(void)>}
+   */
+  deletePawnTicketWithRevisions: async (pawnTicketId, user) => {
+    const transaction = await sequelize.transaction();
+
+    try {
+      const revisionIds = await PawnTicketService.getRevisionIds(
+        pawnTicketId,
+        transaction,
+      );
+
+      for (const revisionId of revisionIds) {
+        await PawnTicketService.deletePawnTicket(revisionId, user, transaction);
+      }
+
+      await transaction.commit();
+    } catch (error) {
+      if (transaction) {
+        await transaction.rollback();
+      }
+      logger.error('deletePawnTicket', error);
       throw error;
     }
   },

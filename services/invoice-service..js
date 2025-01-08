@@ -1,5 +1,6 @@
 const { SequelizeOptionsType } = require('../utils/types');
 const { InvoiceType } = require('../models/invoice');
+const { UserType } = require('../models/user');
 const Invoice = require('../models/invoice');
 const {
   TicketInvoiceTemplateType,
@@ -145,6 +146,27 @@ const InvoiceService = {
         await options.transaction.rollback();
       }
       logger.error('generateInvoice', error);
+      throw error;
+    }
+  },
+  /**
+   *
+   * @param  {InvoiceType} invoice
+   * @param  {UserType} user
+   * @returns {Promise<(void)>}
+   */
+  deleteInvoiceByPawnTicket: async (invoice, user, transaction) => {
+    try {
+      // Set lastUpdatedBy to the current user
+      await invoice.setLastUpdatedBy(user, { transaction });
+
+      // Destroy the invoice
+      await Invoice.destroy({
+        where: { id: invoice.id },
+        transaction,
+      });
+    } catch (error) {
+      logger.error(`deleteInvoiceByPawnTicket`, error);
       throw error;
     }
   },

@@ -121,8 +121,8 @@ const ItemService = {
    * @param {Pick<ItemType, "id">} id
    * @returns {Promise<void>}
    */
-  deleteItem: async (id) => {
-    const transaction = await sequelize.transaction();
+  deleteItem: async (id, transactionToUse) => {
+    let transaction = transactionToUse || (await sequelize.transaction());
 
     try {
       const itemToUpdate = await Item.findByPk(id, {
@@ -149,7 +149,7 @@ const ItemService = {
         transaction,
       });
 
-      await transaction.commit();
+      if (!transactionToUse) await transaction.commit();
     } catch (error) {
       if (transaction) {
         await transaction.rollback();
