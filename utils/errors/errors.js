@@ -110,6 +110,10 @@ const errorTypes = {
       message: 'Sorry! Something went wrong!',
       statusCode: StatusCodes.BAD_REQUEST,
     },
+    RESOURCE_NOT_FOUND: {
+      message: 'Sorry! We could not find this resource!',
+      statusCode: StatusCodes.BAD_REQUEST,
+    },
   },
 };
 

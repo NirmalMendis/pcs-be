@@ -44,5 +44,16 @@ const InterestService = {
       throw error;
     }
   },
+  deleteInterestsByPawnTicket: async (pawnTicketId, transaction) => {
+    try {
+      await Interest.destroy({
+        where: { pawnTicketId },
+        transaction,
+      });
+    } catch (error) {
+      logger.error(`deleteInterestsByPawnTicket`, error);
+      throw error;
+    }
+  },
 };
 module.exports = InterestService;

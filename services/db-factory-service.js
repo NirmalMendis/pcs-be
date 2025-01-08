@@ -5,6 +5,9 @@ const { AssociationOptionsType } = require('../utils/types');
 const paginateData = require('../helpers/shared/pagination');
 const { sequelize } = require('../utils/database');
 const logger = require('../utils/logger');
+const AppError = require('../utils/errors/AppError');
+const { GENERIC } = require('../utils/errors/errors');
+const { StatusCodes } = require('http-status-codes');
 
 /**
  * @namespace
@@ -27,6 +30,9 @@ const DbFactoryService = {
           ? Model.scope(req.query.scope)
           : Model;
       results = await ScopedModel.findByPk(req.params.id, associationOptions);
+      if (!results) {
+        throw new AppError(GENERIC.RESOURCE_NOT_FOUND, StatusCodes.NOT_FOUND);
+      }
       sendSuccessResponse(res, results);
     }),
 
